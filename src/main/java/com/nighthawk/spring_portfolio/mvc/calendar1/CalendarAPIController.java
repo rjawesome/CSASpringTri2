@@ -18,13 +18,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("/api/calendar1")
 public class CalendarAPIController {
 
-    /** GET isLeapYear endpoint
+    /** GET the info for a year
      * ObjectMapper throws exceptions on bad JSON
      *  @throws JsonProcessingException
      *  @throws JsonMappingException
      */
     @GetMapping("/yearinfo/{year}")
-    public ResponseEntity<JsonNode> getIsLeapYear(@PathVariable int year) throws JsonMappingException, JsonProcessingException {
+    public ResponseEntity<JsonNode> getYearInfo(@PathVariable int year) throws JsonMappingException, JsonProcessingException {
       // Backend Year Object
       Year year_obj = new Year();
       year_obj.setYear(year);  // evaluates Leap Year
@@ -36,5 +36,16 @@ public class CalendarAPIController {
       return ResponseEntity.ok(json);  // JSON response, see ExceptionHandlerAdvice for throws
     }
 
-    // add other methods
+     /** GET number of leap years from year1 to year 2
+     * ObjectMapper throws exceptions on bad JSON
+     *  @throws JsonProcessingException
+     *  @throws JsonMappingException
+     */
+    @GetMapping("/leapyears/{year1}/{year2}")
+    public ResponseEntity<JsonNode> getLeapYears(@PathVariable int year1, @PathVariable int year2) throws JsonMappingException, JsonProcessingException {
+      ObjectMapper mapper = new ObjectMapper(); 
+      JsonNode json = mapper.readTree("{ \"count\": " + APCalendar.numberOfLeapYears(year1, year2) + " } "); // this requires exception handling
+
+      return ResponseEntity.ok(json);  // JSON response, see ExceptionHandlerAdvice for throws
+    }
 }
