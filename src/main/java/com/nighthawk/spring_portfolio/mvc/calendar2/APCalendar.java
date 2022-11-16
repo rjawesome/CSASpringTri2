@@ -1,4 +1,4 @@
-package com.nighthawk.spring_portfolio.mvc.calendar;
+package com.nighthawk.spring_portfolio.mvc.calendar2;
 
 // Prototype Implementation
 
@@ -9,20 +9,16 @@ public class APCalendar {
      * isLeapYear(2016) returns True
      */          
     public static boolean isLeapYear(int year) {
-        // implementation not shown
-        if (year % 4 != 0){
-            return false;
-        } 
-        else if (year % 400 ==0) {
-            return true;
-        } 
-        else if (year % 100 ==0){
-            return false;
-        } 
-        else {
-            return true;
+        if (year % 4 != 0) {
+          return false;
+        } else if (year % 400 == 0) {
+          return true;
+        } else if (year % 100 == 0) {
+          return false;
+        } else {
+          return true;
         }
-    }
+      }
         
     /** Returns the value representing the day of the week 
      * 0 denotes Sunday, 
@@ -30,10 +26,10 @@ public class APCalendar {
      * 6 denotes Saturday. 
      * firstDayOfYear(2019) returns 2 for Tuesday.
     */
-    private static int firstDayOfYear(int year) {
+    public static int firstDayOfYear(int year) {
         // implementation not shown
-        int firstDayInt = (int)(Math.random()+7);
-        return firstDayInt;
+        int firstDayTest = (int) (Math.random()*7);
+        return firstDayTest;
         }
 
 
@@ -53,9 +49,17 @@ public class APCalendar {
      * Precondition: 0 <= year1 <= year2
     */ 
     public static int numberOfLeapYears(int year1, int year2) {
-         // to be implemented in part (a)
+          int leapYearCount = 0; // variable to keep track of amount of leap years
 
-        return 0;
+          // for loop: set year to year1, and while it is not yet at year2, find out if leapyear or not
+          for(int year = year1; year <= year2; year++) {
+      
+              // check the year for if it is leap year
+              if(isLeapYear(year)) {
+                  leapYearCount++; // increase count
+              }
+          }
+          return leapYearCount; // return the integer for the count of leap years
         }
 
     /** Returns the value representing the day of the week for the given date
@@ -63,7 +67,10 @@ public class APCalendar {
     */
     public static int dayOfWeek(int month, int day, int year) { 
         // to be implemented in part (b)
-        return 0;
+        int firstDay = firstDayOfYear(year); // store the day of the week of the first day
+        int dayAfterNew = dayOfYear(month, day, year); // store the number of days since new year (inclusive)
+
+        return (firstDay + dayAfterNew - 1) % 7; // adds the day of the week to the days since new year, but minus 1 because the dayAfterNew includes the first day. then, mod 7
         }
 
     /** Tester method */

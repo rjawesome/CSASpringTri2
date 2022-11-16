@@ -1,4 +1,4 @@
-package com.nighthawk.spring_portfolio.mvc.calendar;
+package com.nighthawk.spring_portfolio.mvc.calendar2;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Calendar Endpoint: /api/calendar/isLeapYear/2022, Returns: {"year":2020,"isLeapYear":false}
  */
 @RestController
-@RequestMapping("/api/calendar")
+@RequestMapping("/api/calendar2")
 public class CalendarApiController {
 
     /** GET isLeapYear endpoint
@@ -37,4 +37,17 @@ public class CalendarApiController {
     }
 
     // add other methods
+
+    @GetMapping("/firstDayOfYear/{year}")
+    public ResponseEntity<JsonNode> getFirstDayOfYear(@PathVariable int year) throws JsonMappingException, JsonProcessingException {
+      // Backend Year Object
+      Year year_obj = new Year();
+      year_obj.setYear(year);  // evaluates Leap Year
+
+      // Turn Year Object into JSON
+      ObjectMapper mapper = new ObjectMapper(); 
+      JsonNode json = mapper.readTree(year_obj.firstDayOfYearToString()); // this requires exception handling
+
+      return ResponseEntity.ok(json);  // JSON response, see ExceptionHandlerAdvice for throws
+    }
 }
