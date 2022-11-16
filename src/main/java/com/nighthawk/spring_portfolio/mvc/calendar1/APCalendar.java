@@ -1,8 +1,19 @@
 package com.nighthawk.spring_portfolio.mvc.calendar1;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 public class APCalendar {
     private static int firstDayOf1970 = 4;
-  
+    private static String[] months = {"", "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
     /** Returns true if year is a leap year and false otherwise.
      * isLeapYear(2019) returns False
      * isLeapYear(2016) returns True
@@ -79,6 +90,18 @@ public class APCalendar {
         int CalculatedDay = (DayFirst + DaysAfter - 1); // adds the amount to the first day and subtracts 1
         int DayWeekReturn = CalculatedDay % 7; // changes from a number to a value 0-6 that gives the day of the week
         return DayWeekReturn; // returns the day of the week
+    }
+
+    public static String getBirthdays(int month, int day, int year) throws IOException, InterruptedException, ParseException {
+        HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create(String.format("https://daxeel-celebinfo-v1.p.mashape.com/date/%d/%s", day, months[month])))
+        .method("GET", HttpRequest.BodyPublishers.noBody())
+        .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        JSONObject famousbirthdays = (JSONObject) new JSONParser().parse(response.body());
+        JSONArray birthdaysarray = (JSONArray) famousbirthdays.get("data");
+        JSONObject birthday = (JSONObject) birthdaysarray.get(0);
+        return (String) birthday.get("name");
     }
   
     /** Tester method */

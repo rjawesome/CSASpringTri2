@@ -1,5 +1,8 @@
 package com.nighthawk.spring_portfolio.mvc.calendar1;
 
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +40,7 @@ public class CalendarAPIController {
     }
 
     @GetMapping("/dayinfo/{year}/{month}/{day}")
-    public ResponseEntity<JsonNode> getDayInfo(@PathVariable int year, @PathVariable int month, @PathVariable int day) throws JsonMappingException, JsonProcessingException {
+    public ResponseEntity<JsonNode> getDayInfo(@PathVariable int year, @PathVariable int month, @PathVariable int day) throws IOException, InterruptedException, ParseException {
       // Backend Day Object
       Day day_obj = new Day(day, month, year);
 
