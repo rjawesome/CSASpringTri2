@@ -1,7 +1,5 @@
 package com.nighthawk.spring_portfolio.mvc.calendar1;
 
-import org.springframework.data.mongodb.core.aggregation.DateOperators.DayOfYear;
-
 public class Day {
     private int year;
     private int month;
@@ -15,6 +13,8 @@ public class Day {
         this.year = year;
         this.month = month;
         this.day = day;
+        this.setDayOfWeek();
+        this.setDayOfYear();
     } 
 
   
