@@ -1,4 +1,4 @@
-package com.nighthawk.spring_portfolio.mvc.calendar;
+package com.nighthawk.spring_portfolio.mvc.calendar1;
 
 /** Simple POJO 
  * Used to Interface with APCalendar

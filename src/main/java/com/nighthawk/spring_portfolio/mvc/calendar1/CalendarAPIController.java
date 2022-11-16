@@ -1,4 +1,4 @@
-package com.nighthawk.spring_portfolio.mvc.calendar;
+package com.nighthawk.spring_portfolio.mvc.calendar1;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
