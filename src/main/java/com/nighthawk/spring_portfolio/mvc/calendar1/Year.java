@@ -5,7 +5,7 @@ package com.nighthawk.spring_portfolio.mvc.calendar1;
  * The toString method(s) prepares object for JSON serialization
  * Note... this is NOT an entity, just an abstraction
  */
-class Year {
+public class Year {
   private int year;
   private boolean isLeapYear;
   private int firstDayOfYear;
