@@ -39,12 +39,12 @@ public class Day {
         return APCalendar.dayOfWeek(month, day, year);
     }
     private void setDayOfWeek() {  // this is private to avoid tampering
-        this.dayOfYear = APCalendar.dayOfWeek(month, day, year);
+        this.dayOfWeek = APCalendar.dayOfWeek(month, day, year);
     }
   
     /* isLeapYearToString formatted to be mapped to JSON */
     public String toJSON(){
-        return String.format("{ \"year\": %d, \"month\": %d, \"day\": %d, \"dayOfWeek\": %s, \"dayOfYear\": %d}", this.year, this.month, this.day, this.dayOfWeek, this.dayOfYear);
+        return String.format("{ \"year\": %d, \"month\": %d, \"day\": %d, \"dayOfWeek\": \"%s\", \"dayOfYear\": %d}", this.year, this.month, this.day, this.days[dayOfWeek], this.dayOfYear);
     }	
   
     /* standard toString placeholder until class is extended */

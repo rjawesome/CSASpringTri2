@@ -36,6 +36,18 @@ public class CalendarAPIController {
       return ResponseEntity.ok(json);  // JSON response, see ExceptionHandlerAdvice for throws
     }
 
+    @GetMapping("/dayinfo/{year}/{month}/{day}")
+    public ResponseEntity<JsonNode> getDayInfo(@PathVariable int year, @PathVariable int month, @PathVariable int day) throws JsonMappingException, JsonProcessingException {
+      // Backend Day Object
+      Day day_obj = new Day(day, month, year);
+
+      // Turn Year Object into JSON
+      ObjectMapper mapper = new ObjectMapper(); 
+      JsonNode json = mapper.readTree(day_obj.toJSON()); // this requires exception handling
+
+      return ResponseEntity.ok(json);  // JSON response, see ExceptionHandlerAdvice for throws
+    }
+
      /** GET number of leap years from year1 to year 2
      * ObjectMapper throws exceptions on bad JSON
      *  @throws JsonProcessingException
