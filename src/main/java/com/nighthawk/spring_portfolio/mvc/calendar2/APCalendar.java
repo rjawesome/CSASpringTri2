@@ -42,7 +42,8 @@ public class APCalendar {
     public static int dayOfYear(int month, int day, int year) {
         // implementation not shown
 
-        return 1;
+        int dayOfYearTest = (int) (Math.random()*365);
+        return dayOfYearTest;
         }
 
     /** Returns the number of leap years between year1 and year2, inclusive.
