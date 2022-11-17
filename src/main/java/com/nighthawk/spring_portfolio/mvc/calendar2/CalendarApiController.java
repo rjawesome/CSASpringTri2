@@ -68,5 +68,13 @@ public class CalendarApiController {
       JsonNode json = mapper.readTree("{ \"month\": "  + month +  ", " + "\"day\": "  + day +  ", " + "\"year\": "  + year +  ", " + "\"dayOfYear\": "  + APCalendar.dayOfYear(month, day, year) + " }");
       return ResponseEntity.ok(json);
     }
+
+    @GetMapping("/dayOfWeek/{month}/{day}/{year}")
+    public ResponseEntity<JsonNode> getDayOfWeek(@PathVariable int month, @PathVariable int day, @PathVariable int year) throws JsonMappingException, JsonProcessingException {
+
+      ObjectMapper mapper = new ObjectMapper();
+      JsonNode json = mapper.readTree("{ \"month\": "  + month +  ", " + "\"day\": "  + day +  ", " + "\"year\": "  + year +  ", " + "\"dayOfWeek\": "  + APCalendar.dayOfWeek(month, day, year) + " }");
+      return ResponseEntity.ok(json);
+    }
     
 }
