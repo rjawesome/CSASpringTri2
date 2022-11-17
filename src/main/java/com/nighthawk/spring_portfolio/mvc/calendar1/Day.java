@@ -58,7 +58,7 @@ public class Day {
   
     /* isLeapYearToString formatted to be mapped to JSON */
     public String toJSON(){
-        return String.format("{ \"year\": %d, \"month\": %d, \"day\": %d, \"dayOfWeek\": \"%s\", \"dayOfYear\": %d, \"birthday\": %s}", this.year, this.month, this.day, this.days[dayOfWeek], this.dayOfYear, this.birthday);
+        return String.format("{ \"year\": %d, \"month\": %d, \"day\": %d, \"dayOfWeek\": \"%s\", \"dayOfYear\": %d, \"famousBirthday\": \"%s\"}", this.year, this.month, this.day, this.days[dayOfWeek], this.dayOfYear, this.birthday);
     }	
   
     /* standard toString placeholder until class is extended */
