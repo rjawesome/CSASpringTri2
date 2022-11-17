@@ -94,7 +94,7 @@ public class APCalendar {
 
     public static String getBirthdays(int month, int day, int year) throws IOException, InterruptedException, ParseException {
         HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create(String.format("https://daxeel-celebinfo-v1.p.mashape.com/date/%d/%s", day, months[month])))
+        .uri(URI.create(String.format("https://birthdays.rohanj.dev/api/date/%d/%s", day, months[month])))
         .method("GET", HttpRequest.BodyPublishers.noBody())
         .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
