@@ -13,24 +13,44 @@ public class Day {
     private String birthday;
     private String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
   
-    // zero argument constructor
-    public Day(int day, int month, int year) throws IOException, InterruptedException, ParseException {
-        this.year = year;
-        this.month = month;
-        this.day = day;
-        this.setDayOfWeek();
-        this.setDayOfYear();
-        this.setBirthday();
-    } 
+   // zero argument constructor
+   public Day() {
+
+   }
+   // all argument constructor
+   public Day(int day, int month, int year) throws IOException, InterruptedException, ParseException {
+      this.year = year;
+      this.month = month;
+      this.day = day;
+      this.setDayOfWeek();
+      this.setDayOfYear();
+      this.setBirthday();
+   } 
 
   
-    /* year getter/setters */
-    public int getYear() {
-       return year;
-    }
-    public void setYear(int year) {
+   /* year getter/setters */
+   public int getYear() {
+      return year;
+   }
+   public void setYear(int year) {
+     this.year = year;
+   }
 
-    }
+   /* month getter/setters */
+   public int getMonth() {
+      return month;
+   }
+   public void setMonth(int month) {
+      this.month = month;
+   }
+
+   /* day getter/setters */
+   public int getDay() {
+      return day;
+   }
+   public void setDay(int day) {
+      this.day = day;
+   }
   
    /* dayOfYear getter/setters */
    public int getDayOfYear() {
@@ -66,9 +86,8 @@ public class Day {
        return toJSON(); 
     }
   
-    public static void main(String[] args) {
-       Year year = new Year();
-       year.setYear(2022);
-       System.out.println(year);
+    public static void main(String[] args) throws IOException, InterruptedException, ParseException {
+       Day day = new Day(1, 2, 2000);
+       System.out.println(day);
     }
   }
