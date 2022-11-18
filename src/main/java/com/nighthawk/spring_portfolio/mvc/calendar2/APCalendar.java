@@ -1,6 +1,15 @@
 package com.nighthawk.spring_portfolio.mvc.calendar2;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import org.json.*;
 // Prototype Implementation
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class APCalendar {
 
@@ -73,6 +82,24 @@ public class APCalendar {
 
         return (firstDay + dayAfterNew - 1) % 7; // adds the day of the week to the days since new year, but minus 1 because the dayAfterNew includes the first day. then, mod 7
         }
+
+    public static String yearFact(int year) throws IOException, InterruptedException, ParseException {
+        HttpRequest request = HttpRequest.newBuilder()
+          .uri(URI.create("https://numbersapi.p.rapidapi.com/" + year + "/year?fragment=true&json=true"))
+          .header("X-RapidAPI-Key", "0fb4bb4059msh8489d467f79e14ep1d57f9jsnd0d67fb163e6")
+          .header("X-RapidAPI-Host", "numbersapi.p.rapidapi.com")
+          .method("GET", HttpRequest.BodyPublishers.noBody())
+          .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+      
+        String responseBody = response.body();
+        Object obj = new JSONParser().parse(responseBody);
+        JSONObject jsonObj = (JSONObject) obj;
+
+        String fact = (String) jsonObj.get("text");
+
+        return fact;
+    }
 
     /** Tester method */
     public static void main(String[] args) {

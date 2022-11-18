@@ -1,5 +1,8 @@
 package com.nighthawk.spring_portfolio.mvc.calendar2;
 
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +23,12 @@ public class CalendarApiController {
 
     /** GET isLeapYear endpoint
      * ObjectMapper throws exceptions on bad JSON
-     *  @throws JsonProcessingException
-     *  @throws JsonMappingException
+     * @throws ParseException
+     * @throws InterruptedException
+     * @throws IOException
      */
     @GetMapping("/isLeapYear/{year}")
-    public ResponseEntity<JsonNode> getIsLeapYear(@PathVariable int year) throws JsonMappingException, JsonProcessingException {
+    public ResponseEntity<JsonNode> getIsLeapYear(@PathVariable int year) throws IOException, InterruptedException, ParseException {
       // Backend Year Object
       Year year_obj = new Year();
       year_obj.setYear(year);  // evaluates Leap Year
@@ -39,7 +43,7 @@ public class CalendarApiController {
     // add other methods
 
     @GetMapping("/firstDayOfYear/{year}")
-    public ResponseEntity<JsonNode> getFirstDayOfYear(@PathVariable int year) throws JsonMappingException, JsonProcessingException {
+    public ResponseEntity<JsonNode> getFirstDayOfYear(@PathVariable int year) throws IOException, InterruptedException, ParseException {
       // Backend Year Object
       Year year_obj = new Year();
       year_obj.setYear(year);  // evaluates Leap Year
@@ -47,6 +51,19 @@ public class CalendarApiController {
       // Turn Year Object into JSON
       ObjectMapper mapper = new ObjectMapper(); 
       JsonNode json = mapper.readTree(year_obj.firstDayOfYearToString()); // this requires exception handling
+
+      return ResponseEntity.ok(json);  // JSON response, see ExceptionHandlerAdvice for throws
+    }
+
+    @GetMapping("/yearFact/{year}")
+    public ResponseEntity<JsonNode> getYearFact(@PathVariable int year) throws IOException, InterruptedException, ParseException {
+      // Backend Year Object
+      Year year_obj = new Year();
+      year_obj.setYear(year);  // evaluates Leap Year
+
+      // Turn Year Object into JSON
+      ObjectMapper mapper = new ObjectMapper(); 
+      JsonNode json = mapper.readTree(year_obj.yearFactToString()); // this requires exception handling
 
       return ResponseEntity.ok(json);  // JSON response, see ExceptionHandlerAdvice for throws
     }

@@ -1,5 +1,9 @@
 package com.nighthawk.spring_portfolio.mvc.calendar2;
 
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
+
 /** Simple POJO 
  * Used to Interface with APCalendar
  * The toString method(s) prepares object for JSON serialization
@@ -7,6 +11,7 @@ package com.nighthawk.spring_portfolio.mvc.calendar2;
  */
 class Year {
    private int year;
+   private String yearFact;
    private boolean isLeapYear;
    private int firstDayOfYear;
 
@@ -17,10 +22,11 @@ class Year {
    public int getYear() {
       return year;
    }
-   public void setYear(int year) {
+   public void setYear(int year) throws IOException, InterruptedException, ParseException {
       this.year = year;
       this.setIsLeapYear(year);
       this.setFirstDayOfYear(year);
+      this.setYearFact(year);
    }
 
    /* isLeapYear getter/setters */
@@ -38,6 +44,10 @@ class Year {
       this.firstDayOfYear = APCalendar.firstDayOfYear(year);
    }
 
+   private void setYearFact(int year) throws IOException, InterruptedException, ParseException {  // this is private to avoid tampering
+      this.yearFact = APCalendar.yearFact(year);
+   }
+
    /* isLeapYearToString formatted to be mapped to JSON */
    public String isLeapYearToString(){
       return ( "{ \"year\": "  +this.year+  ", " + "\"isLeapYear\": "  +this.isLeapYear+ " }" );
@@ -47,12 +57,16 @@ class Year {
       return ( "{ \"year\": "  +this.year+  ", " +  "\"firstDayOfYear\": "  +this.firstDayOfYear + " }" );
    }
 
+   public String yearFactToString(){
+      return ( "{ \"year\": "  +this.year+  ", " +  "\"yearFact\": " + "\"" + this.yearFact + "\"" + " }" );
+   }
+
    /* standard toString placeholder until class is extended */
    public String toString() { 
       return isLeapYearToString(); 
    }
 
-   public static void main(String[] args) {
+   public static void main(String[] args) throws IOException, InterruptedException, ParseException {
       Year year = new Year();
       year.setYear(2022);
       System.out.println(year);
