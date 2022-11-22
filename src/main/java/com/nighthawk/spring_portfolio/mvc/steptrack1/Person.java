@@ -19,15 +19,18 @@ public class Person {
     
     // Person data
     String name;
+
     @NotEmpty
     @Size(min=5)
     @Column(unique=true)
     @Email
     String email;
+
     String gender;
     int age;
     int heightIn;
     int weightLbs;
+    int activeSteps;
     String passwordHash;
 
     // relationship
@@ -40,5 +43,23 @@ public class Person {
 
     public void addDay(Day day) {
         days.add(day);
+    }
+
+    public int getActiveDays() {
+      int activeDays = 0;
+      for (Day day : days) {
+        if (day.getSteps() >= activeSteps) {
+          activeDays++;
+        }
+      }
+      return activeDays;
+    }
+
+    public double getAverageSteps() {
+      double totalSteps = 0;
+      for (Day day : days) {
+        totalSteps += day.getSteps();
+      }
+      return totalSteps/days.size();
     }
 }

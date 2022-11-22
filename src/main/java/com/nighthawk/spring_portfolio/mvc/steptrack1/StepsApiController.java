@@ -82,6 +82,12 @@ public class StepsApiController {
         person.setGender((String) stat_map.get("gender"));
         person.setHeightIn((int) stat_map.get("heightIn"));
         person.setWeightLbs((int) stat_map.get("weightLbs"));
+
+
+        /* CHANGE TO A CALCULATION */
+        person.setActiveSteps(10000);
+
+
         // password hash
         String password = (String) stat_map.get("password");
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
