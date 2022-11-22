@@ -90,30 +90,13 @@ public class StepsApiController {
     }
 
     /*
-    The personSearch API looks across database for partial match to term (k,v) passed by RequestEntity body
-     */
-    @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> personSearch(@RequestBody final Map<String,String> map) {
-        // extract term from RequestEntity
-        String term = (String) map.get("term");
-
-        // JPA query to filter on term
-        List<Person> list = repository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
-
-        // return resulting list and status, error checking should be added
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    }
-
-    /*
     The personStats API adds stats by Date to Person table 
     */
     @PostMapping(value = "/setStats", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Person> personStats(@RequestBody final Map<String,Object> stat_map) {
-        // find ID
-        long id=Long.parseLong((String)stat_map.get("id"));  
-        Optional<Person> optional = repository.findById((id));
-        if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+        Optional<Person> optional = repository.findByEmail((String) stat_map.get("email"));
+        if (optional.isPresent()) {  // Good Email
+            Person person = optional.get();  // value from findByEmail
 
             // Extract Attributes from JSON
             Map<String, Object> attributeMap = new HashMap<>();
