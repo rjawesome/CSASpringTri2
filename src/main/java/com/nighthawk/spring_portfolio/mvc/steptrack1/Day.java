@@ -20,8 +20,5 @@ public class Day {
     private int steps;
     private int calories;
     private double distanceMiles;
- 
-    // relationship
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Person person;
+
 }

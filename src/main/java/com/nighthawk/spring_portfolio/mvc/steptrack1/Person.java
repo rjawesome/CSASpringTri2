@@ -39,7 +39,6 @@ public class Person {
     private List<Day> days = new ArrayList<>();
 
     public void addDay(Day day) {
-        day.setPerson(this);
         days.add(day);
     }
 }

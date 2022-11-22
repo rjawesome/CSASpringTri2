@@ -23,6 +23,10 @@ public class StepsApiController {
     // Autowired enables Control to connect POJO Object through JPA
     @Autowired
     private PersonJpaRepository repository;
+
+    @Autowired
+    private DayJpaRepository dayRepository;
+
     /*
     GET individual Person using ID
      */
@@ -114,6 +118,7 @@ public class StepsApiController {
             day.setMonth((int) stat_map.get("month"));
             day.setYear((int) stat_map.get("year"));
             day.setDistanceMiles((double) day.getSteps() / 2250);
+            dayRepository.save(day);
             person.addDay(day);
             repository.save(person);
             // return Person with update Stats
