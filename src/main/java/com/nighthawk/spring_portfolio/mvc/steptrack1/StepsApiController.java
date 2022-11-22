@@ -100,10 +100,6 @@ public class StepsApiController {
 
             // Extract Attributes from JSON
             Map<String, Object> attributeMap = new HashMap<>();
-            for (Map.Entry<String,Object> entry : stat_map.entrySet())  {
-                // Add all attribute other thaN "date" to the "attribute_map"
-                if (!entry.getKey().equals("date") && !entry.getKey().equals("id"))
-                    attributeMap.put(entry.getKey(), entry.getValue());
             }
 
             // Set Date and Attributes to SQL HashMap
