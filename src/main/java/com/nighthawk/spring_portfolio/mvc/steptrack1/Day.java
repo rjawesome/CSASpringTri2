@@ -15,6 +15,7 @@ public class Day {
     
     // attributes, how would you track days.  perhaps capture date and have many method to calculate this data
     private int year;
+    private int month;
     private int day;
     private int steps;
  
