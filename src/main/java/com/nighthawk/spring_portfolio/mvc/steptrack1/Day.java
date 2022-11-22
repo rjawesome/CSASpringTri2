@@ -18,6 +18,7 @@ public class Day {
     private int month;
     private int day;
     private int steps;
+    private int calories;
  
     // relationship
     @ManyToOne(fetch = FetchType.LAZY)
