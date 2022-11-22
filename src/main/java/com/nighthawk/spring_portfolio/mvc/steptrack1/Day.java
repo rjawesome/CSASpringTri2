@@ -8,6 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 public class Day {
+    // id
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     // attributes, how would you track days.  perhaps capture date and have many method to calculate this data
     private int year;
     private int day;
