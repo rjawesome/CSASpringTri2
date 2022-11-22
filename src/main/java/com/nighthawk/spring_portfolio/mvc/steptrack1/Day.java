@@ -21,4 +21,15 @@ public class Day {
     private int calories;
     private double distanceMiles;
 
+    public void appendSteps (int steps) {
+      this.steps += steps;
+    }
+
+    public void appendCalories (int calories) {
+      this.calories += calories;
+    }
+
+    public void appendDistance (double miles) {
+      this.distanceMiles += miles;
+    }
 }

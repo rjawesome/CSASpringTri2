@@ -111,16 +111,39 @@ public class StepsApiController {
             if (!computedPasswordHash.equals(person.getPasswordHash())) {
                 return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
             }
-            Day day = new Day();  
-            day.setCalories((int) stat_map.get("calories"));
-            day.setSteps((int) stat_map.get("steps"));
-            day.setDay((int) stat_map.get("day"));
-            day.setMonth((int) stat_map.get("month"));
-            day.setYear((int) stat_map.get("year"));
-            day.setDistanceMiles((double) day.getSteps() / 2250);
-            dayRepository.save(day);
-            person.addDay(day);
-            repository.save(person);
+
+            int dayInt = (int) stat_map.get("day");
+            int month = (int) stat_map.get("month");
+            int year = (int) stat_map.get("year");
+            int steps = (int) stat_map.get("steps");
+            int calories = (int) stat_map.get("calories");
+            double miles = (double) steps / 2250;
+
+            //check if the day already exists
+            boolean found = false;
+            for (Day existingDay : person.getDays()) {
+              if (existingDay.getDay() == dayInt && existingDay.getMonth() == month && existingDay.getYear() == year) {
+                existingDay.appendCalories(calories);
+                existingDay.appendDistance(miles);
+                existingDay.appendSteps(steps);
+                dayRepository.save(existingDay);
+                found = true;
+                break;
+              }
+            }
+
+            if (!found) {
+              Day day = new Day();  
+              day.setCalories(calories);
+              day.setSteps(steps);
+              day.setDay(dayInt);
+              day.setMonth(month);
+              day.setYear(year);
+              day.setDistanceMiles(miles);
+              dayRepository.save(day);
+              person.addDay(day);
+              repository.save(person);
+            }
             // return Person with update Stats
             return new ResponseEntity<>(person, HttpStatus.OK);
         }
