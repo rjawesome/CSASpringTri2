@@ -58,7 +58,7 @@ public class StepsApiController {
     /*
     DELETE individual Person using ID
      */
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/deletePerson/{id}")
     public ResponseEntity<Person> deletePerson(@PathVariable long id) {
         Optional<Person> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
@@ -73,7 +73,7 @@ public class StepsApiController {
     /*
     POST Aa record by Requesting Parameters from URI
      */
-    @PostMapping( "/post")
+    @PostMapping( "/createPerson")
     public ResponseEntity<Object> postPerson(@RequestBody final Map<String,Object> stat_map) throws NoSuchAlgorithmException {
         // A person object WITHOUT ID will create a new record with default roles as student
         Person person = new Person();
