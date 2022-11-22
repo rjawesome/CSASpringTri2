@@ -27,7 +27,7 @@ public class StepsApiController {
     GET individual Person using ID
      */
     @GetMapping("/getPerson")
-    public ResponseEntity<Person> getPerson(@RequestBody final Map<String,Object> stat_map) throws NoSuchAlgorithmException {
+    public ResponseEntity<Object> getPerson(@RequestBody final Map<String,Object> stat_map) throws NoSuchAlgorithmException {
         Optional<Person> optional = repository.findByEmail((String) stat_map.get("email"));
         if (optional.isPresent()) {  // Good ID
             Person person = optional.get();  // value from findByID
@@ -39,10 +39,11 @@ public class StepsApiController {
             String computedPasswordHash = new String(encodedHash);
 
             if (computedPasswordHash.equals(person.getPasswordHash())) {
+                System.out.println(person.toString());
                 return new ResponseEntity<>(person, HttpStatus.OK);
             }
             else {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);        
+                return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
             }
         }
         // Bad ID
@@ -93,11 +94,19 @@ public class StepsApiController {
     The personStats API adds stats by Date to Person table 
     */
     @PostMapping(value = "/setStats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Person> personStats(@RequestBody final Map<String,Object> stat_map) {
+    public ResponseEntity<Object> personStats(@RequestBody final Map<String,Object> stat_map) throws NoSuchAlgorithmException {
         Optional<Person> optional = repository.findByEmail((String) stat_map.get("email"));
         if (optional.isPresent()) {  // Good Email
             Person person = optional.get();  // value from findByEmail
+            String password = (String) stat_map.get("password");
 
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedHash = digest.digest(
+            password.getBytes(StandardCharsets.UTF_8));
+            String computedPasswordHash = new String(encodedHash);
+            if (!computedPasswordHash.equals(person.getPasswordHash())) {
+                return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
+            }
             Day day = new Day();  
             day.setCalories((int) stat_map.get("calories"));
             day.setSteps((int) stat_map.get("steps"));

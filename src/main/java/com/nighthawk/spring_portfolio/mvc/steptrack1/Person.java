@@ -33,11 +33,13 @@ public class Person {
     // relationship
     @OneToMany(
         cascade = CascadeType.ALL,
-        orphanRemoval = true
+        orphanRemoval = true, 
+        fetch = FetchType.EAGER
     )
     private List<Day> days = new ArrayList<>();
 
     public void addDay(Day day) {
+        day.setPerson(this);
         days.add(day);
     }
 }
