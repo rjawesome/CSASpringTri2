@@ -16,6 +16,11 @@ public class Person {
     // Person data
     String name;
     String email;
+    String gender;
+    int age;
+    int heightIn;
+    int weightLbs;
+    String passwordHash;
 
     // relationship
     @OneToMany(
