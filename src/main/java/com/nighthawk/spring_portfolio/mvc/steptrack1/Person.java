@@ -8,6 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 public class Person {
+    // id
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
     // Person data
     String name;
     String email;
