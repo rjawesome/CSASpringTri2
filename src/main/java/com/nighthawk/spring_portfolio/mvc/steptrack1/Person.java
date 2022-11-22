@@ -36,4 +36,8 @@ public class Person {
         orphanRemoval = true
     )
     private List<Day> days = new ArrayList<>();
+
+    public void addDay(Day day) {
+        days.add(day);
+    }
 }

@@ -68,7 +68,7 @@ public class StepsApiController {
     POST Aa record by Requesting Parameters from URI
      */
     @PostMapping( "/post")
-    public ResponseEntity<Object> postPerson(@RequestBody final Map<String,Object> stat_map) {
+    public ResponseEntity<Object> postPerson(@RequestBody final Map<String,Object> stat_map) throws NoSuchAlgorithmException {
         // A person object WITHOUT ID will create a new record with default roles as student
         Person person = new Person();
         person.setAge((int) stat_map.get("age"));
@@ -86,7 +86,7 @@ public class StepsApiController {
         person.setPasswordHash(computedPasswordHash);
         
         repository.save(person);
-        return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("Account is created successfully", HttpStatus.CREATED);
     }
 
     /*
@@ -98,16 +98,15 @@ public class StepsApiController {
         if (optional.isPresent()) {  // Good Email
             Person person = optional.get();  // value from findByEmail
 
-            // Extract Attributes from JSON
-            Map<String, Object> attributeMap = new HashMap<>();
-            }
-
-            // Set Date and Attributes to SQL HashMap
-            Map<String, Map<String, Object>> date_map = new HashMap<>();
-            date_map.put( (String) stat_map.get("date"), attributeMap );
-            person.setStats(date_map);  // BUG, needs to be customized to replace if existing or append if new
-            repository.save(person);  // conclude by writing the stats updates
-
+            Day day = new Day();  
+            day.setCalories((int) stat_map.get("calories"));
+            day.setSteps((int) stat_map.get("steps"));
+            day.setDay((int) stat_map.get("day"));
+            day.setMonth((int) stat_map.get("month"));
+            day.setYear((int) stat_map.get("year"));
+            day.setDistanceMiles((double) day.getSteps() / 2250);
+            person.addDay(day);
+            repository.save(person);
             // return Person with update Stats
             return new ResponseEntity<>(person, HttpStatus.OK);
         }
