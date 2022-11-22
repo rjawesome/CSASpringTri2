@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 
 @RestController
-@RequestMapping("/api/person")
+@RequestMapping("/api/steptrack1")
 public class StepsApiController {
     /*
     #### RESTful API ####
