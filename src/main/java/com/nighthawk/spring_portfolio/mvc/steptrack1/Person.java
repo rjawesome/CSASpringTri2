@@ -1,6 +1,10 @@
 package com.nighthawk.spring_portfolio.mvc.steptrack1;
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import lombok.*;
 
 @Data
@@ -15,6 +19,10 @@ public class Person {
     
     // Person data
     String name;
+    @NotEmpty
+    @Size(min=5)
+    @Column(unique=true)
+    @Email
     String email;
     String gender;
     int age;

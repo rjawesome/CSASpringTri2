@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 
 @RestController
@@ -23,12 +26,24 @@ public class StepsApiController {
     /*
     GET individual Person using ID
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<Person> getPerson(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
+    @GetMapping("/getPerson")
+    public ResponseEntity<Person> getPerson(@RequestBody final Map<String,Object> stat_map) throws NoSuchAlgorithmException {
+        Optional<Person> optional = repository.findByEmail((String) stat_map.get("email"));
         if (optional.isPresent()) {  // Good ID
             Person person = optional.get();  // value from findByID
-            return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
+            String password = (String) stat_map.get("password");
+
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedHash = digest.digest(
+            password.getBytes(StandardCharsets.UTF_8));
+            String computedPasswordHash = new String(encodedHash);
+
+            if (computedPasswordHash.equals(person.getPasswordHash())) {
+                return new ResponseEntity<>(person, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);        
+            }
         }
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
