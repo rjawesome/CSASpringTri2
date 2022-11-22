@@ -68,18 +68,23 @@ public class StepsApiController {
     POST Aa record by Requesting Parameters from URI
      */
     @PostMapping( "/post")
-    public ResponseEntity<Object> postPerson(@RequestParam("email") String email,
-                                             @RequestParam("password") String password,
-                                             @RequestParam("name") String name,
-                                             @RequestParam("dob") String dobString) {
-        Date dob;
-        try {
-            dob = new SimpleDateFormat("MM-dd-yyyy").parse(dobString);
-        } catch (Exception e) {
-            return new ResponseEntity<>(dobString +" error; try MM-dd-yyyy", HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<Object> postPerson(@RequestBody final Map<String,Object> stat_map) {
         // A person object WITHOUT ID will create a new record with default roles as student
-        Person person = new Person(email, password, name, dob);
+        Person person = new Person();
+        person.setAge((int) stat_map.get("age"));
+        person.setName((String) stat_map.get("name"));
+        person.setEmail((String) stat_map.get("email"));
+        person.setGender((String) stat_map.get("gender"));
+        person.setHeightIn((int) stat_map.get("heightIn"));
+        person.setWeightLbs((int) stat_map.get("weightLbs"));
+        // password hash
+        String password = (String) stat_map.get("password");
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] encodedHash = digest.digest(
+        password.getBytes(StandardCharsets.UTF_8));
+        String computedPasswordHash = new String(encodedHash);
+        person.setPasswordHash(computedPasswordHash);
+        
         repository.save(person);
         return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
     }
