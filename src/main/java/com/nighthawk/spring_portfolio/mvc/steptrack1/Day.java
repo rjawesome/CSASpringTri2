@@ -1,7 +1,11 @@
 package com.nighthawk.spring_portfolio.mvc.steptrack1;
 
 import javax.persistence.*;
+import lombok.*;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Day {
     // attributes, how would you track days.  perhaps capture date and have many method to calculate this data
