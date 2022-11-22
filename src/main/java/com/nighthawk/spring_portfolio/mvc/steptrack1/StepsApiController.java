@@ -43,7 +43,8 @@ public class StepsApiController {
             String computedPasswordHash = new String(encodedHash);
 
             if (computedPasswordHash.equals(person.getPasswordHash())) {
-                System.out.println(person.toString());
+                // redact password
+                person.passwordHash = "REDACTED";
                 return new ResponseEntity<>(person, HttpStatus.OK);
             }
             else {
@@ -150,6 +151,10 @@ public class StepsApiController {
               person.addDay(day);
               repository.save(person);
             }
+
+            //redact password
+            person.passwordHash = "REDACTED";
+
             // return Person with update Stats
             return new ResponseEntity<>(person, HttpStatus.OK);
         }
