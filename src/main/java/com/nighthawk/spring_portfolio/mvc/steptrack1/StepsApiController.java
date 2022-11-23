@@ -58,16 +58,29 @@ public class StepsApiController {
     /*
     DELETE individual Person using ID
      */
-    @DeleteMapping("/deletePerson/{id}")
-    public ResponseEntity<Person> deletePerson(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
+    @DeleteMapping("/deletePerson")
+    public ResponseEntity<Object> deletePerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
+        String email = (String) map.get("email");
+        String password = (String) map.get("password");
+        Optional<Person> optional = repository.findByEmail(email);
         if (optional.isPresent()) {  // Good ID
             Person person = optional.get();  // value from findByID
-            repository.deleteById(id);  // value from findByID
-            return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
+            
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedHash = digest.digest(
+            password.getBytes(StandardCharsets.UTF_8));
+            String computedPasswordHash = new String(encodedHash);
+
+            if (!computedPasswordHash.equals(person.passwordHash)) {
+                return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST); 
+            }
+
+            repository.deleteById(person.getId());
+
+            return new ResponseEntity<>("Person has been deleted", HttpStatus.OK);  // OK HTTP response: status code, headers, and body
         }
         // Bad ID
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+        return new ResponseEntity<>("Person doesn't exist", HttpStatus.BAD_REQUEST); 
     }
 
     /*
