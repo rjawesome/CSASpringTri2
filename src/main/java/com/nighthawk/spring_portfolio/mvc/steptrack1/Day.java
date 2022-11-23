@@ -32,4 +32,8 @@ public class Day {
     public void appendDistance (double miles) {
       this.distanceMiles += miles;
     }
+
+    public boolean isDate (int day, int month, int year) {
+      return this.day == day && this.month == month && this.year == year;
+    }
 }
