@@ -209,7 +209,11 @@ public class StepsApiController {
         }
         // return Bad ID
         return new ResponseEntity<>("Account doesn't exist", HttpStatus.BAD_REQUEST); 
-        
     }
 
+    // handles exceptions
+    @ExceptionHandler({ClassCastException.class, NullPointerException.class})
+    public ResponseEntity<Object> handleBadUserInput () {
+      return new ResponseEntity<>("Bad input JSON", HttpStatus.BAD_REQUEST); 
+    }
 }
