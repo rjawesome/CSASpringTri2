@@ -75,6 +75,12 @@ public class StepsApiController {
      */
     @PostMapping("/createPerson")
     public ResponseEntity<Object> postPerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
+        //check for existing person
+        if (repository.findByEmail((String) map.get("email")).isPresent()) {
+            return new ResponseEntity<>("Account with email has been created", HttpStatus.CREATED);
+        }
+
+
         // A person object WITHOUT ID will create a new record with default roles as student
         Person person = new Person();
         person.setAge((int) map.get("age"));
