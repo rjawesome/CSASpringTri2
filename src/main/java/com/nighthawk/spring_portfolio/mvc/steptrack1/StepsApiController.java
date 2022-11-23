@@ -52,7 +52,7 @@ public class StepsApiController {
             }
         }
         // Bad ID
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
+        return new ResponseEntity<>("Person with email doesn't exist", HttpStatus.BAD_REQUEST);       
     }
 
     /*
@@ -165,7 +165,7 @@ public class StepsApiController {
             return new ResponseEntity<>(person, HttpStatus.OK);
         }
         // return Bad ID
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
+        return new ResponseEntity<>("Account doesn't exist", HttpStatus.BAD_REQUEST); 
         
     }
 
