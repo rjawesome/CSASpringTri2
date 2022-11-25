@@ -2,7 +2,6 @@ package com.nighthawk.spring_portfolio.mvc.steptrack1;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +9,6 @@ import java.util.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 
 @RestController
 @RequestMapping("/api/steptrack1")
@@ -133,10 +131,8 @@ public class StepsApiController {
         person.setHeightIn((int) map.get("heightIn"));
         person.setWeightLbs((int) map.get("weightLbs"));
 
-
-        /* CHANGE TO A CALCULATION */
-        person.setActiveSteps(10000);
-
+        int activeSteps = (((person.getWeightLbs() / (person.getHeightIn() * person.getHeightIn())) * 703) * 500);
+        person.setActiveSteps(activeSteps);
 
         // password hash
         String password = (String) map.get("password");
