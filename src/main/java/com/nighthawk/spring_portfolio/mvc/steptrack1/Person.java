@@ -62,4 +62,22 @@ public class Person {
       }
       return totalSteps/days.size();
     }
+
+    public static void main(String[] args) {
+      Person person = new Person();
+      person.setActiveSteps(1000);
+      person.setAge(16);
+      person.setGender("Male");
+      person.setDays(null);
+      person.setEmail("rohanj2006@gmail.com");
+      person.setHeightIn(65);
+      person.setId(null);
+      person.setName("Rohan Juneja");
+      person.setPasswordHash("asodjaosidjoa");
+      person.setWeightLbs(120);
+      System.out.println(person);
+
+      Person person2 = new Person(null, "Rohan", "rohanj2006@gmail.com", "Female", 16, 65, 120, 10000, "asdjaoi", null);
+      System.out.println(person2);
+    }
 }
