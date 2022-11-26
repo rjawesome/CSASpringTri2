@@ -36,4 +36,19 @@ public class Day {
     public boolean isDate (int day, int month, int year) {
       return this.day == day && this.month == month && this.year == year;
     }
-}
+
+    public static void main(String[] args) {
+      Day day = new Day();
+      day.setCalories(100);
+      day.setDay(10);
+      day.setDistanceMiles(1.1);
+      day.setId(null);
+      day.setMonth(5);
+      day.setSteps(10000);
+      day.setYear(2022);
+      System.out.println(day);
+
+      Day day2 = new Day(null, 2022, 5, 10, 10000, 100, 1.1);
+      System.out.println(day2);
+    }
+  }
