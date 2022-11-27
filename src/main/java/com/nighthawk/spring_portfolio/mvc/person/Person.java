@@ -64,6 +64,12 @@ public class Person {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dob;
     
+    // New POJOs
+    @NotEmpty
+    private double weight; // To be specific, this is in kilograms
+
+    @NotEmpty
+    private double height; // To be specific, this is in centimeters (cuz it's easier)
 
     /* HashMap is used to store JSON for daily "stats"
     "stats": {
@@ -79,11 +85,13 @@ public class Person {
     
 
     // Constructor used when building object from an API
-    public Person(String email, String password, String name, Date dob) {
+    public Person(String email, String password, String name, Date dob, double weight, double height) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.dob = dob;
+        this.weight = weight;
+        this.height = height;
     }
 
     // A custom getter to return age from dob attribute
@@ -92,6 +100,11 @@ public class Person {
             LocalDate birthDay = this.dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             return Period.between(birthDay, LocalDate.now()).getYears(); }
         return -1;
+    }
+
+    // Calculates BMI with height and weight
+    public double getBMI() {
+        return weight / (Math.pow(height / 100, 2));
     }
 
 }
