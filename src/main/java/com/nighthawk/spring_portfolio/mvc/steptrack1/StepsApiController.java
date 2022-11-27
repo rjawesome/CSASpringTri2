@@ -131,7 +131,7 @@ public class StepsApiController {
         person.setHeightIn((int) map.get("heightIn"));
         person.setWeightLbs((int) map.get("weightLbs"));
 
-        int activeSteps = (((person.getWeightLbs() / (person.getHeightIn() * person.getHeightIn())) * 703) * 500);
+        int activeSteps = (int) ((((double) person.getWeightLbs() / (person.getHeightIn() * person.getHeightIn())) * 703) * 500);
         person.setActiveSteps(activeSteps);
 
         // password hash
