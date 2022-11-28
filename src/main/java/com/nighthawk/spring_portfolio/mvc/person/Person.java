@@ -26,6 +26,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
 
 /*
 Person is a POJO, Plain Old Java Object.
@@ -38,6 +39,7 @@ The last annotation connect to database
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString
 @TypeDef(name="json", typeClass = JsonType.class)
 public class Person {
     
@@ -112,8 +114,15 @@ public class Person {
         stats.put(date, info);
     }
 
+    // public String toString() {
+    //     return String.format("id: %d, email: %s, password: %s, name: %s, dob: %s, weight: %s, height: %s", stats: %s, id, email, password, name, dob, weight, height, stats);
+    // }
+    
+
     public static void main(String[] args) {
         Person john = new Person();
+        System.out.println(john.toString());
         Person peter = new Person("bruh@gmail.com", "deez", "peter", new Date(2000, 11, 21), 100, 178);
+        System.out.println(peter.toString());
     }
 }
