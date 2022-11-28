@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.json.simple.JSONObject;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.vladmihalcea.hibernate.type.json.JsonType;
@@ -73,6 +74,8 @@ public class Person {
     //@NotEmpty dont think it worksda
     private double height; // To be specific, this is in centimeters (cuz it's easier)
 
+    private long stepGoal = 10000;
+
     /* HashMap is used to store JSON for daily "stats"
     "stats": {
         "2022-11-13": {
@@ -114,10 +117,14 @@ public class Person {
         stats.put(date, info);
     }
 
+    public Map<String, Object> getDayStat(String date) {
+        return stats.get(date);
+    }
+
     // public String toString() {
     //     return String.format("id: %d, email: %s, password: %s, name: %s, dob: %s, weight: %s, height: %s", stats: %s, id, email, password, name, dob, weight, height, stats);
     // }
-    
+    // used lombok
 
     public static void main(String[] args) {
         Person john = new Person();

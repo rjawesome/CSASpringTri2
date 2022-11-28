@@ -1,5 +1,6 @@
 package com.nighthawk.spring_portfolio.mvc.person;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -59,6 +60,22 @@ public class PersonApiController {
         }
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
+    }
+
+    @PostMapping("/goalAchieved")
+    public ResponseEntity<Boolean> goalCheck(@RequestParam("id") long id, @RequestParam("date") String date) {
+        Optional<Person> optional = repository.findById(id);
+        if (optional.isPresent()) {
+            Person person = optional.get();
+            long stepGoal = person.getStepGoal();
+            System.out.println(stepGoal);
+            JSONObject dayStat = new JSONObject(person.getDayStat(date));
+            long stepsTaken = Long.valueOf((int) dayStat.get("steps"));
+
+            return new ResponseEntity<>(stepsTaken >= stepGoal, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
     }
 
     /*
