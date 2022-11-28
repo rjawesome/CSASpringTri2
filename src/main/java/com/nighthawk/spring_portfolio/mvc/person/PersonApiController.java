@@ -62,6 +62,19 @@ public class PersonApiController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
     }
 
+    @GetMapping("/age/{id}")
+    public ResponseEntity<JsonNode> getAge(@PathVariable long id) throws JsonMappingException, JsonProcessingException {
+        Optional<Person> optional = repository.findById(id);
+        if (optional.isPresent()) {  // Good ID
+            Person person = optional.get();  // value from findByID
+            ObjectMapper mapper = new ObjectMapper(); 
+            JsonNode json = mapper.readTree("{ \"id\": "  +id+  ", " +  "\"BMI\": "  + person.getAge() + "}");  // OK HTTP response: status code, headers, and body
+            return ResponseEntity.ok(json);
+        }
+        // Bad ID
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
+    }
+
     @PostMapping("/goalAchieved")
     public ResponseEntity<Boolean> goalCheck(@RequestParam("id") long id, @RequestParam("date") String date) {
         Optional<Person> optional = repository.findById(id);
