@@ -6,6 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.*;
 import java.text.SimpleDateFormat;
 
@@ -38,6 +43,19 @@ public class PersonApiController {
         if (optional.isPresent()) {  // Good ID
             Person person = optional.get();  // value from findByID
             return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
+        }
+        // Bad ID
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
+    }
+
+    @GetMapping("/bmi/{id}")
+    public ResponseEntity<JsonNode> getBMI(@PathVariable long id) throws JsonMappingException, JsonProcessingException {
+        Optional<Person> optional = repository.findById(id);
+        if (optional.isPresent()) {  // Good ID
+            Person person = optional.get();  // value from findByID
+            ObjectMapper mapper = new ObjectMapper(); 
+            JsonNode json = mapper.readTree("{ \"id\": "  +id+  ", " +  "\"BMI\": "  + person.getBMI() + "}");  // OK HTTP response: status code, headers, and body
+            return ResponseEntity.ok(json);
         }
         // Bad ID
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);       
