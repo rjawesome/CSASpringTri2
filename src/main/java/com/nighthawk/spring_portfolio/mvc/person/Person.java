@@ -65,10 +65,10 @@ public class Person {
     private Date dob;
     
     // New POJOs
-    @NotEmpty
+    //@NotEmpty dont think it works
     private double weight; // To be specific, this is in kilograms
 
-    @NotEmpty
+    //@NotEmpty dont think it worksda
     private double height; // To be specific, this is in centimeters (cuz it's easier)
 
     /* HashMap is used to store JSON for daily "stats"
@@ -107,4 +107,13 @@ public class Person {
         return weight / (Math.pow(height / 100, 2));
     }
 
+    // appends 
+    public void addStats(String date, Map<String, Object> info) {
+        stats.put(date, info);
+    }
+
+    public static void main(String[] args) {
+        Person john = new Person();
+        Person peter = new Person("bruh@gmail.com", "deez", "peter", new Date(2000, 11, 21), 100, 178);
+    }
 }
