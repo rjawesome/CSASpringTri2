@@ -42,7 +42,7 @@ The last annotation connect to database
 @Entity
 @ToString
 @TypeDef(name="json", typeClass = JsonType.class)
-public class Person {
+public class Person2 {
     
     // automatic unique identifier for Person record
     @Id
@@ -90,7 +90,7 @@ public class Person {
     
 
     // Constructor used when building object from an API
-    public Person(String email, String password, String name, Date dob, double weight, double height) {
+    public Person2(String email, String password, String name, Date dob, double weight, double height) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -127,9 +127,9 @@ public class Person {
     // used lombok
 
     public static void main(String[] args) {
-        Person john = new Person();
+        Person2 john = new Person2();
         System.out.println(john.toString());
-        Person peter = new Person("bruh@gmail.com", "deez", "peter", new Date(2000, 11, 21), 100, 178);
+        Person2 peter = new Person2("bruh@gmail.com", "deez", "peter", new Date(2000, 11, 21), 100, 178);
         System.out.println(peter.toString());
     }
 }

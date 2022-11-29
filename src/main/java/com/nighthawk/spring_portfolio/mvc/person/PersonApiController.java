@@ -25,13 +25,13 @@ public class PersonApiController {
 
     // Autowired enables Control to connect POJO Object through JPA
     @Autowired
-    private PersonJpaRepository repository;
+    private Person2JpaRepository repository;
 
     /*
     GET List of People
      */
     @GetMapping("/")
-    public ResponseEntity<List<Person>> getPeople() {
+    public ResponseEntity<List<Person2>> getPeople() {
         return new ResponseEntity<>( repository.findAllByOrderByNameAsc(), HttpStatus.OK);
     }
 
@@ -39,10 +39,10 @@ public class PersonApiController {
     GET individual Person using ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Person> getPerson(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
+    public ResponseEntity<Person2> getPerson(@PathVariable long id) {
+        Optional<Person2> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            Person2 person = optional.get();  // value from findByID
             return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
         }
         // Bad ID
@@ -51,9 +51,9 @@ public class PersonApiController {
 
     @GetMapping("/bmi/{id}")
     public ResponseEntity<JsonNode> getBMI(@PathVariable long id) throws JsonMappingException, JsonProcessingException {
-        Optional<Person> optional = repository.findById(id);
+        Optional<Person2> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            Person2 person = optional.get();  // value from findByID
             ObjectMapper mapper = new ObjectMapper(); 
             JsonNode json = mapper.readTree("{ \"id\": "  +id+  ", " +  "\"BMI\": "  + person.getBMI() + "}");  // OK HTTP response: status code, headers, and body
             return ResponseEntity.ok(json);
@@ -64,9 +64,9 @@ public class PersonApiController {
 
     @GetMapping("/age/{id}")
     public ResponseEntity<JsonNode> getAge(@PathVariable long id) throws JsonMappingException, JsonProcessingException {
-        Optional<Person> optional = repository.findById(id);
+        Optional<Person2> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            Person2 person = optional.get();  // value from findByID
             ObjectMapper mapper = new ObjectMapper(); 
             JsonNode json = mapper.readTree("{ \"id\": "  +id+  ", " +  "\"BMI\": "  + person.getAge() + "}");  // OK HTTP response: status code, headers, and body
             return ResponseEntity.ok(json);
@@ -77,9 +77,9 @@ public class PersonApiController {
 
     @PostMapping("/goalAchieved")
     public ResponseEntity<Boolean> goalCheck(@RequestParam("id") long id, @RequestParam("date") String date) {
-        Optional<Person> optional = repository.findById(id);
+        Optional<Person2> optional = repository.findById(id);
         if (optional.isPresent()) {
-            Person person = optional.get();
+            Person2 person = optional.get();
             long stepGoal = person.getStepGoal();
             System.out.println(stepGoal);
             JSONObject dayStat = new JSONObject(person.getDayStat(date));
@@ -95,10 +95,10 @@ public class PersonApiController {
     DELETE individual Person using ID
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Person> deletePerson(@PathVariable long id) {
-        Optional<Person> optional = repository.findById(id);
+    public ResponseEntity<Person2> deletePerson(@PathVariable long id) {
+        Optional<Person2> optional = repository.findById(id);
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            Person2 person = optional.get();  // value from findByID
             repository.deleteById(id);  // value from findByID
             return new ResponseEntity<>(person, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
         }
@@ -123,7 +123,7 @@ public class PersonApiController {
             return new ResponseEntity<>(dobString +" error; try MM-dd-yyyy", HttpStatus.BAD_REQUEST);
         }
         // A person object WITHOUT ID will create a new record with default roles as student
-        Person person = new Person(email, password, name, dob, weight, height);
+        Person2 person = new Person2(email, password, name, dob, weight, height);
         repository.save(person);
         return new ResponseEntity<>(email +" is created successfully", HttpStatus.CREATED);
     }
@@ -137,7 +137,7 @@ public class PersonApiController {
         String term = (String) map.get("term");
 
         // JPA query to filter on term
-        List<Person> list = repository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
+        List<Person2> list = repository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
 
         // return resulting list and status, error checking should be added
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -147,12 +147,12 @@ public class PersonApiController {
     The personStats API adds stats by Date to Person table 
     */
     @PostMapping(value = "/setStats", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Person> personStats(@RequestBody final Map<String,Object> stat_map) {
+    public ResponseEntity<Person2> personStats(@RequestBody final Map<String,Object> stat_map) {
         // find ID
         long id=Long.parseLong((String) stat_map.get("id"));  
-        Optional<Person> optional = repository.findById((id));
+        Optional<Person2> optional = repository.findById((id));
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            Person2 person = optional.get();  // value from findByID
 
             // Extract Attributes from JSON
             Map<String, Object> attributeMap = new HashMap<>();
