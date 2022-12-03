@@ -156,6 +156,22 @@ public class Calculator1 {
         }
 
     }
+    
+    // Calculates result from two numbers and an operator
+    private double resolve (double n1, double n2, String operator) {
+        switch (operator) {
+            case "+":
+                return num1 + num2;
+            case "-":
+                return num1 - num2;
+            case "*":
+                return num1 * num2;
+            case "/":
+                return num1 / num2;
+            default:
+                return 0;
+        }   
+    }
 
     // Takes RPN and produces a final result
     private void rpnToResult()
@@ -170,9 +186,10 @@ public class Calculator1 {
             if (isOperator(token))
             {
                 // Pop the two top entries
-
+                double n2 = calcStack.pop();
+                double n1 = calcStack.pop();
                 // Calculate intermediate results
-                result = 0.0;
+                result = resolve(n1, n2, token);
 
                 // Push intermediate result back onto the stack
                 calcStack.push( result );
