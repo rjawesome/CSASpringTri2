@@ -24,6 +24,7 @@ public class Calculator1 {
     private final Map<String, Integer> OPERATORS = new HashMap<>();
     {
         // Map<"token", precedence>
+        OPERATORS.put("^", 2);
         OPERATORS.put("*", 3);
         OPERATORS.put("/", 3);
         OPERATORS.put("%", 3);
@@ -132,6 +133,7 @@ public class Calculator1 {
                 case "*":
                 case "/":
                 case "%":
+                case "^":
                     // While stack
                     // not empty AND stack top element
                     // and is an operator
@@ -168,6 +170,8 @@ public class Calculator1 {
                 return num1 * num2;
             case "/":
                 return num1 / num2;
+            case "^":
+                return Math.pow(num1, num2):
             default:
                 return 0;
         }   
