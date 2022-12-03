@@ -42,7 +42,7 @@ public class Calculator1 {
     }
 
     // Create a 1 argument constructor expecting a mathematical expression
-    public Calculator(String expression) {
+    public Calculator1(String expression) {
         // original input
         this.expression = expression;
 
@@ -160,7 +160,7 @@ public class Calculator1 {
     }
     
     // Calculates result from two numbers and an operator
-    private double resolve (double n1, double n2, String operator) {
+    private double resolve (double num1, double num2, String operator) {
         switch (operator) {
             case "+":
                 return num1 + num2;
@@ -171,7 +171,7 @@ public class Calculator1 {
             case "/":
                 return num1 / num2;
             case "^":
-                return Math.pow(num1, num2):
+                return Math.pow(num1, num2);
             default:
                 return 0;
         }   
@@ -219,27 +219,27 @@ public class Calculator1 {
     // Tester method
     public static void main(String[] args) {
         // Random set of test cases
-        Calculator simpleMath = new Calculator("100 + 200  * 3");
+        Calculator1 simpleMath = new Calculator1("100 + 200  * 3");
         System.out.println("Simple Math\n" + simpleMath);
 
         System.out.println();
 
-        Calculator parenthesisMath = new Calculator("(100 + 200)  * 3");
+        Calculator1 parenthesisMath = new Calculator1("(100 + 200)  * 3");
         System.out.println("Parenthesis Math\n" + parenthesisMath);
 
         System.out.println();
 
-        Calculator decimalMath = new Calculator("100.2 - 99.3");
+        Calculator1 decimalMath = new Calculator1("100.2 - 99.3");
         System.out.println("Decimal Math\n" + decimalMath);
 
         System.out.println();
 
-        Calculator moduloMath = new Calculator("300 % 200");
+        Calculator1 moduloMath = new Calculator1("300 % 200");
         System.out.println("Modulo Math\n" + moduloMath);
 
         System.out.println();
 
-        Calculator divisionMath = new Calculator("300/200");
+        Calculator1 divisionMath = new Calculator1("300/200");
         System.out.println("Division Math\n" + divisionMath);
 
     }
