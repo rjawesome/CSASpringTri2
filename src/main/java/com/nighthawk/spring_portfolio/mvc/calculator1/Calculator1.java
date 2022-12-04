@@ -160,18 +160,19 @@ public class Calculator1 {
     }
     
     // Calculates result from two numbers and an operator
-    private double resolve (double num1, double num2, String operator) {
+    private double resolve (Stack<Double> stack, String operator) {
         switch (operator) {
             case "+":
-                return num1 + num2;
+                return stack.pop() + stack.pop();
             case "-":
-                return num1 - num2;
+                return -stack.pop() + stack.pop();
             case "*":
-                return num1 * num2;
+                return stack.pop() * stack.pop();
             case "/":
-                return num1 / num2;
+                return 1/stack.pop() * stack.pop();
             case "^":
-                return Math.pow(num1, num2);
+                double exp = stack.pop();
+                return Math.pow(stack.pop(), exp);
             default:
                 return 0;
         }   
@@ -189,11 +190,8 @@ public class Calculator1 {
             // If the token is an operator, calculate
             if (isOperator(token))
             {
-                // Pop the two top entries
-                double n2 = calcStack.pop();
-                double n1 = calcStack.pop();
                 // Calculate intermediate results
-                result = resolve(n1, n2, token);
+                result = resolve(calcStack, token);
 
                 // Push intermediate result back onto the stack
                 calcStack.push( result );
