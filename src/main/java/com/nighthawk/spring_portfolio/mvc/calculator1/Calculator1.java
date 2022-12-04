@@ -286,8 +286,12 @@ public class Calculator1 {
         Calculator1 powerMath = new Calculator1("2 ^ 3 + 1");
         System.out.println("Power Math\n" + powerMath);
 
+        System.out.println();
+
         Calculator1 squareRootMath = new Calculator1("3 + 5 * SQRT(81)");
         System.out.println("Square Root Math\n" + squareRootMath);
+
+        System.out.println();
 
         Calculator1 normalMath = new Calculator1("NORM(1) - NORM(n1)");
         System.out.println("Normal Math\n" + normalMath);
