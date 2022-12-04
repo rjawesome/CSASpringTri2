@@ -25,6 +25,7 @@ public class Calculator1 {
     {
         // Map<"token", precedence>
         OPERATORS.put("SQRT", 1);
+        OPERATORS.put("NORM", 1);
         OPERATORS.put("^", 2);
         OPERATORS.put("*", 3);
         OPERATORS.put("/", 3);
@@ -87,7 +88,8 @@ public class Calculator1 {
             if ( isOperator(c.toString() ) || isSeparator(c.toString())  ) {
                 // 1st check for working term and add if it exists
                 if (multiCharTerm.length() > 0) {
-                    tokens.add(this.expression.substring(start, i));
+                    // SPECIAL CHARACTER "n" used as a negative sign
+                    tokens.add(this.expression.substring(start, i).replace("n", "-"));
                 }
                 // Add operator or parenthesis term to list
                 if (c != ' ') {
@@ -97,14 +99,14 @@ public class Calculator1 {
                 start = i + 1;
                 multiCharTerm = new StringBuilder();
             } 
-            // special case for sqrt multi character
-            else if (i + 3 < this.expression.length() && this.expression.substring(i, i + 4).equals("SQRT")) {
+            // special case for 4 character functions
+            else if (i + 3 < this.expression.length() && isOperator(this.expression.substring(i, i + 4))) {
                 // 1st check for working term and add if it exists
                 if (multiCharTerm.length() > 0) {
                     tokens.add(this.expression.substring(start, i));
                 }
                 // Add SQRT operator to list
-                tokens.add("SQRT");
+                tokens.add(this.expression.substring(i, i + 4));
                 // Get ready for next term
                 start = i + 4;
                 multiCharTerm = new StringBuilder();
@@ -150,6 +152,7 @@ public class Calculator1 {
                 case "%":
                 case "^":
                 case "SQRT":
+                case "NORM":
                     // While stack
                     // not empty AND stack top element
                     // and is an operator
@@ -174,6 +177,16 @@ public class Calculator1 {
         }
 
     }
+
+    double normConst = 1/Math.sqrt(2*Math.PI);
+    double[] taylorSeries = {normConst/1, -normConst/6, normConst/40, -normConst/336, normConst/3456, -normConst/42240, normConst/599040};
+    double getAreaUnderNormalCurve(double z) {
+        double ans = 0.5;
+        for (int i = 0; i<taylorSeries.length; i++) {
+            ans += Math.pow(z, 2*i+1) * taylorSeries[i];
+        }
+        return ans;
+    }
     
     // Calculates result from two numbers and an operator
     private double resolve (Stack<Double> stack, String operator) {
@@ -194,6 +207,8 @@ public class Calculator1 {
                 return Math.pow(stack.pop(), exp);
             case "SQRT":
                 return Math.sqrt(stack.pop());
+            case "NORM":
+                return getAreaUnderNormalCurve(stack.pop());
             default:
                 return 0;
         }   
@@ -268,5 +283,8 @@ public class Calculator1 {
 
         Calculator1 squareRootMath = new Calculator1("3 + 5 * SQRT(81)");
         System.out.println("Square Root Math\n" + squareRootMath);
+
+        Calculator1 normalMath = new Calculator1("NORM(1) - NORM(n1)");
+        System.out.println("Normal Math\n" + normalMath);
     }
 }
