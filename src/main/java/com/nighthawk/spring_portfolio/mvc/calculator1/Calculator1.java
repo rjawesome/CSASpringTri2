@@ -24,6 +24,7 @@ public class Calculator1 {
     private final Map<String, Integer> OPERATORS = new HashMap<>();
     {
         // Map<"token", precedence>
+        OPERATORS.put("SQRT", 1);
         OPERATORS.put("^", 2);
         OPERATORS.put("*", 3);
         OPERATORS.put("/", 3);
@@ -95,7 +96,21 @@ public class Calculator1 {
                 // Get ready for next term
                 start = i + 1;
                 multiCharTerm = new StringBuilder();
-            } else {
+            } 
+            // special case for sqrt multi character
+            else if (i + 3 < this.expression.length() && this.expression.substring(i, i + 4).equals("SQRT")) {
+                // 1st check for working term and add if it exists
+                if (multiCharTerm.length() > 0) {
+                    tokens.add(this.expression.substring(start, i));
+                }
+                // Add SQRT operator to list
+                tokens.add("SQRT");
+                // Get ready for next term
+                start = i + 4;
+                multiCharTerm = new StringBuilder();
+                i += 3;
+            }
+            else {
                 // multi character terms: numbers, functions, perhaps non-supported elements
                 // Add next character to working term
                 multiCharTerm.append(c);
@@ -134,6 +149,7 @@ public class Calculator1 {
                 case "/":
                 case "%":
                 case "^":
+                case "SQRT":
                     // While stack
                     // not empty AND stack top element
                     // and is an operator
@@ -176,6 +192,8 @@ public class Calculator1 {
             case "^":
                 double exp = stack.pop();
                 return Math.pow(stack.pop(), exp);
+            case "SQRT":
+                return Math.sqrt(stack.pop());
             default:
                 return 0;
         }   
@@ -243,5 +261,12 @@ public class Calculator1 {
         Calculator1 divisionMath = new Calculator1("300/200");
         System.out.println("Division Math\n" + divisionMath);
 
+        System.out.println();
+
+        Calculator1 powerMath = new Calculator1("2 ^ 3 + 1");
+        System.out.println("Power Math\n" + powerMath);
+
+        Calculator1 squareRootMath = new Calculator1("3 + 5 * SQRT(81)");
+        System.out.println("Square Root Math\n" + squareRootMath);
     }
 }
