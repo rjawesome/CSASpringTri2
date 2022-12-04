@@ -170,6 +170,9 @@ public class Calculator1 {
                 return stack.pop() * stack.pop();
             case "/":
                 return 1/stack.pop() * stack.pop();
+            case "%":
+                double divisor = stack.pop();
+                return stack.pop() % divisor;
             case "^":
                 double exp = stack.pop();
                 return Math.pow(stack.pop(), exp);
