@@ -250,6 +250,11 @@ public class Calculator1 {
                 "Final result: " + String.format("%.2f", this.result));
     }
 
+    // result getter
+    public double getResult() {
+      return this.result;
+    }
+
     // Tester method
     public static void main(String[] args) {
         // Random set of test cases
