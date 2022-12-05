@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import lombok.Data;
+
 /* In mathematics,
     an expression or mathematical expression is a finite combination of symbols that is well-formed
     according to rules that depend on the context.
@@ -13,7 +15,8 @@ import java.util.Stack;
     to handle computer math we often convert strings into reverse polish notation
     to handle errors we perform try / catch or set default conditions to trap errors
      */
-public class Calculator {
+@Data
+public class Calculator2 {
     // Key instance variables
     private final String expression;
     private ArrayList<String> tokens;
@@ -43,7 +46,7 @@ public class Calculator {
     }
 
     // Create a 1 argument constructor expecting a mathematical expression
-    public Calculator(String expression) throws BadParenthesisException {
+    public Calculator2(String expression) throws BadParenthesisException {
         // original input
         this.expression = expression;
 
@@ -269,32 +272,32 @@ public class Calculator {
     // Tester method
     public static void main(String[] args) throws BadParenthesisException {
         // Random set of test cases
-        Calculator simpleMath = new Calculator("100 + 200  * 3");
+        Calculator2 simpleMath = new Calculator2("100 + 200  * 3");
         System.out.println("Simple Math\n" + simpleMath);
 
         System.out.println();
 
-        Calculator parenthesisMath = new Calculator("(100 + 200)  * 3");
+        Calculator2 parenthesisMath = new Calculator2("(100 + 200)  * 3");
         System.out.println("Parenthesis Math\n" + parenthesisMath);
 
         System.out.println();
 
-        Calculator decimalMath = new Calculator("100.2 - 99.3");
+        Calculator2 decimalMath = new Calculator2("100.2 - 99.3");
         System.out.println("Decimal Math\n" + decimalMath);
 
         System.out.println();
 
-        Calculator moduloMath = new Calculator("300 % 200");
+        Calculator2 moduloMath = new Calculator2("300 % 200");
         System.out.println("Modulo Math\n" + moduloMath);
 
         System.out.println();
 
-        Calculator divisionMath = new Calculator("300/200");
+        Calculator2 divisionMath = new Calculator2("300/200");
         System.out.println("Division Math\n" + divisionMath);
 
         System.out.println();
 
-        Calculator sqrtMath = new Calculator("SQRT (9 * 9)");
+        Calculator2 sqrtMath = new Calculator2("SQRT (9 * 9)");
         System.out.println("SQRT Math\n" + sqrtMath);
 
 
