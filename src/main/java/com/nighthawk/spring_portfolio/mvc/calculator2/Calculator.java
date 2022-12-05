@@ -43,26 +43,19 @@ public class Calculator {
     }
 
     // Create a 1 argument constructor expecting a mathematical expression
-    public Calculator(String expression) {
+    public Calculator(String expression) throws BadParenthesisException {
         // original input
         this.expression = expression;
 
-        if (this.isBalanced(expression)) {
-            // parse expression into terms
-            this.termTokenizer();
+        
+        // parse expression into terms
+        this.termTokenizer();
 
-            this.tokensToReversePolishNotation();
+        this.tokensToReversePolishNotation();
 
-            // calculate reverse polish notation
-            this.rpnToResult();
-        } else {
-            try {
-                throw new BadParenthesisException();
-            } catch (BadParenthesisException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+        // calculate reverse polish notation
+        this.rpnToResult();
+        
         
     }
 
@@ -110,39 +103,43 @@ public class Calculator {
     }
 
     // Term Tokenizer takes original expression and converts it to ArrayList of tokens
-    private void termTokenizer() {
-        
-        // contains final list of tokens
-        this.tokens = new ArrayList<>();
+    private void termTokenizer() throws BadParenthesisException {
+        if (this.isBalanced(expression)) {
+            // contains final list of tokens
+            this.tokens = new ArrayList<>();
 
-        int start = 0;  // term split starting index
-        StringBuilder multiCharTerm = new StringBuilder();    // term holder
-        for (int i = 0; i < this.expression.length(); i++) {
-            Character c = this.expression.charAt(i);
-            if ( isOperator(c.toString() ) || isSeparator(c.toString())  ) {
-                // 1st check for working term and add if it exists
-                if (multiCharTerm.length() > 0) {
-                    tokens.add(this.expression.substring(start, i));
+            int start = 0;  // term split starting index
+            StringBuilder multiCharTerm = new StringBuilder();    // term holder
+            for (int i = 0; i < this.expression.length(); i++) {
+                Character c = this.expression.charAt(i);
+                if ( isOperator(c.toString() ) || isSeparator(c.toString())  ) {
+                    // 1st check for working term and add if it exists
+                    if (multiCharTerm.length() > 0) {
+                        tokens.add(this.expression.substring(start, i));
+                    }
+                    // Add operator or parenthesis term to list
+                    if (c != ' ') {
+                        tokens.add(c.toString());
+                    }
+                    // Get ready for next term
+                    start = i + 1;
+                    multiCharTerm = new StringBuilder();
+                } else {
+                    // multi character terms: numbers, functions, perhaps non-supported elements
+                    // Add next character to working term
+                    multiCharTerm.append(c);
+
                 }
-                // Add operator or parenthesis term to list
-                if (c != ' ') {
-                    tokens.add(c.toString());
-                }
-                // Get ready for next term
-                start = i + 1;
-                multiCharTerm = new StringBuilder();
-            } else {
-                // multi character terms: numbers, functions, perhaps non-supported elements
-                // Add next character to working term
-                multiCharTerm.append(c);
 
             }
-
+            // Add last term
+            if (multiCharTerm.length() > 0) {
+                tokens.add(this.expression.substring(start));
+            }
+        } else {
+            throw new BadParenthesisException();
         }
-        // Add last term
-        if (multiCharTerm.length() > 0) {
-            tokens.add(this.expression.substring(start));
-        }
+        
 
 
     }
@@ -270,14 +267,14 @@ public class Calculator {
     }
 
     // Tester method
-    public static void main(String[] args) {
+    public static void main(String[] args) throws BadParenthesisException {
         // Random set of test cases
         Calculator simpleMath = new Calculator("100 + 200  * 3");
         System.out.println("Simple Math\n" + simpleMath);
 
         System.out.println();
 
-        Calculator parenthesisMath = new Calculator("((100 + 200)  * 3");
+        Calculator parenthesisMath = new Calculator("(100 + 200)  * 3");
         System.out.println("Parenthesis Math\n" + parenthesisMath);
 
         System.out.println();
