@@ -78,6 +78,9 @@ public class Calculator1 {
 
     // Term Tokenizer takes original expression and converts it to ArrayList of tokens
     private void termTokenizer() {
+        // check parenthesis
+        // if (parenthesis are unmathced for this.expression) throw new BadParenthesisException();
+        
         // contains final list of tokens
         this.tokens = new ArrayList<>();
 
