@@ -44,7 +44,7 @@ public class Calculator1 {
     }
 
     // Create a 1 argument constructor expecting a mathematical expression
-    public Calculator1(String expression) {
+    public Calculator1(String expression) throws BadParenthesisException {
         // original input
         this.expression = expression;
 
@@ -77,9 +77,13 @@ public class Calculator1 {
     }
 
     // Term Tokenizer takes original expression and converts it to ArrayList of tokens
-    private void termTokenizer() {
-        // check parenthesis
-        // if (parenthesis are unmathced for this.expression) throw new BadParenthesisException();
+    private void termTokenizer() throws BadParenthesisException {
+        DelimeterFRQ1 frq = new DelimeterFRQ1('(', ')');
+        if (frq.isBalanced(frq.getDelimitersList(this.expression))) {
+        }
+        else {
+            throw new BadParenthesisException();
+        }
         
         // contains final list of tokens
         this.tokens = new ArrayList<>();
@@ -259,7 +263,7 @@ public class Calculator1 {
     }
 
     // Tester method
-    public static void main(String[] args) {
+    public static void main(String[] args) throws BadParenthesisException {
         // Random set of test cases
         Calculator1 simpleMath = new Calculator1("100 + 200  * 3");
         System.out.println("Simple Math\n" + simpleMath);
