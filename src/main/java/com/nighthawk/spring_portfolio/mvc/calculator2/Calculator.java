@@ -47,23 +47,14 @@ public class Calculator {
         // original input
         this.expression = expression;
 
-        if (this.isBalanced(expression)) {
-            // parse expression into terms
-            this.termTokenizer();
+        // parse expression into terms
+        this.termTokenizer();
 
-            this.tokensToReversePolishNotation();
+        // place terms into reverse polish notation
+        this.tokensToReversePolishNotation();
 
-            // calculate reverse polish notation
-            this.rpnToResult();
-        } else {
-            try {
-                throw new BadParenthesisException();
-            } catch (BadParenthesisException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        
+        // calculate reverse polish notation
+        this.rpnToResult();
     }
 
     // Test if token is an operator
@@ -84,34 +75,8 @@ public class Calculator {
         return (OPERATORS.get(token1) - OPERATORS.get(token2) >= 0) ;
     }
 
-    private boolean isBalanced(String s) {
-        Stack<Character> stack = new Stack<Character>();
-
-        for(int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if(c == '[' || c == '(' || c == '{' ) {     
-                stack.push(c);
-            } else if(c == ']') {
-                if(stack.isEmpty() || stack.pop() != '[') {
-                    return false;
-                }
-            } else if(c == ')') {
-                if(stack.isEmpty() || stack.pop() != '(') {
-                    return false;
-                }           
-            } else if(c == '}') {
-                if(stack.isEmpty() || stack.pop() != '{') {
-                    return false;
-                }
-            }
-
-        }
-        return stack.isEmpty();
-    }
-
     // Term Tokenizer takes original expression and converts it to ArrayList of tokens
     private void termTokenizer() {
-        
         // contains final list of tokens
         this.tokens = new ArrayList<>();
 
@@ -143,8 +108,6 @@ public class Calculator {
         if (multiCharTerm.length() > 0) {
             tokens.add(this.expression.substring(start));
         }
-
-
     }
 
     // Takes tokens and converts to Reverse Polish Notation (RPN), this is one where the operator follows its operands.
@@ -161,16 +124,12 @@ public class Calculator {
                     tokenStack.push(token);
                     break;
                 case ")":
-                    
                     while (tokenStack.peek() != null && !tokenStack.peek().equals("("))
                     {
                         reverse_polish.add( tokenStack.pop() );
                     }
-                    
                     tokenStack.pop();
                     break;
-                    
-                    
                 case "+":
                 case "-":
                 case "*":
@@ -277,7 +236,7 @@ public class Calculator {
 
         System.out.println();
 
-        Calculator parenthesisMath = new Calculator("((100 + 200)  * 3");
+        Calculator parenthesisMath = new Calculator("(100 + 200)  * 3");
         System.out.println("Parenthesis Math\n" + parenthesisMath);
 
         System.out.println();
