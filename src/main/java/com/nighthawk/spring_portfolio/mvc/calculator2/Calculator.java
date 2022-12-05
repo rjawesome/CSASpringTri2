@@ -136,6 +136,7 @@ public class Calculator {
                 case "/":
                 case "%":
                 case "^":
+                case "SQRT":
                     // While stack
                     // not empty AND stack top element
                     // and is an operator
@@ -175,27 +176,32 @@ public class Calculator {
             {
                 // Pop the two top entries
                 double op2 = calcStack.pop();
-                double op1 = calcStack.pop();
+                double op1 = calcStack.isEmpty() ? 0 : calcStack.pop();
+                
 
                 switch (token) {
                     case "+":
-                        result = op1 + op2;
+                        result = op2 + op1;
                         break;
                     case "-":
-                        result = op1 - op2;
+                        result = op2 - op1;
                         break;
                     case "*":
-                        result = op1 * op2;
+                        result = op2 * op1;
                         break;
                     case "/":
-                        result = op1 / op2;
+                        result = op2 / op1;
                         break;
                     case "%":
-                        result = op1 % op2;
+                        result = op2 % op1;
                         break;
                     case "^":
-                        result = Math.pow(op1, op2);
+                        result = Math.pow(op2, op1);
                         break;
+                    case "SQRT":
+                        result = Math.sqrt(op2);
+                        break;
+
                     
                 }
 
@@ -248,5 +254,9 @@ public class Calculator {
         Calculator divisionMath = new Calculator("300/200");
         System.out.println("Division Math\n" + divisionMath);
 
-    }
+        Calculator sqrtMath = new Calculator("SQRT (9 * 9)");
+        System.out.println("SQRT Math\n" + sqrtMath);
+
+
+    }   
 }
