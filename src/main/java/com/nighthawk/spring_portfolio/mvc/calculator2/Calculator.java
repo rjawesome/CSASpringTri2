@@ -254,6 +254,8 @@ public class Calculator {
         Calculator divisionMath = new Calculator("300/200");
         System.out.println("Division Math\n" + divisionMath);
 
+        System.out.println();
+
         Calculator sqrtMath = new Calculator("SQRT (9 * 9)");
         System.out.println("SQRT Math\n" + sqrtMath);
 
