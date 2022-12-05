@@ -27,6 +27,8 @@ public class Calculator2 {
     private final Map<String, Integer> OPERATORS = new HashMap<>();
     {
         // Map<"token", precedence>
+        OPERATORS.put("SIN", 1);
+        OPERATORS.put("COS", 1);
         OPERATORS.put("SQRT", 1);
         OPERATORS.put("^", 2);
         OPERATORS.put("*", 3);
@@ -178,6 +180,8 @@ public class Calculator2 {
                 case "%":
                 case "^":
                 case "SQRT":
+                case "SIN":
+                case "COS":
                     // While stack
                     // not empty AND stack top element
                     // and is an operator
@@ -203,6 +207,13 @@ public class Calculator2 {
 
     }
 
+    private boolean isSingleOperator(String token) {
+        if (token.equals("SQRT") || token.equals("SIN") || token.equals("COS")) {
+            return true;
+        }
+        return false;
+    }
+
     // Takes RPN and produces a final result
     private void rpnToResult()
     {
@@ -217,30 +228,36 @@ public class Calculator2 {
             {
                 // Pop the two top entries
                 double op2 = calcStack.pop();
-                double op1 = calcStack.isEmpty() ? 0 : calcStack.pop();
+                double op1 = isSingleOperator(token) ? 0 : calcStack.pop();
                 
 
                 switch (token) {
                     case "+":
-                        result = op2 + op1;
+                        result = op1 + op2;
                         break;
                     case "-":
-                        result = op2 - op1;
+                        result = op1 - op2;
                         break;
                     case "*":
-                        result = op2 * op1;
+                        result = op1 * op2;
                         break;
                     case "/":
-                        result = op2 / op1;
+                        result = op1 / op2;
                         break;
                     case "%":
-                        result = op2 % op1;
+                        result = op1 % op2;
                         break;
                     case "^":
-                        result = Math.pow(op2, op1);
+                        result = Math.pow(op1, op2);
                         break;
                     case "SQRT":
                         result = Math.sqrt(op2);
+                        break;
+                    case "SIN":
+                        result = Math.sin(op2*Math.PI/180);
+                        break;
+                    case "COS":
+                        result = Math.cos(op2*Math.PI/180);
                         break;
 
                     
@@ -272,33 +289,49 @@ public class Calculator2 {
     // Tester method
     public static void main(String[] args) throws BadParenthesisException {
         // Random set of test cases
-        Calculator2 simpleMath = new Calculator2("100 + 200  * 3");
-        System.out.println("Simple Math\n" + simpleMath);
+        // Calculator2 simpleMath = new Calculator2("100 + 200  * 3");
+        // System.out.println("Simple Math\n" + simpleMath);
+
+        // System.out.println();
+
+        // Calculator2 parenthesisMath = new Calculator2("(100 + 200)  * 3");
+        // System.out.println("Parenthesis Math\n" + parenthesisMath);
+
+        // System.out.println();
+
+        // Calculator2 decimalMath = new Calculator2("100.2 - 99.3");
+        // System.out.println("Decimal Math\n" + decimalMath);
+
+        // System.out.println();
+
+        // Calculator2 moduloMath = new Calculator2("300 % 200");
+        // System.out.println("Modulo Math\n" + moduloMath);
+
+        // System.out.println();
+
+        // Calculator2 divisionMath = new Calculator2("300/200");
+        // System.out.println("Division Math\n" + divisionMath);
+
+        // System.out.println();
+
+        // Calculator2 sqrtMath = new Calculator2("SQRT (9 * 9)");
+        // System.out.println("SQRT Math\n" + sqrtMath);
+
+        // System.out.println();
+
+        Calculator2 sinMath = new Calculator2("SIN (90)");
+        System.out.println("SIN Math\n" + sinMath);
 
         System.out.println();
 
-        Calculator2 parenthesisMath = new Calculator2("(100 + 200)  * 3");
-        System.out.println("Parenthesis Math\n" + parenthesisMath);
+        Calculator2 cosMath = new Calculator2("COS (180)");
+        System.out.println("COS Math\n" + cosMath);
 
         System.out.println();
 
-        Calculator2 decimalMath = new Calculator2("100.2 - 99.3");
-        System.out.println("Decimal Math\n" + decimalMath);
 
-        System.out.println();
 
-        Calculator2 moduloMath = new Calculator2("300 % 200");
-        System.out.println("Modulo Math\n" + moduloMath);
 
-        System.out.println();
-
-        Calculator2 divisionMath = new Calculator2("300/200");
-        System.out.println("Division Math\n" + divisionMath);
-
-        System.out.println();
-
-        Calculator2 sqrtMath = new Calculator2("SQRT (9 * 9)");
-        System.out.println("SQRT Math\n" + sqrtMath);
 
 
     }   
