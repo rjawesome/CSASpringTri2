@@ -14,8 +14,8 @@ public class DelimeterFRQ1 {
     public ArrayList<String> getDelimitersList(String input) {
         ArrayList<String> delimeter = new ArrayList<String>();
         for (char each : input.toCharArray()) {
-            if (each.equals(closeDel) || each.equals(openDel)) {
-                delimeter.add(each);
+            if (each == closeDel || each == openDel) {
+                delimeter.add(Character.toString(each));
             }
         }
         return delimeter;
@@ -25,7 +25,7 @@ public class DelimeterFRQ1 {
         int closeDels = 0;
 
         for (String each : delimiters) {
-            if (each.equals(openDel)) {
+            if (each.equals(Character.toString(openDel))) {
                 openDels++;
             }
             else {
