@@ -24,7 +24,7 @@ public class Calculator2ApiController {
     */
 
     
-    @GetMapping("/")
+    @PostMapping("/")
     public ResponseEntity<Double> calculate(@RequestBody String expression) throws BadParenthesisException {
         System.out.println(expression);
         Calculator2 calculator = new Calculator2(expression);
