@@ -19,7 +19,7 @@ public class Calculator1ApiController {
     System.out.println(expression);
     return new ResponseEntity<Double>(calculator.getResult(), HttpStatus.OK);
   }
-@ExceptionHandler({BadParenthesisException.class})
+@ExceptionHandler({BadParenthesisException.class}) //exception handler for bad parenthesis
   public ResponseEntity<Object> handleBadUserInput () {
     return new ResponseEntity<>("Parentheses are unmatched", HttpStatus.BAD_REQUEST); 
   }
