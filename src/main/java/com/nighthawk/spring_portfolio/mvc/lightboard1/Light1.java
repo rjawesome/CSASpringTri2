@@ -1,6 +1,7 @@
 package com.nighthawk.spring_portfolio.mvc.lightboard1;
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.Color;
 
 public class Light1 {
     boolean on;
@@ -186,7 +187,7 @@ public class Light1 {
 	
 
     /* Assign random colors and effects */
-    public Light() {
+    public Light1() {
         int maxColor = 255;
         int effect = 9;
         this.red = (short) (Math.random()*(maxColor+1));
@@ -194,6 +195,16 @@ public class Light1 {
         this.blue = (short) (Math.random()*(maxColor+1));
         this.effect = (short) (Math.random()*(effect+1));
     }
+	
+	/* Use color name input */
+	public Light1(String colorName) {
+		String hex = colorMap.get(colorName);
+		Color colorObj = Color.decode(hex);
+		this.red = colorObj.getRed();
+		this.green = colorObj.getGreen();
+		this.blue = colorObj.getBlue();
+		this.effect = 0;
+	}
 
     public String getEffectTitle() {
         return EFFECT.get(this.effect);
