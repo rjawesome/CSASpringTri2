@@ -1,22 +1,42 @@
 package com.nighthawk.spring_portfolio.mvc.lightboard2;
 
+import java.util.Scanner;
+import java.awt.Color;
+
 import lombok.Data;
 
 @Data  // Annotations to simplify writing code (ie constructors, setters)
 public class LightBoard {
     private Light[][] lights;
+    boolean input = false;
 
     /* Initialize LightBoard and Lights */
-    public LightBoard(int numRows, int numCols) {
+    public LightBoard(int numRows, int numCols, boolean input) {
         this.lights = new Light[numRows][numCols];
+        Scanner getInput = new Scanner(System.in);
+        String hexCode;
+        short effectInput;
         // 2D array nested loops, used for initialization
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
-                lights[row][col] = new Light();  // each cell needs to be constructed
+                if (input) {
+                    System.out.println("Enter hexadecimal: ");
+                    hexCode = getInput.nextLine();
+                    System.out.println("Enter effect: ");
+                    effectInput = getInput.nextShort();
+                    short[] rgbList = hexToRGB(hexCode);
+                    lights[row][col] = new Light(rgbList[0], rgbList[1], rgbList[2], effectInput);
+                } else {
+                    lights[row][col] = new Light(); // each cell needs to be constructed
+                }  
             }
         }
+        getInput.close();
     }
 
+    public LightBoard(int numRows, int numCols) {
+        this(numRows, numCols, false);
+    }
     /* Output is intended for API key/values */
     public String toString() { 
         String outString = "[";
@@ -117,6 +137,12 @@ public class LightBoard {
 		return outString;
     }
     
+    public short[] hexToRGB(String hexCode) {
+        Color rgbValues = Color.decode(hexCode);
+
+        return new short[]{(short)rgbValues.getRed(), (short)rgbValues.getGreen(), (short)rgbValues.getBlue()};
+
+    }
     static public void main(String[] args) {
         // create and display LightBoard
         LightBoard lightBoard = new LightBoard(5, 5);

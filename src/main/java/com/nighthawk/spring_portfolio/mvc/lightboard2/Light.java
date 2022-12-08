@@ -12,6 +12,8 @@ public class Light {
     short green;
     short blue;
     short effect;
+    static int maxColor = 255;
+    static int maxEffect = 9;
 
     /*  ANSI effects
         n	Name	Note
@@ -42,14 +44,23 @@ public class Light {
     }
 
     /* Assign random colors and effects */
-    public Light() {
-        int maxColor = 255;
-        int effect = 9;
-        this.red = (short) (Math.random()*(maxColor+1));
-        this.green = (short) (Math.random()*(maxColor+1));
-        this.blue = (short) (Math.random()*(maxColor+1));
-        this.effect = (short) (Math.random()*(effect+1));
+    // Constructor with arguments makes specific 
+    public Light(short red, short green, short blue, short effectInput) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.effect = effectInput;
     }
+
+    // Constructor with no arguments automatically creates a random color
+    public Light() {
+        this((short) (Math.random()*(maxColor+1)), 
+            (short) (Math.random()*(maxColor+1)), 
+            (short) (Math.random()*(maxColor+1)), 
+            (short) (Math.random()*(maxEffect+1)));
+    }
+
+
 
     public String getEffectTitle() {
         return EFFECT.get(this.effect);
