@@ -35,6 +35,22 @@ public class LightBoard {
         getInput.close();
     }
 
+    public boolean evaluateLight(int row, int col) {
+        int numOn = 0;
+        for (int r = 0; r < lights.length; r++) {
+            if (lights[r][col].effect == 0) {
+                numOn++;
+            }
+        }
+        if (lights[row][col].effect == 0 && numOn % 2 == 0) {
+            return false;
+        }
+        if (lights[row][col].effect != 0 && numOn % 3 == 0) {
+            return true;
+        }
+        return lights[row][col].effect == 0;
+    }
+
     public LightBoard(int numRows, int numCols) {
         this(numRows, numCols, false);
     }
