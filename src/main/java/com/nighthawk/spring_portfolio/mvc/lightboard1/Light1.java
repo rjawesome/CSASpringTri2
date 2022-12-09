@@ -10,7 +10,6 @@ public class Light1 {
     short green;
     short blue;
     short effect;
-
 	
     /*  ANSI effects
         n	Name	Note
