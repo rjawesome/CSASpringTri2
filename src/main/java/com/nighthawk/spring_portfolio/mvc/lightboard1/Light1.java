@@ -2,6 +2,7 @@ package com.nighthawk.spring_portfolio.mvc.lightboard1;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.Color;
+import java.util.*;
 
 public class Light1 {
     boolean on;
