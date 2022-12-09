@@ -24,6 +24,7 @@ public class LightBoard {
                     hexCode = getInput.nextLine();
                     System.out.println("Enter effect: ");
                     effectInput = getInput.nextShort();
+                    getInput.nextLine(); // This line has to be added as buffer or else terminal will skip over next reading
                     short[] rgbList = hexToRGB(hexCode);
                     lights[row][col] = new Light(rgbList[0], rgbList[1], rgbList[2], effectInput);
                 } else {
@@ -145,7 +146,7 @@ public class LightBoard {
     }
     static public void main(String[] args) {
         // create and display LightBoard
-        LightBoard lightBoard = new LightBoard(2, 2, true);
+        LightBoard lightBoard = new LightBoard(3, 3);
         System.out.println(lightBoard);  // use toString() method
         System.out.println(lightBoard.toTerminal());
         System.out.println(lightBoard.toColorPalette());
