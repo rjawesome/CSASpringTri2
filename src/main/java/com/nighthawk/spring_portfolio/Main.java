@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // @SpringBootApplication annotation is key to building web applications using Java https://spring.io/projects/spring-boot
 @SpringBootApplication
-public class Mains {
+public class Main {
 
     // Starts a spring application as a stand-alone application from the main method
     public static void main(String[] args) {
