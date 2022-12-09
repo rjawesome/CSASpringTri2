@@ -10,6 +10,7 @@ public class Light1 {
     short green;
     short blue;
     short effect;
+	
     /*  ANSI effects
         n	Name	Note
         0	Reset or normal	All attributes off
