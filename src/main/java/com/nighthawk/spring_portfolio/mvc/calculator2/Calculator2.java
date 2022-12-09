@@ -289,35 +289,35 @@ public class Calculator2 {
     // Tester method
     public static void main(String[] args) throws BadParenthesisException {
         // Random set of test cases
-        // Calculator2 simpleMath = new Calculator2("100 + 200  * 3");
-        // System.out.println("Simple Math\n" + simpleMath);
+        Calculator2 simpleMath = new Calculator2("100 + 200  * 3");
+        System.out.println("Simple Math\n" + simpleMath);
 
-        // System.out.println();
+        System.out.println();
 
-        // Calculator2 parenthesisMath = new Calculator2("(100 + 200)  * 3");
-        // System.out.println("Parenthesis Math\n" + parenthesisMath);
+        Calculator2 parenthesisMath = new Calculator2("(100 + 200)  * 3");
+        System.out.println("Parenthesis Math\n" + parenthesisMath);
 
-        // System.out.println();
+        System.out.println();
 
-        // Calculator2 decimalMath = new Calculator2("100.2 - 99.3");
-        // System.out.println("Decimal Math\n" + decimalMath);
+        Calculator2 decimalMath = new Calculator2("100.2 - 99.3");
+        System.out.println("Decimal Math\n" + decimalMath);
 
-        // System.out.println();
+        System.out.println();
 
-        // Calculator2 moduloMath = new Calculator2("300 % 200");
-        // System.out.println("Modulo Math\n" + moduloMath);
+        Calculator2 moduloMath = new Calculator2("300 % 200");
+        System.out.println("Modulo Math\n" + moduloMath);
 
-        // System.out.println();
+        System.out.println();
 
-        // Calculator2 divisionMath = new Calculator2("300/200");
-        // System.out.println("Division Math\n" + divisionMath);
+        Calculator2 divisionMath = new Calculator2("300/200");
+        System.out.println("Division Math\n" + divisionMath);
 
-        // System.out.println();
+        System.out.println();
 
-        // Calculator2 sqrtMath = new Calculator2("SQRT (9 * 9)");
-        // System.out.println("SQRT Math\n" + sqrtMath);
+        Calculator2 sqrtMath = new Calculator2("SQRT (9 * 9)");
+        System.out.println("SQRT Math\n" + sqrtMath);
 
-        // System.out.println();
+        System.out.println();
 
         Calculator2 sinMath = new Calculator2("SIN (90)");
         System.out.println("SIN Math\n" + sinMath);
