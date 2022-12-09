@@ -1,15 +1,15 @@
 package com.nighthawk.spring_portfolio.mvc.lightboard1;
 
 public class LightBoard {
-    private Light[][] lights;
+    private Light1[][] lights;
 
     /* Initialize LightBoard and Lights */
     public LightBoard(int numRows, int numCols) {
-        this.lights = new Light[numRows][numCols];
+        this.lights = new Light1[numRows][numCols];
         // 2D array nested loops, used for initialization
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
-                lights[row][col] = new Light();  // each cell needs to be constructed
+                lights[row][col] = new Light1();  // each cell needs to be constructed
             }
         }
     }
@@ -116,7 +116,7 @@ public class LightBoard {
     
     static public void main(String[] args) {
         // create and display LightBoard
-        LightBoard lightBoard = new LightBoard(5, 5);
+        LightBoard1 lightBoard = new LightBoard1(5, 5);
         System.out.println(lightBoard);  // use toString() method
         System.out.println(lightBoard.toTerminal());
         System.out.println(lightBoard.toColorPalette());
