@@ -14,6 +14,7 @@ public class LightBoard {
         }
     }
 
+	
     /* Output is intended for API key/values */
     public String toString() { 
         String outString = "[";
