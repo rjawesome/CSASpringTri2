@@ -146,7 +146,7 @@ public class LightBoard {
     }
     static public void main(String[] args) {
         // create and display LightBoard
-        LightBoard lightBoard = new LightBoard(3, 3);
+        LightBoard lightBoard = new LightBoard(5, 5);
         System.out.println(lightBoard);  // use toString() method
         System.out.println(lightBoard.toTerminal());
         System.out.println(lightBoard.toColorPalette());
