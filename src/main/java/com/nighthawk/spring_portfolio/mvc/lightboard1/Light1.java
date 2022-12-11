@@ -201,9 +201,9 @@ public class Light1 {
 	public Light1(String colorName) {
 		String hex = colorMap.get(colorName.toLowerCase().replaceAll(" ", ""));
 		Color colorObj = Color.decode(hex);
-		this.red = colorObj.getRed();
-		this.green = colorObj.getGreen();
-		this.blue = colorObj.getBlue();
+		this.red = (short) colorObj.getRed();
+		this.green = (short) colorObj.getGreen();
+		this.blue = (short) colorObj.getBlue();
 		this.effect = 0;
 	}
 

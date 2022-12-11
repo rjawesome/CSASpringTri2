@@ -1,10 +1,10 @@
 package com.nighthawk.spring_portfolio.mvc.lightboard1;
 
-public class LightBoard {
+public class LightBoard1 {
     private Light1[][] lights;
 
     /* Initialize LightBoard and Lights */
-    public LightBoard(int numRows, int numCols) {
+    public LightBoard1(int numRows, int numCols) {
         this.lights = new Light1[numRows][numCols];
         // 2D array nested loops, used for initialization
         for (int row = 0; row < numRows; row++) {
