@@ -79,8 +79,8 @@ public class LightBoard1 {
     /* Output is intended for Terminal, draws color palette */
     public String toColorPalette() {
         // block sizes
-        final int ROWS = 5;
-        final int COLS = 10;
+        final int ROWS = 7;
+        final int COLS = 8;
 
         // Build large string for entire color palette
         String outString = "";
@@ -127,7 +127,7 @@ public class LightBoard1 {
     
     static public void main(String[] args) {
         // create and display LightBoard
-        LightBoard1 lightBoard = new LightBoard1(5, 5, "Light Green");
+        LightBoard1 lightBoard = new LightBoard1(6, 6, "Light Green");
         System.out.println(lightBoard);  // use toString() method
         System.out.println(lightBoard.toTerminal());
         System.out.println(lightBoard.toColorPalette());
