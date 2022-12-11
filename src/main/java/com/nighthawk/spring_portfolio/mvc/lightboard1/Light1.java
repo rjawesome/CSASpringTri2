@@ -190,21 +190,22 @@ public class Light1 {
     /* Assign random colors and effects */
     public Light1() {
         int maxColor = 255;
-        int effect = 9;
+        int maxEffect = 9;
         this.red = (short) (Math.random()*(maxColor+1));
         this.green = (short) (Math.random()*(maxColor+1));
         this.blue = (short) (Math.random()*(maxColor+1));
-        this.effect = (short) (Math.random()*(effect+1));
+        this.effect = (short) (Math.random()*(maxEffect+1));
     }
 	
 	/* Use color name input */
 	public Light1(String colorName) {
+    int maxEffect = 9;
 		String hex = colorMap.get(colorName.toLowerCase().replaceAll(" ", ""));
 		Color colorObj = Color.decode(hex);
 		this.red = (short) colorObj.getRed();
 		this.green = (short) colorObj.getGreen();
 		this.blue = (short) colorObj.getBlue();
-		this.effect = 0;
+		this.effect = (short) (Math.random()*(maxEffect+1));
 	}
 
     public String getEffectTitle() {

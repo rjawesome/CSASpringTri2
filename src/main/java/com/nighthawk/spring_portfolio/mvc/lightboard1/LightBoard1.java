@@ -13,6 +13,17 @@ public class LightBoard1 {
             }
         }
     }
+
+    /* Initialize LightBoard and Lights w/ single color */
+    public LightBoard1(int numRows, int numCols, String color) {
+      this.lights = new Light1[numRows][numCols];
+      // 2D array nested loops, used for initialization
+      for (int row = 0; row < numRows; row++) {
+          for (int col = 0; col < numCols; col++) {
+              lights[row][col] = new Light1(color);  // each cell needs to be constructed
+          }
+      }
+  }
 	
     /* Output is intended for API key/values */
     public String toString() { 
@@ -116,7 +127,7 @@ public class LightBoard1 {
     
     static public void main(String[] args) {
         // create and display LightBoard
-        LightBoard1 lightBoard = new LightBoard1(5, 5);
+        LightBoard1 lightBoard = new LightBoard1(5, 5, "Light Green");
         System.out.println(lightBoard);  // use toString() method
         System.out.println(lightBoard.toTerminal());
         System.out.println(lightBoard.toColorPalette());
