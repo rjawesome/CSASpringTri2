@@ -104,11 +104,11 @@ public class LightBoard1 {
                         "\033[m" +
                         
                         // color
-                        "\033[38;2;" + 
+                        (lights[row][col].on ? ("\033[38;2;" + 
                         lights[row][col].getRed() + ";" +
                         lights[row][col].getGreen() + ";" +
                         lights[row][col].getBlue() + ";" +
-                        "7m" +
+                        "7m") : "") +
 
                         // color code or blank character
                         c +

@@ -195,6 +195,7 @@ public class Light1 {
         this.green = (short) (Math.random()*(maxColor+1));
         this.blue = (short) (Math.random()*(maxColor+1));
         this.effect = (short) (Math.random()*(maxEffect+1));
+        this.on = Math.random() > 0.5;
     }
 	
 	/* Use color name input */
@@ -206,6 +207,7 @@ public class Light1 {
 		this.green = (short) colorObj.getGreen();
 		this.blue = (short) colorObj.getBlue();
 		this.effect = (short) (Math.random()*(maxEffect+1));
+    this.on = Math.random() > 0.5;
 	}
 
     public String getEffectTitle() {
@@ -227,6 +229,7 @@ public class Light1 {
             "\"green\": " +  green + "," + 
             "\"blue\": " + blue + "," +
             "\"effect\": " + "\"" + EFFECT.get(effect) + "\"" +
+            "\"on\": " + "\"" + on + "\"" +
             "}" );
     }
 
