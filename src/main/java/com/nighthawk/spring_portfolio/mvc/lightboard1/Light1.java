@@ -255,7 +255,7 @@ public class Light1 {
 
     static public void main(String[] args) {
         // create and display LightBoard
-        Light light = new Light();
+        Light1 light = new Light1();
         System.out.println(light);  // use toString() method
     }
     
