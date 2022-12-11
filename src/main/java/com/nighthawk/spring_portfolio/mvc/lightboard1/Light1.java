@@ -228,8 +228,8 @@ public class Light1 {
             "\"red\": " + red + "," +
             "\"green\": " +  green + "," + 
             "\"blue\": " + blue + "," +
-            "\"effect\": " + "\"" + EFFECT.get(effect) + "\"" +
-            "\"on\": " + "\"" + on + "\"" +
+            "\"effect\": " + "\"" + EFFECT.get(effect) + "\"" + "," +
+            "\"on\": " + on +
             "}" );
     }
 
