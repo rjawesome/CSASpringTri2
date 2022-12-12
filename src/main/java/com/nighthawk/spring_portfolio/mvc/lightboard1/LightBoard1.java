@@ -45,6 +45,10 @@ public class LightBoard1 {
 		return outString;
     }
 
+    public Light1[][] getLights() {
+        return this.lights;
+    }
+
     /* Output is intended for Terminal, effects added to output */
     public String toTerminal() { 
         String outString = "[";
