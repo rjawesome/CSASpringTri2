@@ -12,6 +12,8 @@ public class LightBoard1 {
                 lights[row][col] = new Light1();  // each cell needs to be constructed
             }
         }
+
+        this.evaluateLights();
     }
 
     /* Initialize LightBoard and Lights w/ single color */
@@ -23,6 +25,17 @@ public class LightBoard1 {
               lights[row][col] = new Light1(color);  // each cell needs to be constructed
           }
       }
+
+      this.evaluateLights();
+  }
+
+  public void evaluateLights () {
+    LightboardFRQ frq = new LightboardFRQ(this);
+    for (int row = 0; row < lights.length; row++) {
+      for (int col = 0; col < lights[row].length; col++){
+        lights[row][col].setEvaluates(frq.evaluateLight(row, col));
+      }
+    }
   }
 	
     /* Output is intended for API key/values */

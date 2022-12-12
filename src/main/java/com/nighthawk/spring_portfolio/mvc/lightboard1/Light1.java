@@ -6,6 +6,7 @@ import java.util.*;
 
 public class Light1 {
     boolean on;
+    boolean evaluates;
     short red;
     short green;
     short blue;
@@ -229,7 +230,8 @@ public class Light1 {
             "\"green\": " +  green + "," + 
             "\"blue\": " + blue + "," +
             "\"effect\": " + "\"" + EFFECT.get(effect) + "\"" + "," +
-            "\"on\": " + on +
+            "\"on\": " + on + "," +
+            "\"evaluates\": " + evaluates + 
             "}" );
     }
 
@@ -239,6 +241,10 @@ public class Light1 {
 
     public void setOn(boolean on) {
         this.on = on;
+    }
+
+    public void setEvaluates(boolean evaluates) {
+      this.evaluates = evaluates;
     }
 
     public short getRed() {
