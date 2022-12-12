@@ -125,7 +125,7 @@ public class LightBoard1 {
                         lights[row][col].getRed() + ";" +
                         lights[row][col].getGreen() + ";" +
                         lights[row][col].getBlue() + ";" +
-                        "7m") : "") +
+                        (lights[row][col].evaluates ? "7m" : "9m")) : (lights[row][col].evaluates ? "" : "\033[38;2;;;;9m")) +
 
                         // color code or blank character
                         c +
