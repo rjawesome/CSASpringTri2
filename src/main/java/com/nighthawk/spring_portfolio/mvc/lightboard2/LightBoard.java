@@ -15,6 +15,8 @@ public class LightBoard {
         this.lights = new Light[numRows][numCols];
         Scanner getInput = new Scanner(System.in);
         // 2D array nested loops, used for initialization
+
+        // Check for pattern
         switch (pattern) {
             case "checkerboard":
                 System.out.println("Enter hexadecimal 1: ");
