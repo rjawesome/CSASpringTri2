@@ -148,5 +148,11 @@ public class LightBoard1 {
         System.out.println(lightBoard);  // use toString() method
         System.out.println(lightBoard.toTerminal());
         System.out.println(lightBoard.toColorPalette());
+
+        LightBoard1 lightBoard2 = new LightBoard1(6, 6);
+        System.out.println(lightBoard2);  // use toString() method
+        System.out.println(lightBoard2.toTerminal());
+        System.out.println(lightBoard2.toColorPalette());
     }
+    
 }
