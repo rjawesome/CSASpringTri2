@@ -16,4 +16,11 @@ public class LightApiController1 {
         LightBoard1 lb = new LightBoard1(6, 6);
         return new ResponseEntity<>(lb.toString(), HttpStatus.OK);
     }
+    
+    @GetMapping("/getlights/{color}")
+    @CrossOrigin("*")
+    public static ResponseEntity<String> getLights (@PathVariable("color") String color) {
+        LightBoard1 lb = new LightBoard1(6, 6, color);
+        return new ResponseEntity<>(lb.toString(), HttpStatus.OK);
+    }
 }
