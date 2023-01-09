@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/light1")
 public class LightApiController1 {
     @GetMapping("/getlights")
-    @CrossOrigin("*")
     public static ResponseEntity<String> getLights () {
         LightBoard1 lb = new LightBoard1(6, 6);
         return new ResponseEntity<>(lb.toString(), HttpStatus.OK);
     }
     
     @GetMapping("/getlights/{color}")
-    @CrossOrigin("*")
     public static ResponseEntity<String> getLights (@PathVariable("color") String color) {
         LightBoard1 lb = new LightBoard1(6, 6, color);
         return new ResponseEntity<>(lb.toString(), HttpStatus.OK);
