@@ -28,7 +28,7 @@ public class StepsApiController {
     /*
     GET individual Person using ID
      */
-    @GetMapping("/getPerson")
+    @PostMapping("/getPerson")
     public ResponseEntity<Object> getPerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
         Optional<Person> optional = repository.findByEmail((String) map.get("email"));
         if (optional.isPresent()) {  // Good ID
@@ -56,7 +56,7 @@ public class StepsApiController {
     /*
     GET individual stats for a person using ID
      */
-    @GetMapping("/getStats")
+    @PostMapping("/getStats")
     public ResponseEntity<Object> getStats(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
         Optional<Person> optional = repository.findByEmail((String) map.get("email"));
         if (optional.isPresent()) {  // Good ID

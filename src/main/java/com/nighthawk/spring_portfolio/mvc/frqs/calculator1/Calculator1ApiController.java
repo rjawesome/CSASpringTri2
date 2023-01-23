@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/calculator1")
 public class Calculator1ApiController {
-  @CrossOrigin("*")
   @GetMapping("/calculate")
   public static ResponseEntity<Double> calculate (@RequestParam("expression") String expression) throws BadParenthesisException {
     Calculator1 calculator = new Calculator1(expression);
