@@ -3,10 +3,11 @@ package com.nighthawk.spring_portfolio.mvc;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.nighthawk.spring_portfolio.mvc.jokes.Jokes;
-import com.nighthawk.spring_portfolio.mvc.jokes.JokesJpaRepository;
+import com.nighthawk.spring_portfolio.mvc.frqs.jokes.Jokes;
+import com.nighthawk.spring_portfolio.mvc.frqs.jokes.JokesJpaRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
