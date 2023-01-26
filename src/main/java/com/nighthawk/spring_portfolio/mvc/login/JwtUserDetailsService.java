@@ -11,5 +11,5 @@ public class JwtUserDetailsService implements UserDetailsService {
         // TODO Auto-generated method stub
         return null;
     }
-    
+    // Basically this can't be implemented until an actual user class is created to store usernames and passwords
 }
