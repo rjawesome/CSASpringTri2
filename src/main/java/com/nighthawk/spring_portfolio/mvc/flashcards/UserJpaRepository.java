@@ -12,4 +12,5 @@ Extends the JpaRepository interface from Spring Data JPA.
  */
 public interface UserJpaRepository extends JpaRepository<User, Long> {
     Optional <User> findByEmail(String email);
+    
 }

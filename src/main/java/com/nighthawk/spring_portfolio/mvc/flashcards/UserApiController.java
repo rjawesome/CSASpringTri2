@@ -11,7 +11,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @RestController
-@RequestMapping("/api/steptrack1")
+@RequestMapping("/api/user")
 public class UserApiController {
     /*
     #### RESTful API ####
