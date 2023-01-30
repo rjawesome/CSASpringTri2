@@ -27,6 +27,11 @@ public class UserApiController {
      */
     @PostMapping("/getPerson")
     public ResponseEntity<Object> getPerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
+
+        /*
+         * Fix findByEmail somehow because it needs to return User for JWT
+         * Not my problem though
+         */
         Optional<User> optional = repository.findByEmail((String) map.get("email"));
         if (optional.isPresent()) {  // Good ID
             User person = optional.get();  // value from findByID
