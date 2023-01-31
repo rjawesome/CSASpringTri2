@@ -1,6 +1,7 @@
 package com.nighthawk.spring_portfolio.mvc.login;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -21,9 +22,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         // Since two different classes of the same name are used, I have to create a user using the entire import name
-        com.nighthawk.spring_portfolio.mvc.flashcards.User user = repository.findByEmail(email);
-        if (user != null) {
-            return new User(user.getEmail(), user.getPasswordHash(), new ArrayList<>());
+        Optional<com.nighthawk.spring_portfolio.mvc.flashcards.User> user = repository.findByEmail(email);
+        if (user.isPresent()) {
+            return new User(user.get().getEmail(), user.get().getPasswordHash(), new ArrayList<>());
         } else {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
