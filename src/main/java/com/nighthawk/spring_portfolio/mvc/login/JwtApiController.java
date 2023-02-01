@@ -1,9 +1,11 @@
 package com.nighthawk.spring_portfolio.mvc.login;
 
+import java.net.http.HttpHeaders;
 import java.util.Map;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,14 +29,19 @@ public class JwtApiController {
     private JwtUserDetailsService jwtUserDetailsService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody Map<String, String> authenticationRequest) throws Exception {
-        String email = (String) authenticationRequest.get("email");
-        String password = (String) authenticationRequest.get("password");
-        authenticate(email, password);
-        System.out.println("Good email and password");
-        final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(email);
-        final String token = jwtTokenUtil.generateToken(userDetails);
-        return null; //ResponseEntity.ok(new JwtResponse(token));
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody User authenticationRequest) throws Exception {
+        authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
+		final UserDetails userDetails = userDetailsService // Don't worry I'll fix this later
+				.loadUserByUsername(authenticationRequest.getEmail());
+		final String token = jwtTokenUtil.generateToken(userDetails);
+		final ResponseCookie tokenCookie = ResponseCookie.from("jwt", token)
+			.httpOnly(true)
+			.secure(true)
+			.path("/")
+			.maxAge(3600)
+			// .domain("example.com") // Set to backend domain
+			.build();
+		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, tokenCookie.toString()).build();
     }
 
     private void authenticate(String username, String password) throws Exception {
