@@ -1,5 +1,7 @@
 package com.nighthawk.spring_portfolio.mvc.flashcards;
 
+import java.util.List;
+
 import javax.persistence.*;
 import lombok.*;
 
