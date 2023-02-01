@@ -23,5 +23,5 @@ public class Stats {
     private Flashcard flashcard;
 
     @ManyToOne
-    private User user;
+    private Person user;
   }

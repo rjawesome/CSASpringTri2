@@ -1,7 +1,8 @@
 package com.nighthawk.spring_portfolio.mvc.flashcards;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.*;
+
+import java.util.Optional;
 
 /*
 Extends the JpaRepository interface from Spring Data JPA.
@@ -9,7 +10,7 @@ Extends the JpaRepository interface from Spring Data JPA.
 -- JpaRepository defines standard CRUD methods
 -- Via JPA the developer can retrieve database from relational databases to Java objects and vice versa.
  */
-public interface FlashcardJpaRepository extends JpaRepository<FlashcardSet, Long> {
-  Optional<Flashcard> findById(long id);
-  List<Flashcard> findByOwner(Person owner);
+public interface PersonJpaRepository extends JpaRepository<Person, Long> {
+    Optional<Person> findByEmail(String email);
+    
 }

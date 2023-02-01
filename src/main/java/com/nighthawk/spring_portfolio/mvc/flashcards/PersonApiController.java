@@ -11,8 +11,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @RestController
-@RequestMapping("/api/flashcard")
-public class FlashcardApiController {
+@RequestMapping("/api/user")
+public class PersonApiController {
     /*
     #### RESTful API ####
     Resource: https://spring.io/guides/gs/rest-service/
@@ -22,13 +22,11 @@ public class FlashcardApiController {
     @Autowired
     private PersonJpaRepository repository;
 
-    @Autowired
-    private FlashcardSetJpaRepository flashcardSetRepository;
     /*
     GET individual Person using ID
      */
-    @PostMapping("/createFlashcardSet")
-    public ResponseEntity<Object> createFlashcardSet(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
+    @PostMapping("/getPerson")
+    public ResponseEntity<Object> getPerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
 
         /*
          * Fix findByEmail somehow because it needs to return User for JWT
@@ -47,24 +45,10 @@ public class FlashcardApiController {
             if (computedPasswordHash.equals(person.getPasswordHash())) {
                 // redact password
                 person.passwordHash = "REDACTED";
+                return new ResponseEntity<>(person, HttpStatus.OK);
             }
             else {
                 return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
-            }
-
-            List<Map<String, Object>> flashcardData = (List<Map<String, Object>>) map.get("flashcards");
-
-            FlashcardSet flashcardSet = new FlashcardSet();
-            flashcardSet.setName((String) map.get("name"));
-            flashcardSet.setOwner(person);
-            flashcardSet.setPublic((boolean) map.get("isPublic"));
-
-            for (Map<String, Object> flashcard : flashcardData) {
-                Flashcard flashcardObject = new Flashcard();
-                flashcardObject.setFront((String) flashcard.get("front"));
-                flashcardObject.setBack((String) flashcard.get("back"));
-                flashcardObject.setFlashcardSet(flashcardSet);
-                // flashcardSet.getFlashcards().add(flashcardObject);
             }
         }
         // Bad ID
@@ -72,44 +56,6 @@ public class FlashcardApiController {
     }
 
    
-    @PostMapping("/getFlashcardSet")
-    public ResponseEntity<Object> getFlashcardSet(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
-
-        /*
-         * Fix findByEmail somehow because it needs to return User for JWT
-         * Not my problem though
-         */
-        Optional <FlashcardSet> optionalFlashcardSet = flashcardSetRepository.findById((long) map.get("id"));
-        if (!optionalFlashcardSet.isPresent())  {
-            return new ResponseEntity<>("Flashcard set doesn't exist", HttpStatus.BAD_REQUEST);        
-        }
-        if (!optionalFlashcardSet.get().isPublic()) {
-            Optional<Person> optional = repository.findByEmail((String) map.get("email"));
-
-            if (optional.isPresent()) {  // Good ID
-                Person person = optional.get();  // value from findByID
-                String password = (String) map.get("password");
-    
-                MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                byte[] encodedHash = digest.digest(
-                password.getBytes(StandardCharsets.UTF_8));
-                String computedPasswordHash = new String(encodedHash);
-    
-                if (computedPasswordHash.equals(person.getPasswordHash())) {
-                    // redact password
-                    person.passwordHash = "REDACTED";
-                }
-                else {
-                    return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
-                }
-        }
-
-
-            
-        }
-
-        return new ResponseEntity<>(optionalFlashcardSet.get(), HttpStatus.OK);       
-    }
 
     /*
     DELETE individual Person using ID

@@ -19,5 +19,5 @@ public class FlashcardSet {
     private boolean isPublic;
 
     @ManyToOne
-    private User owner;
+    private Person owner;
   }
