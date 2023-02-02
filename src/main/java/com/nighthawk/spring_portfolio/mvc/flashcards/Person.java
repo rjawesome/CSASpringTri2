@@ -17,6 +17,10 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    // For roles
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<PersonRole> roles = new ArrayList<>();
+
     @NotEmpty
     @Size(min=5)
     @Column(unique=true)
@@ -24,4 +28,5 @@ public class Person {
     String email;
 
     String passwordHash;
+
 }

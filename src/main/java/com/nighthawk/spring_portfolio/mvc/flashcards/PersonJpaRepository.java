@@ -1,7 +1,9 @@
 package com.nighthawk.spring_portfolio.mvc.flashcards;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 /*
@@ -13,4 +15,14 @@ Extends the JpaRepository interface from Spring Data JPA.
 public interface PersonJpaRepository extends JpaRepository<Person, Long> {
     Optional<Person> findByEmail(String email);
     
+    List<Person> findAllByOrderByNameAsc();
+
+    List<Person> findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String name, String email);
+
+    Person findByEmailAndPassword(String email, String password);
+
+    @Query(
+        value = "SELECT * FROM Person p WHERE p.name LIKE ?1 or p.email LIKE ?1",
+        nativeQuery = true)
+    List<Person> findByLikeTermNative(String term);
 }
