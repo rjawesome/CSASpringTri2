@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.nighthawk.spring_portfolio.mvc.flashcards.User;
+import com.nighthawk.spring_portfolio.mvc.flashcards.Person;
 
 public class JwtApiController {
 
@@ -31,7 +31,7 @@ public class JwtApiController {
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody User authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
-		final UserDetails userDetails = userDetailsService // Don't worry I'll fix this later
+		final UserDetails userDetails = personDetailsService // Don't worry I'll fix this later
 				.loadUserByUsername(authenticationRequest.getEmail());
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		final ResponseCookie tokenCookie = ResponseCookie.from("jwt", token)
