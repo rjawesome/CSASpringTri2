@@ -9,7 +9,7 @@ Extends the JpaRepository interface from Spring Data JPA.
 -- JpaRepository defines standard CRUD methods
 -- Via JPA the developer can retrieve database from relational databases to Java objects and vice versa.
  */
-public interface FlashcardJpaRepository extends JpaRepository<FlashcardSet, Long> {
+public interface FlashcardJpaRepository extends JpaRepository<Flashcard, Long> {
   Optional<Flashcard> findById(long id);
   List<Flashcard> findByFlashcardSet(FlashcardSet flashcardSet);
 }
