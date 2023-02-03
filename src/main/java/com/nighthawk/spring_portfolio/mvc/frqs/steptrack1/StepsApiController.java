@@ -20,7 +20,7 @@ public class StepsApiController {
 
     // Autowired enables Control to connect POJO Object through JPA
     @Autowired
-    private PersonJpaRepository repository;
+    private Person1JpaRepository repository;
 
     @Autowired
     private DayJpaRepository dayRepository;

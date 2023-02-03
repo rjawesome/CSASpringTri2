@@ -48,4 +48,82 @@ public class PersonDetailsService implements UserDetailsService {
     public List<Person> listAll() {
         return personJpaRepository.findAllByOrderByNameAsc();
     }
+
+    public List<Person> list(String name, String email) {
+        return personJpaRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(name, email);
+    }
+
+    public List<Person> listLike(String term) {
+        return personJpaRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
+    }
+
+    public List<Person> listLikeNative(String term) {
+        String like_term = String.format("%%%s%%", term);
+        return personJpaRepository.findByLikeTermNative(like_term);
+    }
+
+    public void save(Person person) {
+        person.setPasswordHash(person.getPasswordHash());
+        personJpaRepository.save(person);
+    }
+
+    public Person get(long id) {
+        return (personJpaRepository.findById(id).isPresent()) ? personJpaRepository.findById(id).get() : null;
+    }
+
+    public Person getByEmail(String email) {
+        return personJpaRepository.findByEmail(email).get();
+    }
+
+    public void delete(long id) {
+        personJpaRepository.deleteById(id);
+    }
+
+    public void defaults(String password, String roleName) {
+        for (Person person : listAll()) {
+            if (person.getPasswordHash() == null || person.getPasswordHash().isEmpty() || person.getPasswordHash().isBlank()) {
+                System.out.println("L + Bozo + Skill Issue");
+            }
+            if (person.getRoles().isEmpty()) {
+                PersonRole role = personRoleJpaRepository.findByName(roleName);
+                if (role != null) {
+                    person.getRoles().add(role);
+                }
+            }
+        }
+    }
+
+    public void saveRole(PersonRole role) {
+        PersonRole roleObj = personRoleJpaRepository.findByName(role.getName());
+        if (roleObj == null) {
+            personRoleJpaRepository.save(role);
+        }
+    }
+
+    public List<PersonRole> listAllRoles() {
+        return personRoleJpaRepository.findAll();
+    }
+
+    public PersonRole findRole(String roleName) {
+        return personRoleJpaRepository.findByName(roleName);
+    }
+
+    public void addRoleToPerson(String email, String roleName) {
+        Optional<Person> person = personJpaRepository.findByEmail(email);
+
+        if (person.isPresent()) {
+            PersonRole role = personRoleJpaRepository.findByName(roleName);
+            if (role != null) {
+                boolean addRole = true;
+                for (PersonRole roleObj : person.get().getRoles()) {
+                    if (roleObj.getName().equals(roleName)) {
+                        addRole = false;
+                        break;
+                    }
+                }
+                if (addRole) person.get().getRoles().add(role);
+            }
+        }
+    }
+
 }

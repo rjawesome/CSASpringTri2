@@ -1,10 +1,10 @@
 package com.nighthawk.spring_portfolio.mvc.login;
 
-import java.net.http.HttpHeaders;
 import java.util.Map;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.nighthawk.spring_portfolio.mvc.flashcards.Person;
+import com.nighthawk.spring_portfolio.mvc.flashcards.PersonDetailsService;
 
 public class JwtApiController {
 
@@ -28,9 +29,12 @@ public class JwtApiController {
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
 
+    @Autowired
+    private PersonDetailsService personDetailsService;
+
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody User authenticationRequest) throws Exception {
-        authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody Person authenticationRequest) throws Exception {
+        authenticate(authenticationRequest.getEmail(), authenticationRequest.getPasswordHash());
 		final UserDetails userDetails = personDetailsService // Don't worry I'll fix this later
 				.loadUserByUsername(authenticationRequest.getEmail());
 		final String token = jwtTokenUtil.generateToken(userDetails);
