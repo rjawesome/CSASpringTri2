@@ -2,7 +2,8 @@ package com.nighthawk.spring_portfolio.mvc.flashcards;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
+import java.util.*;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -46,15 +47,11 @@ public class PersonDetailsService implements UserDetailsService {
     // Person stuff
 
     public List<Person> listAll() {
-        return personJpaRepository.findAllByOrderByNameAsc();
+        return personJpaRepository.findAll();
     }
 
-    public List<Person> list(String name, String email) {
-        return personJpaRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(name, email);
-    }
-
-    public List<Person> listLike(String term) {
-        return personJpaRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
+    public List<Person> list(String email) {
+        return Arrays.asList(personJpaRepository.findByEmail(email).get());
     }
 
     public List<Person> listLikeNative(String term) {
