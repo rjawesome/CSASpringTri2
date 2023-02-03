@@ -175,6 +175,7 @@ public class FlashcardApiController {
               randAns = (int)(Math.random()*flashcards.size());
             }
             mcq.get(question).add(flashcards.get(randAns).getBack());
+            prevAns.add(randAns);
           }
         }
 
