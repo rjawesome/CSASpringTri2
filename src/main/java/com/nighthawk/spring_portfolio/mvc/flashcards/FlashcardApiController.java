@@ -152,8 +152,25 @@ public class FlashcardApiController {
           }
         }
 
-        List<Map<String, List<String>>> mcq = new ArrayList<>();
+        Map<String, List<String>> mcq = new HashMap<>();
         List<Flashcard> flashcards = flashcardRepository.findByFlashcardSet(optionalFlashcardSet.get());
+
+        if (flashcards.size() < 4) {
+          return new ResponseEntity<>("Flashcard Set too small", HttpStatus.BAD_REQUEST); 
+        }
+
+        for (Flashcard flashcard : flashcards) {
+          String question = flashcard.getFront();
+          String answer = flashcard.getBack();
+
+          mcq.put(question, new ArrayList<>());
+          mcq.get(question).add(answer);
+
+          // wrong answers
+          for (int i = 0; i<3; i++) {
+            
+          }
+        }
 
         return new ResponseEntity<>(optionalFlashcardSet.get(), HttpStatus.OK);       
     }
