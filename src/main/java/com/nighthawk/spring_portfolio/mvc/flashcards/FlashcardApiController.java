@@ -159,7 +159,8 @@ public class FlashcardApiController {
           return new ResponseEntity<>("Flashcard Set too small", HttpStatus.BAD_REQUEST); 
         }
 
-        for (Flashcard flashcard : flashcards) {
+        for (int i = 0; i<flashcards.size(); i++) {
+          Flashcard flashcard = flashcards.get(i);
           String question = flashcard.getFront();
           String answer = flashcard.getBack();
 
@@ -167,12 +168,17 @@ public class FlashcardApiController {
           mcq.get(question).add(answer);
 
           // wrong answers
-          for (int i = 0; i<3; i++) {
-            
+          Set<Integer> prevAns = new HashSet<>();
+          for (int j = 0; j<3; j++) {
+            int randAns = -1;
+            while (randAns == -1 || randAns == i || prevAns.contains(randAns)){
+              randAns = (int)(Math.random()*flashcards.size());
+            }
+            mcq.get(question).add(flashcards.get(randAns).getBack());
           }
         }
 
-        return new ResponseEntity<>(optionalFlashcardSet.get(), HttpStatus.OK);       
+        return new ResponseEntity<>(mcq, HttpStatus.OK);       
     }
 
     /*
