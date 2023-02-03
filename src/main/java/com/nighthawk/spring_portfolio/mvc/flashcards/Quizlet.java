@@ -1,4 +1,4 @@
-package com.nighthawk.spring_portfolio.mvc.flashcards;
+package com.nighthawk.spring_portfolio.mvc.flashcards
 
 import java.io.IOException;
 import java.net.URI;
