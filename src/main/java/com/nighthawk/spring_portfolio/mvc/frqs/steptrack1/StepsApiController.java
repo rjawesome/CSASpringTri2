@@ -30,9 +30,9 @@ public class StepsApiController {
      */
     @PostMapping("/getPerson")
     public ResponseEntity<Object> getPerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
-        Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+        Optional<Person1> optional = repository.findByEmail((String) map.get("email"));
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            Person1 person = optional.get();  // value from findByID
             String password = (String) map.get("password");
 
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -58,9 +58,9 @@ public class StepsApiController {
      */
     @PostMapping("/getStats")
     public ResponseEntity<Object> getStats(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
-        Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+        Optional<Person1> optional = repository.findByEmail((String) map.get("email"));
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            Person1 person = optional.get();  // value from findByID
             String password = (String) map.get("password");
 
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -90,9 +90,9 @@ public class StepsApiController {
     public ResponseEntity<Object> deletePerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
         String email = (String) map.get("email");
         String password = (String) map.get("password");
-        Optional<Person> optional = repository.findByEmail(email);
+        Optional<Person1> optional = repository.findByEmail(email);
         if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
+            Person1 person = optional.get();  // value from findByID
             
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] encodedHash = digest.digest(
@@ -123,7 +123,7 @@ public class StepsApiController {
 
 
         // A person object WITHOUT ID will create a new record with default roles as student
-        Person person = new Person();
+        Person1 person = new Person1();
         person.setAge((int) map.get("age"));
         person.setName((String) map.get("name"));
         person.setEmail((String) map.get("email"));
@@ -151,9 +151,9 @@ public class StepsApiController {
     */
     @PostMapping(value = "/setStats")
     public ResponseEntity<Object> personStats(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
-        Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+        Optional<Person1> optional = repository.findByEmail((String) map.get("email"));
         if (optional.isPresent()) {  // Good Email
-            Person person = optional.get();  // value from findByEmail
+            Person1 person = optional.get();  // value from findByEmail
             String password = (String) map.get("password");
 
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
