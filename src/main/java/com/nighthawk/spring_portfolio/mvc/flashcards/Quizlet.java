@@ -70,6 +70,13 @@ public class Quizlet {
     
         return terms;
     }
+
+    public static void main(String[] args) throws InterruptedException {
+        CompletableFuture<List<Object>> future = new Quizlet("213648175").fetchQuizlet();
+        future.thenAccept(terms -> {
+            System.out.println(terms);
+        });
+    }
     
     private static class ResponseData {
         List<Response> responses;
