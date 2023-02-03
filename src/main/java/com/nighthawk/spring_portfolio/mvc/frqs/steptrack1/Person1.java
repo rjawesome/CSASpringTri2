@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Person {
+public class Person1 {
     // id
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -64,7 +64,7 @@ public class Person {
     }
 
     public static void main(String[] args) {
-      Person person = new Person();
+      Person1 person = new Person1();
       person.setActiveSteps(1000);
       person.setAge(16);
       person.setGender("Male");
@@ -77,7 +77,7 @@ public class Person {
       person.setWeightLbs(120);
       System.out.println(person);
 
-      Person person2 = new Person(null, "Rohan", "rohanj2006@gmail.com", "Female", 16, 65, 120, 10000, "asdjaoi", null);
+      Person1 person2 = new Person1(null, "Rohan", "rohanj2006@gmail.com", "Female", 16, 65, 120, 10000, "asdjaoi", null);
       System.out.println(person2);
     }
 }
