@@ -24,6 +24,10 @@ public class FlashcardApiController {
 
     @Autowired
     private FlashcardSetJpaRepository flashcardSetRepository;
+
+    @Autowired
+    private FlashcardJpaRepository flashcardRepository;
+
     /*
     GET individual Person using ID
      */
@@ -145,11 +149,11 @@ public class FlashcardApiController {
                 else {
                     return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
                 }
+          }
         }
 
-
-            
-        }
+        List<Map<String, List<String>>> mcq = new ArrayList<>();
+        List<Flashcard> flashcards = flashcardRepository.findByFlashcardSet(optionalFlashcardSet.get());
 
         return new ResponseEntity<>(optionalFlashcardSet.get(), HttpStatus.OK);       
     }

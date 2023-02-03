@@ -11,5 +11,5 @@ Extends the JpaRepository interface from Spring Data JPA.
  */
 public interface FlashcardJpaRepository extends JpaRepository<FlashcardSet, Long> {
   Optional<Flashcard> findById(long id);
-  List<Flashcard> findByOwner(Person owner);
+  List<Flashcard> findByFlashcardSet(FlashcardSet flashcardSet);
 }
