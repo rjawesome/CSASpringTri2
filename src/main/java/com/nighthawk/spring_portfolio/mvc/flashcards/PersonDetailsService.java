@@ -27,6 +27,7 @@ public class PersonDetailsService implements UserDetailsService {
     @Autowired
     private PersonRoleJpaRepository personRoleJpaRepository;
 
+    // Probably don't need this
     @Autowired
     private PasswordEncoder passwordEncoder;
 

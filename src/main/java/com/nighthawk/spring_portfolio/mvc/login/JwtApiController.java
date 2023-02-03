@@ -25,9 +25,6 @@ public class JwtApiController {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    
-    @Autowired
-    private JwtUserDetailsService jwtUserDetailsService;
 
     @Autowired
     private PersonDetailsService personDetailsService;
