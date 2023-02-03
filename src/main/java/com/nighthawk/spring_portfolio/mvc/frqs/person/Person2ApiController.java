@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 
 @RestController
 @RequestMapping("/api/person2")
-public class PersonApiController {
+public class Person2ApiController {
     /*
     #### RESTful API ####
     Resource: https://spring.io/guides/gs/rest-service/
