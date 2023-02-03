@@ -15,11 +15,7 @@ Extends the JpaRepository interface from Spring Data JPA.
 public interface PersonJpaRepository extends JpaRepository<Person, Long> {
     Optional<Person> findByEmail(String email);
     
-    List<Person> findAllByOrderByNameAsc();
-
-    List<Person> findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String name, String email);
-
-    Person findByEmailAndPassword(String email, String password);
+    Person findByEmailAndPasswordHash(String email, String passwordHash);
 
     @Query(
         value = "SELECT * FROM Person p WHERE p.name LIKE ?1 or p.email LIKE ?1",
