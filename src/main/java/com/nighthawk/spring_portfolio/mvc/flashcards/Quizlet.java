@@ -13,9 +13,13 @@ import com.google.gson.Gson;
 
 public class Quizlet {
 
-    private static final HttpClient httpClient = HttpClient.newHttpClient();
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private String id;
+    public Quizlet (String id) {
+        this.id = id;
+    }
 
-    public static CompletableFuture<List<Object>> fetchQuizlet(String id) {
+    public CompletableFuture<List<Object>> fetchQuizlet() {
         return httpClient.sendAsync(
                 HttpRequest.newBuilder()
                         .GET()
@@ -26,10 +30,18 @@ public class Quizlet {
                         .build(),
                 HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenApply(Quizlet::extractTerms);
+                .thenApply(arg0 -> {
+                    try {
+                        return extractTerms(arg0);
+                    } catch (IOException e) {
+                        return new ArrayList<>();
+                    } catch (InterruptedException e) {
+                        return new ArrayList<>();
+                    }
+                });
     }
 
-    private static List<Object> extractTerms(String response) {
+    private List<Object> extractTerms(String response) throws IOException, InterruptedException {
         Gson gson = new Gson();
         ResponseData res = gson.fromJson(response, ResponseData.class);
         List<Object> terms = res.responses.get(0).models.studiableItem;
@@ -53,18 +65,11 @@ public class Quizlet {
             String newResponse = httpResponse.body();
             ResponseData newRes = gson.fromJson(newResponse, ResponseData.class);
             terms.addAll(newRes.responses.get(0).models.studiableItem);
-            currentLength = newRes.responses.get(0).models.studiableItem.length;
+            currentLength = newRes.responses.get(0).models.studiableItem.size();
             token = newRes.responses.get(0).paging.token;
         }
     
         return terms;
-    }
-
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        CompletableFuture<List<Object>> future = fetchQuizlet("213648175");
-        future.thenAccept(terms -> {
-            // Implement code to log terms
-        });
     }
     
     private static class ResponseData {
