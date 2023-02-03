@@ -112,6 +112,49 @@ public class FlashcardApiController {
     }
 
     /*
+     * GET MC quiz for flashcard set
+     */
+
+    @PostMapping("/getFlashcardSetMC")
+    public ResponseEntity<Object> getFlashcardSetMC(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
+
+        /*
+         * Fix findByEmail somehow because it needs to return User for JWT
+         * Not my problem though
+         */
+        Optional <FlashcardSet> optionalFlashcardSet = flashcardSetRepository.findById((long) map.get("id"));
+        if (!optionalFlashcardSet.isPresent())  {
+            return new ResponseEntity<>("Flashcard set doesn't exist", HttpStatus.BAD_REQUEST);        
+        }
+        if (!optionalFlashcardSet.get().isPublic()) {
+            Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+
+            if (optional.isPresent()) {  // Good ID
+                Person person = optional.get();  // value from findByID
+                String password = (String) map.get("password");
+    
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                byte[] encodedHash = digest.digest(
+                password.getBytes(StandardCharsets.UTF_8));
+                String computedPasswordHash = new String(encodedHash);
+    
+                if (computedPasswordHash.equals(person.getPasswordHash())) {
+                    // redact password
+                    person.passwordHash = "REDACTED";
+                }
+                else {
+                    return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
+                }
+        }
+
+
+            
+        }
+
+        return new ResponseEntity<>(optionalFlashcardSet.get(), HttpStatus.OK);       
+    }
+
+    /*
     DELETE individual Person using ID
      */
     @DeleteMapping("/deletePerson")
