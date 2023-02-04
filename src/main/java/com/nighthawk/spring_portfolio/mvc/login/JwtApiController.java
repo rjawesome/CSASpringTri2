@@ -45,6 +45,14 @@ public class JwtApiController {
 		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, tokenCookie.toString()).build();
     }
 
+    // Worry about it later
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody String email, @RequestBody String password) throws Exception {
+
+        return null;
+    }
+
+
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
