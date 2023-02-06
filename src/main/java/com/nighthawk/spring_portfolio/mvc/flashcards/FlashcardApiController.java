@@ -135,7 +135,7 @@ public class FlashcardApiController {
          * Fix findByEmail somehow because it needs to return User for JWT
          * Not my problem though
          */
-        Optional <FlashcardSet> optionalFlashcardSet = flashcardSetRepository.findById((long) map.get("id"));
+        Optional <FlashcardSet> optionalFlashcardSet = flashcardSetRepository.findById((int) map.get("id"));
         if (!optionalFlashcardSet.isPresent())  {
             return new ResponseEntity<>("Flashcard set doesn't exist", HttpStatus.BAD_REQUEST);        
         }
