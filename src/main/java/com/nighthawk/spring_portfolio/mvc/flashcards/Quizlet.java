@@ -49,7 +49,7 @@ public class Quizlet {
         int currentLength = 5;
         String token = res.responses.get(0).paging.token;
         int page = 2;
-        while (currentLength >= 100) {
+        while (currentLength >= 200) {
             HttpResponse<String> httpResponse = httpClient.send(
                     HttpRequest.newBuilder()
                             .GET()
