@@ -41,14 +41,15 @@ public class Quizlet {
     }
 
     private List<Object> extractTerms(String response) throws IOException, InterruptedException {
+        System.out.println(response);
         Gson gson = new Gson();
         ResponseData res = gson.fromJson(response, ResponseData.class);
         List<Object> terms = res.responses.get(0).models.studiableItem;
-    
+
         int currentLength = 5;
         String token = res.responses.get(0).paging.token;
         int page = 2;
-        while (currentLength >= 5) {
+        while (currentLength >= 200) {
             HttpResponse<String> httpResponse = httpClient.send(
                     HttpRequest.newBuilder()
                             .GET()
@@ -67,7 +68,7 @@ public class Quizlet {
             currentLength = newRes.responses.get(0).models.studiableItem.size();
             token = newRes.responses.get(0).paging.token;
         }
-    
+
         return terms;
     }
 
