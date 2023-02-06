@@ -19,13 +19,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.nighthawk.spring_portfolio.mvc.flashcards.PersonDetailsService;
+
 import io.jsonwebtoken.ExpiredJwtException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JwtUserDetailsService jwtUserDetailsService;
+    private PersonDetailsService personUserDetailsService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -49,7 +51,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         if (jwtToken == null) {
-            logger.warn("No cookies?");
+            logger.warn("No jwt cookies?");
         } else {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
@@ -65,7 +67,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
        // Validation
        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-        UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = this.personUserDetailsService.loadUserByUsername(username);
 
         if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
