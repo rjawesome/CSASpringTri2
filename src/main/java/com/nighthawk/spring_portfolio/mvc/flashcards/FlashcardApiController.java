@@ -62,14 +62,17 @@ public class FlashcardApiController {
             flashcardSet.setName((String) map.get("name"));
             flashcardSet.setOwner(person);
             flashcardSet.setPublic((boolean) map.get("isPublic"));
+            flashcardSetRepository.save(flashcardSet);
 
             for (Map<String, Object> flashcard : flashcardData) {
                 Flashcard flashcardObject = new Flashcard();
                 flashcardObject.setFront((String) flashcard.get("front"));
                 flashcardObject.setBack((String) flashcard.get("back"));
                 flashcardObject.setFlashcardSet(flashcardSet);
+                flashcardRepository.save(flashcardObject);
                 // flashcardSet.getFlashcards().add(flashcardObject);
             }
+            return new ResponseEntity<>("Flashcard Set created with ID " + flashcardSet.getId(), HttpStatus.OK);
         }
         // Bad ID
         return new ResponseEntity<>("Person with email doesn't exist", HttpStatus.BAD_REQUEST);       
@@ -106,13 +109,15 @@ public class FlashcardApiController {
                 else {
                     return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
                 }
+            }    
         }
 
+        List<Flashcard> flashcards = flashcardRepository.findByFlashcardSet(optionalFlashcardSet.get());
+        HashMap<String, Object> resp = new HashMap<String, Object>();
+        resp.put("meta", optionalFlashcardSet.get());
+        resp.put("flashcards", flashcards);
 
-            
-        }
-
-        return new ResponseEntity<>(optionalFlashcardSet.get(), HttpStatus.OK);       
+        return new ResponseEntity<>(resp, HttpStatus.OK);       
     }
 
     /*
