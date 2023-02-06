@@ -25,7 +25,7 @@ public class Quizlet {
                         .uri(URI.create(
                                 "https://quizlet.com/webapi/3.4/studiable-item-documents?filters%5BstudiableContainerId%5D="
                                         + id
-                                        + "&filters%5BstudiableContainerType%5D=1&perPage=100&page=1"))
+                                        + "&filters%5BstudiableContainerType%5D=1&perPage=200&page=1"))
                         .build(),
                 HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
