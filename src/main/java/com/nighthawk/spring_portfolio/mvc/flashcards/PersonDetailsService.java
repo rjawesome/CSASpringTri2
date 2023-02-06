@@ -28,8 +28,8 @@ public class PersonDetailsService implements UserDetailsService {
     private PersonRoleJpaRepository personRoleJpaRepository;
 
     // Probably don't need this
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    // @Autowired
+    // private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

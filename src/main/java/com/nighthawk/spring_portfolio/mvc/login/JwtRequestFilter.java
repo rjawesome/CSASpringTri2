@@ -6,6 +6,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,40 +35,47 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         // TODO Auto-generated method stub
 
-        final String requestTokenHeader = request.getHeader("Authorization");
+       final Cookie[] cookies = request.getCookies();
+       String username = null;
+       String jwtToken = null;
 
-        String username = null;
-        String jwtToken = null;
-
-        // JWT Tokens generally begin with Bearer with a space, so it can be generally used as an identifier for JWT tokens
-        if (request != null && requestTokenHeader.startsWith("Bearer ")) {
-            jwtToken = requestTokenHeader.substring(7);
+       // Get cookie with name JWT
+       if ((cookies == null) || (cookies.length == 0)) {
+        logger.warn("No cookies?");
+       } else {
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("jwt)")) {
+                jwtToken = cookie.getValue();
+            }
+        }
+        if (jwtToken == null) {
+            logger.warn("No cookies?");
+        } else {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT token");
+                System.out.println("Can't get JWT token");
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
-            }
-        } else {
-            logger.warn("JWT Token is mad sus (it doesn't begin with Bearer String)");
-        }
-        
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
-
-            // If token is valid, set authentication
-            if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                // Specify user is authenticated
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                System.out.println("JWT token has expired");
+            } catch (Exception e) {
+                System.out.println("Error ocurred");
             }
         }
-        filterChain.doFilter(request, response);
+       }
+
+       // Validation
+       if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+
+        if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            // Specify that current user is authenticated
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        }
+       }
+
+       filterChain.doFilter(request, response);
     }
     
     @Override
