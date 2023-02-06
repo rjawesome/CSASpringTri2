@@ -104,14 +104,15 @@ public class FlashcardApiController {
                 String computedPasswordHash = new String(encodedHash);
     
                 if (computedPasswordHash.equals(person.getPasswordHash())) {
-                    // redact password
-                    flashcardSet.getOwner().setPasswordHash("REDACTED");;
+                  // auth passed
                 }
                 else {
                     return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
                 }
             }    
         }
+
+        flashcardSet.getOwner().setPasswordHash("REDACTED");;
 
         List<Flashcard> flashcards = flashcardRepository.findByFlashcardSet(flashcardSet);
         for (Flashcard i : flashcards) {
