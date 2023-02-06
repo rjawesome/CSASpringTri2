@@ -22,6 +22,7 @@ public class Quizlet {
         return httpClient.sendAsync(
                 HttpRequest.newBuilder()
                         .GET()
+                        .setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36")
                         .uri(URI.create(
                                 "https://quizlet.com/webapi/3.4/studiable-item-documents?filters%5BstudiableContainerId%5D="
                                         + id
@@ -41,11 +42,10 @@ public class Quizlet {
     }
 
     private List<Object> extractTerms(String response) throws IOException, InterruptedException {
-        System.out.println(response);
         Gson gson = new Gson();
         ResponseData res = gson.fromJson(response, ResponseData.class);
         List<Object> terms = res.responses.get(0).models.studiableItem;
-
+    
         int currentLength = 5;
         String token = res.responses.get(0).paging.token;
         int page = 2;
@@ -56,7 +56,7 @@ public class Quizlet {
                             .uri(URI.create(
                                     "https://quizlet.com/webapi/3.4/studiable-item-documents?filters%5BstudiableContainerId%5D="
                                             + id
-                                            + "&filters%5BstudiableContainerType%5D=1&perPage=5&page="
+                                            + "&filters%5BstudiableContainerType%5D=1&perPage=200&page="
                                             + page++
                                             + "&pagingToken="
                                             + token))
@@ -68,14 +68,16 @@ public class Quizlet {
             currentLength = newRes.responses.get(0).models.studiableItem.size();
             token = newRes.responses.get(0).paging.token;
         }
-
+    
         return terms;
     }
 
     public static void main(String[] args) throws InterruptedException {
         CompletableFuture<List<Object>> future = new Quizlet("213648175").fetchQuizlet();
         List<Object> terms = future.join();
-        System.out.println(terms);
+        terms.forEach(term -> {
+          System.out.println(term);
+        });
     }
     
     private static class ResponseData {
@@ -94,5 +96,5 @@ public class Quizlet {
     private static class Models {
         List<Object> studiableItem;
     }
-
+    
 }
