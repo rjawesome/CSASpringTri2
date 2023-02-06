@@ -62,14 +62,17 @@ public class FlashcardApiController {
             flashcardSet.setName((String) map.get("name"));
             flashcardSet.setOwner(person);
             flashcardSet.setPublic((boolean) map.get("isPublic"));
+            flashcardSetRepository.save(flashcardSet);
 
             for (Map<String, Object> flashcard : flashcardData) {
                 Flashcard flashcardObject = new Flashcard();
                 flashcardObject.setFront((String) flashcard.get("front"));
                 flashcardObject.setBack((String) flashcard.get("back"));
                 flashcardObject.setFlashcardSet(flashcardSet);
+                flashcardRepository.save(flashcardObject);
                 // flashcardSet.getFlashcards().add(flashcardObject);
             }
+            return new ResponseEntity<>("Flashcard Set created with ID " + flashcardSet.getId(), HttpStatus.OK);
         }
         // Bad ID
         return new ResponseEntity<>("Person with email doesn't exist", HttpStatus.BAD_REQUEST);       
@@ -83,11 +86,12 @@ public class FlashcardApiController {
          * Fix findByEmail somehow because it needs to return User for JWT
          * Not my problem though
          */
-        Optional <FlashcardSet> optionalFlashcardSet = flashcardSetRepository.findById((long) map.get("id"));
+        Optional <FlashcardSet> optionalFlashcardSet = flashcardSetRepository.findById((int) map.get("id"));
         if (!optionalFlashcardSet.isPresent())  {
             return new ResponseEntity<>("Flashcard set doesn't exist", HttpStatus.BAD_REQUEST);        
         }
-        if (!optionalFlashcardSet.get().isPublic()) {
+        FlashcardSet flashcardSet = optionalFlashcardSet.get();
+        if (flashcardSet.isPublic()) {
             Optional<Person> optional = repository.findByEmail((String) map.get("email"));
 
             if (optional.isPresent()) {  // Good ID
@@ -100,19 +104,25 @@ public class FlashcardApiController {
                 String computedPasswordHash = new String(encodedHash);
     
                 if (computedPasswordHash.equals(person.getPasswordHash())) {
-                    // redact password
-                    person.passwordHash = "REDACTED";
+                  // auth passed
                 }
                 else {
                     return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
                 }
+            }    
         }
 
+        flashcardSet.getOwner().setPasswordHash("REDACTED");;
 
-            
+        List<Flashcard> flashcards = flashcardRepository.findByFlashcardSet(flashcardSet);
+        for (Flashcard i : flashcards) {
+          i.setFlashcardSet(null);
         }
+        HashMap<String, Object> resp = new HashMap<String, Object>();
+        resp.put("meta", flashcardSet);
+        resp.put("flashcards", flashcards);
 
-        return new ResponseEntity<>(optionalFlashcardSet.get(), HttpStatus.OK);       
+        return new ResponseEntity<>(resp, HttpStatus.OK);       
     }
 
     /*
@@ -126,7 +136,7 @@ public class FlashcardApiController {
          * Fix findByEmail somehow because it needs to return User for JWT
          * Not my problem though
          */
-        Optional <FlashcardSet> optionalFlashcardSet = flashcardSetRepository.findById((long) map.get("id"));
+        Optional <FlashcardSet> optionalFlashcardSet = flashcardSetRepository.findById((int) map.get("id"));
         if (!optionalFlashcardSet.isPresent())  {
             return new ResponseEntity<>("Flashcard set doesn't exist", HttpStatus.BAD_REQUEST);        
         }
