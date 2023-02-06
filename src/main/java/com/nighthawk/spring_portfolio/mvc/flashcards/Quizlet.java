@@ -18,14 +18,15 @@ public class Quizlet {
         this.id = id;
     }
 
-    public CompletableFuture<List<Object>> fetchQuizlet() {
+    public CompletableFuture<List<FlashcardContainer>> fetchQuizlet() {
         return httpClient.sendAsync(
                 HttpRequest.newBuilder()
                         .GET()
+                        .setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36")
                         .uri(URI.create(
                                 "https://quizlet.com/webapi/3.4/studiable-item-documents?filters%5BstudiableContainerId%5D="
                                         + id
-                                        + "&filters%5BstudiableContainerType%5D=1&perPage=5&page=1"))
+                                        + "&filters%5BstudiableContainerType%5D=1&perPage=200&page=1"))
                         .build(),
                 HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
@@ -40,22 +41,22 @@ public class Quizlet {
                 });
     }
 
-    private List<Object> extractTerms(String response) throws IOException, InterruptedException {
+    private List<FlashcardContainer> extractTerms(String response) throws IOException, InterruptedException {
         Gson gson = new Gson();
         ResponseData res = gson.fromJson(response, ResponseData.class);
-        List<Object> terms = res.responses.get(0).models.studiableItem;
+        List<FlashcardContainer> terms = res.responses.get(0).models.studiableItem;
     
         int currentLength = 5;
         String token = res.responses.get(0).paging.token;
         int page = 2;
-        while (currentLength >= 5) {
+        while (currentLength >= 200) {
             HttpResponse<String> httpResponse = httpClient.send(
                     HttpRequest.newBuilder()
                             .GET()
                             .uri(URI.create(
                                     "https://quizlet.com/webapi/3.4/studiable-item-documents?filters%5BstudiableContainerId%5D="
                                             + id
-                                            + "&filters%5BstudiableContainerType%5D=1&perPage=5&page="
+                                            + "&filters%5BstudiableContainerType%5D=1&perPage=200&page="
                                             + page++
                                             + "&pagingToken="
                                             + token))
@@ -72,9 +73,10 @@ public class Quizlet {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        CompletableFuture<List<Object>> future = new Quizlet("213648175").fetchQuizlet();
-        future.thenAccept(terms -> {
-            System.out.println(terms);
+        CompletableFuture<List<FlashcardContainer>> future = new Quizlet("213648175").fetchQuizlet();
+        List<FlashcardContainer> terms = future.join();
+        terms.forEach(term -> {
+          System.out.println(term.cardSides.get(0).media.get(0).plainText + ": " + term.cardSides.get(1).media.get(0).plainText);
         });
     }
     
@@ -92,7 +94,20 @@ public class Quizlet {
     }
 
     private static class Models {
-        List<Object> studiableItem;
+        List<FlashcardContainer> studiableItem;
     }
 
+    private static class FlashcardContainer {
+      List<FlashcardSide> cardSides;
+    }
+
+    private static class FlashcardSide {
+      List<FlashcardMedia> media;
+      String label;
+    }
+
+    private static class FlashcardMedia {
+      String plainText;
+      String richText;
+    }
 }
