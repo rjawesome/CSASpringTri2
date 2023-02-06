@@ -73,9 +73,8 @@ public class Quizlet {
 
     public static void main(String[] args) throws InterruptedException {
         CompletableFuture<List<Object>> future = new Quizlet("213648175").fetchQuizlet();
-        future.thenAccept(terms -> {
-            System.out.println(terms);
-        });
+        List<Object> terms = future.join();
+        System.out.println(terms);
     }
     
     private static class ResponseData {
