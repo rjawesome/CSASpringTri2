@@ -85,28 +85,34 @@ public class FlashcardApiController {
          * Fix findByEmail somehow because it needs to return User for JWT
          * Not my problem though
          */
-            Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+        Optional<Person> optional = repository.findByEmail((String) map.get("email"));
 
-            if (optional.isPresent()) {  // Good ID
-                Person person = optional.get();  // value from findByID
-                String password = (String) map.get("password");
-    
-                MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                byte[] encodedHash = digest.digest(
-                password.getBytes(StandardCharsets.UTF_8));
-                String computedPasswordHash = new String(encodedHash);
-    
-                if (computedPasswordHash.equals(person.getPasswordHash())) {
-                  // auth passed
-                }
-                else {
-                    return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
-                }
-            }    
+        if (optional.isPresent()) {  // Good ID
+            Person person = optional.get();  // value from findByID
+            String password = (String) map.get("password");
 
-        // flashcardSet.getOwner().setPasswordHash("REDACTED");;
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedHash = digest.digest(
+            password.getBytes(StandardCharsets.UTF_8));
+            String computedPasswordHash = new String(encodedHash);
 
-        return new ResponseEntity<>("", HttpStatus.OK);
+            if (computedPasswordHash.equals(person.getPasswordHash())) {
+              // auth passed
+            }
+            else {
+                return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
+            }
+        } else {
+          return new ResponseEntity<>("User doesn't exist", HttpStatus.BAD_REQUEST);
+        }  
+
+        List<FlashcardSet> flashcardSets = flashcardSetRepository.findAllByOwnerEmail(optional.get().getEmail());
+        
+        for (FlashcardSet i : flashcardSets) {
+          i.getOwner().setPasswordHash("REDACTED");;
+        }
+
+        return new ResponseEntity<>(flashcardSets, HttpStatus.OK);
     }
    
     @PostMapping("/getFlashcardSet")
