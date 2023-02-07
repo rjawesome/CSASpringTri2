@@ -127,7 +127,7 @@ public class FlashcardApiController {
             return new ResponseEntity<>("Flashcard set doesn't exist", HttpStatus.BAD_REQUEST);        
         }
         FlashcardSet flashcardSet = optionalFlashcardSet.get();
-        if (flashcardSet.isPublic()) {
+        if (!flashcardSet.isPublic()) {
             Optional<Person> optional = repository.findByEmail((String) map.get("email"));
 
             if (optional.isPresent()) {  // Good ID
