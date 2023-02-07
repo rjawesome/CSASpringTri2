@@ -1,5 +1,7 @@
 package com.nighthawk.spring_portfolio.mvc.login;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Map;
 
 import org.apache.catalina.connector.Response;
@@ -14,10 +16,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.nighthawk.spring_portfolio.mvc.flashcards.Person;
 import com.nighthawk.spring_portfolio.mvc.flashcards.PersonDetailsService;
+import com.nighthawk.spring_portfolio.mvc.flashcards.PersonJpaRepository;
 
+@RestController
+@RequestMapping("/api/jwt")
 public class JwtApiController {
 
     @Autowired
@@ -27,10 +34,21 @@ public class JwtApiController {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
+    private PersonJpaRepository personJpaRepository;
+
+    @Autowired
     private PersonDetailsService personDetailsService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody Person authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody String email, @RequestBody String password) throws Exception {
+
+        // Creating password hash from password
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] encodedHash = digest.digest(
+        password.getBytes(StandardCharsets.UTF_8));
+        String computedPasswordHash = new String(encodedHash);
+        
+        Person authenticationRequest = personJpaRepository.findByEmailAndPasswordHash(email, computedPasswordHash);
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPasswordHash());
 		final UserDetails userDetails = personDetailsService // Don't worry I'll fix this later
 				.loadUserByUsername(authenticationRequest.getEmail());
