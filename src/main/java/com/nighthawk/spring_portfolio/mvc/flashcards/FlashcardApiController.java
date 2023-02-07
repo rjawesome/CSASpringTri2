@@ -163,6 +163,23 @@ public class FlashcardApiController {
         return new ResponseEntity<>(resp, HttpStatus.OK);       
     }
 
+    @PostMapping("/getFlashcardSetsByName")
+    public ResponseEntity<Object> getFlashcardSetsByName(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
+
+        /*
+         * Fix findByEmail somehow because it needs to return User for JWT
+         * Not my problem though
+         */
+        List <FlashcardSet> flashcardSets = flashcardSetRepository.findByNameContainingIgnoreCaseAndIsPublic((String) map.get("name"), true);
+
+        for (FlashcardSet i : flashcardSets) {
+          i.getOwner().setPasswordHash("REDACTED");
+        }
+
+        return new ResponseEntity<>(flashcardSets, HttpStatus.OK);       
+    }
+
+
     /*
      * GET MC quiz for flashcard set
      */
