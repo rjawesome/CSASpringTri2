@@ -78,6 +78,36 @@ public class FlashcardApiController {
         return new ResponseEntity<>("Person with email doesn't exist", HttpStatus.BAD_REQUEST);       
     }
 
+    @PostMapping("/getYourFlashcardSets")
+    public ResponseEntity<Object> getYourFlashcardSets(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
+      
+        /*
+         * Fix findByEmail somehow because it needs to return User for JWT
+         * Not my problem though
+         */
+            Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+
+            if (optional.isPresent()) {  // Good ID
+                Person person = optional.get();  // value from findByID
+                String password = (String) map.get("password");
+    
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                byte[] encodedHash = digest.digest(
+                password.getBytes(StandardCharsets.UTF_8));
+                String computedPasswordHash = new String(encodedHash);
+    
+                if (computedPasswordHash.equals(person.getPasswordHash())) {
+                  // auth passed
+                }
+                else {
+                    return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
+                }
+            }    
+
+        // flashcardSet.getOwner().setPasswordHash("REDACTED");;
+
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
    
     @PostMapping("/getFlashcardSet")
     public ResponseEntity<Object> getFlashcardSet(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
@@ -109,7 +139,9 @@ public class FlashcardApiController {
                 else {
                     return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
                 }
-            }    
+            } else {
+              return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);          
+            } 
         }
 
         flashcardSet.getOwner().setPasswordHash("REDACTED");;
