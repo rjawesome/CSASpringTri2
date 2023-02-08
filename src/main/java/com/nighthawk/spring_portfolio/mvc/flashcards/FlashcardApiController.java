@@ -53,7 +53,9 @@ public class FlashcardApiController {
                 person.passwordHash = "REDACTED";
             }
             else {
-                return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
+              Map<String, Object> resp = new HashMap<>();
+              resp.put("err", "Incorrect Password");
+              return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);        
             }
 
             List<Map<String, Object>> flashcardData = (List<Map<String, Object>>) map.get("flashcards");
@@ -77,7 +79,9 @@ public class FlashcardApiController {
             return new ResponseEntity<>(resp, HttpStatus.OK);
         }
         // Bad ID
-        return new ResponseEntity<>("Person with email doesn't exist", HttpStatus.BAD_REQUEST);       
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("err", "Account doesn't exist");
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);       
     }
 
     @PostMapping("/getYourFlashcardSets")
@@ -102,10 +106,14 @@ public class FlashcardApiController {
               // auth passed
             }
             else {
-                return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
+              Map<String, Object> resp = new HashMap<>();
+              resp.put("err", "Incorrect Password");
+              return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);        
             }
         } else {
-          return new ResponseEntity<>("User doesn't exist", HttpStatus.BAD_REQUEST);
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", "Account doesn't exist");
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
         }  
 
         List<FlashcardSet> flashcardSets = flashcardSetRepository.findAllByOwnerEmail(optional.get().getEmail());
@@ -126,7 +134,9 @@ public class FlashcardApiController {
          */
         Optional <FlashcardSet> optionalFlashcardSet = flashcardSetRepository.findById((int) map.get("id"));
         if (!optionalFlashcardSet.isPresent())  {
-            return new ResponseEntity<>("Flashcard set doesn't exist", HttpStatus.BAD_REQUEST);        
+          Map<String, Object> resp = new HashMap<>();
+          resp.put("err", "Flashcard set doesn't exist");
+          return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);        
         }
         FlashcardSet flashcardSet = optionalFlashcardSet.get();
         if (!flashcardSet.isPublic()) {
@@ -145,11 +155,14 @@ public class FlashcardApiController {
                   // auth passed
                 }
                 else {
-                    return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
+                  Map<String, Object> resp = new HashMap<>();
+                  resp.put("err", "Incorrect Password");
+                  return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);        
                 }
             } else {
-              return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);          
-            } 
+                Map<String, Object> resp = new HashMap<>();
+                resp.put("err", "Incorrect Password");
+                return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);            } 
         }
 
         flashcardSet.getOwner().setPasswordHash("REDACTED");;
@@ -195,7 +208,9 @@ public class FlashcardApiController {
          */
         Optional <FlashcardSet> optionalFlashcardSet = flashcardSetRepository.findById((int) map.get("id"));
         if (!optionalFlashcardSet.isPresent())  {
-            return new ResponseEntity<>("Flashcard set doesn't exist", HttpStatus.BAD_REQUEST);        
+          Map<String, Object> resp = new HashMap<>();
+          resp.put("err", "Flashcard set doesn't exist");
+          return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);        
         }
         if (!optionalFlashcardSet.get().isPublic()) {
             Optional<Person> optional = repository.findByEmail((String) map.get("email"));
@@ -214,8 +229,15 @@ public class FlashcardApiController {
                     person.passwordHash = "REDACTED";
                 }
                 else {
-                    return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
+                  Map<String, Object> resp = new HashMap<>();
+                  resp.put("err", "Incorrect Password");
+                  return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);        
                 }
+          }
+          else {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", "Incorrect Password");
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
           }
         }
 
@@ -223,7 +245,9 @@ public class FlashcardApiController {
         List<Flashcard> flashcards = flashcardRepository.findByFlashcardSet(optionalFlashcardSet.get());
 
         if (flashcards.size() < 4) {
-          return new ResponseEntity<>("Flashcard Set too small", HttpStatus.BAD_REQUEST); 
+          Map<String, Object> resp = new HashMap<>();
+          resp.put("err", "Flashcard set too small");
+          return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST); 
         }
 
         for (int i = 0; i<flashcards.size(); i++) {
@@ -249,65 +273,13 @@ public class FlashcardApiController {
         return new ResponseEntity<>(mcq, HttpStatus.OK);       
     }
 
-    /*
-    DELETE individual Person using ID
-     */
-    @DeleteMapping("/deletePerson")
-    public ResponseEntity<Object> deletePerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
-        String email = (String) map.get("email");
-        String password = (String) map.get("password");
-        Optional<Person> optional = repository.findByEmail(email);
-        if (optional.isPresent()) {  // Good ID
-            Person person = optional.get();  // value from findByID
-            
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] encodedHash = digest.digest(
-            password.getBytes(StandardCharsets.UTF_8));
-            String computedPasswordHash = new String(encodedHash);
-
-            if (!computedPasswordHash.equals(person.passwordHash)) {
-                return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST); 
-            }
-
-            repository.deleteById(person.getId());
-
-            return new ResponseEntity<>("Person has been deleted", HttpStatus.OK);  // OK HTTP response: status code, headers, and body
-        }
-        // Bad ID
-        return new ResponseEntity<>("Person doesn't exist", HttpStatus.BAD_REQUEST); 
-    }
-
-    /*
-    POST Aa record by Requesting Parameters from URI
-     */
-    @PostMapping("/createPerson")
-    public ResponseEntity<Object> postPerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
-        //check for existing person
-        if (repository.findByEmail((String) map.get("email")).isPresent()) {
-            return new ResponseEntity<>("Account with email has been created", HttpStatus.CREATED);
-        }
-
-
-        // A person object WITHOUT ID will create a new record with default roles as student
-        Person person = new Person();
-        person.setEmail((String) map.get("email"));
-
-        // password hash
-        String password = (String) map.get("password");
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedHash = digest.digest(
-        password.getBytes(StandardCharsets.UTF_8));
-        String computedPasswordHash = new String(encodedHash);
-        person.setPasswordHash(computedPasswordHash);
-        
-        repository.save(person);
-        return new ResponseEntity<>("Account is created successfully", HttpStatus.CREATED);
-    }
-
+    
   
     // handles exceptions
     @ExceptionHandler({ClassCastException.class, NullPointerException.class})
     public ResponseEntity<Object> handleBadUserInput () {
-      return new ResponseEntity<>("Bad input JSON", HttpStatus.BAD_REQUEST); 
+      Map<String, Object> resp = new HashMap<>();
+      resp.put("err", "Bad user input");
+      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 }
