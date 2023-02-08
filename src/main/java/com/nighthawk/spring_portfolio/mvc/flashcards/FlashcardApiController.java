@@ -72,7 +72,9 @@ public class FlashcardApiController {
                 flashcardRepository.save(flashcardObject);
                 // flashcardSet.getFlashcards().add(flashcardObject);
             }
-            return new ResponseEntity<>("Flashcard Set created with ID " + flashcardSet.getId(), HttpStatus.OK);
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("id", flashcardSet.getId());
+            return new ResponseEntity<>(resp, HttpStatus.OK);
         }
         // Bad ID
         return new ResponseEntity<>("Person with email doesn't exist", HttpStatus.BAD_REQUEST);       
