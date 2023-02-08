@@ -48,11 +48,15 @@ public class PersonApiController {
                 return new ResponseEntity<>(person, HttpStatus.OK);
             }
             else {
-                return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
+                Map<String, Object> resp = new HashMap<>();
+                resp.put("err", "Incorrect Password");
+                return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);        
             }
         }
         // Bad ID
-        return new ResponseEntity<>("Person with email doesn't exist", HttpStatus.BAD_REQUEST);       
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("err", "No account with this email");
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);          
     }
 
    
@@ -74,15 +78,21 @@ public class PersonApiController {
             String computedPasswordHash = new String(encodedHash);
 
             if (!computedPasswordHash.equals(person.passwordHash)) {
-                return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST); 
+                Map<String, Object> resp = new HashMap<>();
+                resp.put("err", "Incorrect Password");
+                return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);   
             }
 
             repository.deleteById(person.getId());
 
-            return new ResponseEntity<>("Person has been deleted", HttpStatus.OK);  // OK HTTP response: status code, headers, and body
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", false);
+            return new ResponseEntity<>(resp, HttpStatus.OK);   
         }
         // Bad ID
-        return new ResponseEntity<>("Person doesn't exist", HttpStatus.BAD_REQUEST); 
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("err", "No account with this email");
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);    
     }
 
     /*
@@ -92,7 +102,9 @@ public class PersonApiController {
     public ResponseEntity<Object> postPerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
         //check for existing person
         if (repository.findByEmail((String) map.get("email")).isPresent()) {
-            return new ResponseEntity<>("Account with email has been created", HttpStatus.CREATED);
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", "Email already in use");
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
         }
 
 
@@ -109,13 +121,17 @@ public class PersonApiController {
         person.setPasswordHash(computedPasswordHash);
         
         repository.save(person);
-        return new ResponseEntity<>("Account is created successfully", HttpStatus.CREATED);
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("err", false);
+        return new ResponseEntity<>(resp, HttpStatus.CREATED);
     }
 
   
     // handles exceptions
     @ExceptionHandler({ClassCastException.class, NullPointerException.class})
     public ResponseEntity<Object> handleBadUserInput () {
-      return new ResponseEntity<>("Bad input JSON", HttpStatus.BAD_REQUEST); 
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("err", "Bad User Input");
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 }
