@@ -6,7 +6,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import com.google.gson.Gson;
 
@@ -72,12 +74,14 @@ public class Quizlet {
         return terms;
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        CompletableFuture<List<FlashcardContainer>> future = new Quizlet("213648175").fetchQuizlet();
+    public static Map<String, String> fetch(String id) throws InterruptedException {
+        CompletableFuture<List<FlashcardContainer>> future = new Quizlet(id).fetchQuizlet();
         List<FlashcardContainer> terms = future.join();
-        terms.forEach(term -> {
-          System.out.println(term.cardSides.get(0).media.get(0).plainText + ": " + term.cardSides.get(1).media.get(0).plainText);
-        });
+        Map<String, String> termsMap = new HashMap<>();
+        for (FlashcardContainer term : terms) {
+          termsMap.put(term.cardSides.get(0).media.get(0).plainText, term.cardSides.get(1).media.get(0).plainText);
+        }
+        return termsMap;
     }
     
     private static class ResponseData {
