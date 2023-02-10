@@ -275,7 +275,7 @@ public class FlashcardApiController {
 
     @PostMapping("/getQuizlet")
     public ResponseEntity<Object> getQuizlet(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException, InterruptedException {
-      return new ResponseEntity<>(Quizlet.fetch(), HttpStatus.OK);
+      return new ResponseEntity<>(Quizlet.fetch((String) map.get("id")), HttpStatus.OK);
     }
   
     // handles exceptions

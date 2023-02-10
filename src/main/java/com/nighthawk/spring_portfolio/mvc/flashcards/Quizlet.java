@@ -74,8 +74,8 @@ public class Quizlet {
         return terms;
     }
 
-    public static Map<String, String> fetch() throws InterruptedException {
-        CompletableFuture<List<FlashcardContainer>> future = new Quizlet("213648175").fetchQuizlet();
+    public static Map<String, String> fetch(String id) throws InterruptedException {
+        CompletableFuture<List<FlashcardContainer>> future = new Quizlet(id).fetchQuizlet();
         List<FlashcardContainer> terms = future.join();
         Map<String, String> termsMap = new HashMap<>();
         for (FlashcardContainer term : terms) {
