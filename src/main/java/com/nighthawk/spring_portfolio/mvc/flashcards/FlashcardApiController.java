@@ -162,7 +162,8 @@ public class FlashcardApiController {
             } else {
                 Map<String, Object> resp = new HashMap<>();
                 resp.put("err", "Incorrect Password");
-                return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);            } 
+                return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);           
+             } 
         }
 
         flashcardSet.getOwner().setPasswordHash("REDACTED");;
