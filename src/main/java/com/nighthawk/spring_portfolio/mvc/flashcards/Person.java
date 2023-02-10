@@ -29,4 +29,11 @@ public class Person {
 
     String passwordHash;
 
+    public static void main(String[] args) {
+        Person p = new Person();
+        p.setEmail("yippee@y8ipee.com");
+        p.setPasswordHash("password");
+
+        System.out.println(p.toString());
+    }
 }
