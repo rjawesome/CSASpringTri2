@@ -1,4 +1,5 @@
 package com.nighthawk.spring_portfolio.mvc.flashcards;
+
 import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -22,8 +23,8 @@ public class Person {
     private Collection<PersonRole> roles = new ArrayList<>();
 
     @NotEmpty
-    @Size(min=5)
-    @Column(unique=true)
+    @Size(min = 5)
+    @Column(unique = true)
     @Email
     String email;
 
