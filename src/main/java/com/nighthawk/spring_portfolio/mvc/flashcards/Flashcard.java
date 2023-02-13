@@ -8,14 +8,14 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 public class Flashcard {
-    // id
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    
-    private String front;
-    private String back;
+  // id
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    @ManyToOne
-    private FlashcardSet flashcardSet;
-  }
+  private String front;
+  private String back;
+
+  @ManyToOne
+  private FlashcardSet flashcardSet;
+}
