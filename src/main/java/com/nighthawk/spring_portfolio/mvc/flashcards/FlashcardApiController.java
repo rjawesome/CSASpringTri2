@@ -259,8 +259,9 @@ public class FlashcardApiController {
       String answer = flashcard.getBack();
 
       mcq.put(question, new HashMap<>());
-      mcq.get(question).put("answers", new List<String>());
-      mcq.get(question).get("answers").add(answer);
+      var answers = new ArrayList<String>();
+      mcq.get(question).put("answers", answers);
+      answers.add(answer);
 
       // wrong answers
       Set<Integer> prevAns = new HashSet<>();
@@ -269,7 +270,7 @@ public class FlashcardApiController {
         while (randAns == -1 || randAns == i || prevAns.contains(randAns)) {
           randAns = (int) (Math.random() * flashcards.size());
         }
-        mcq.get(question).get("answers").add(flashcards.get(randAns).getBack());
+        answers.add(flashcards.get(randAns).getBack());
         prevAns.add(randAns);
       }
       mcq.get(question).put("id", flashcard.getId());
