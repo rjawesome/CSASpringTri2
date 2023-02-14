@@ -40,16 +40,16 @@ public class JwtApiController {
     private PersonDetailsService personDetailsService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody String email, @RequestBody String password) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody Person person) throws Exception {
 
         System.out.println("breakpoint");
         // Creating password hash from password
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedHash = digest.digest(
-        password.getBytes(StandardCharsets.UTF_8));
+        person.getPasswordHash().getBytes(StandardCharsets.UTF_8));
         String computedPasswordHash = new String(encodedHash);
         
-        Person authenticationRequest = personJpaRepository.findByEmailAndPasswordHash(email, computedPasswordHash);
+        Person authenticationRequest = personJpaRepository.findByEmailAndPasswordHash(person.getEmail(), computedPasswordHash);
 
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPasswordHash());
 		final UserDetails userDetails = personDetailsService // Don't worry I'll fix this later
