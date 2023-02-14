@@ -244,7 +244,7 @@ public class FlashcardApiController {
       }
     }
 
-    Map<String, List<Object>> mcq = new HashMap<>();
+    Map<String, Map<String, Object>> mcq = new HashMap<>();
     List<Flashcard> flashcards = flashcardRepository.findByFlashcardSet(optionalFlashcardSet.get());
 
     if (flashcards.size() < 4) {
@@ -258,8 +258,9 @@ public class FlashcardApiController {
       String question = flashcard.getFront();
       String answer = flashcard.getBack();
 
-      mcq.put(question, new ArrayList<>());
-      mcq.get(question).add(answer);
+      mcq.put(question, new HashMap<>());
+      mcq.get(question).put("answers", new List<String>());
+      mcq.get(question).get("answers").add(answer);
 
       // wrong answers
       Set<Integer> prevAns = new HashSet<>();
@@ -268,10 +269,10 @@ public class FlashcardApiController {
         while (randAns == -1 || randAns == i || prevAns.contains(randAns)) {
           randAns = (int) (Math.random() * flashcards.size());
         }
-        mcq.get(question).add(flashcards.get(randAns).getBack());
+        mcq.get(question).get("answers").add(flashcards.get(randAns).getBack());
         prevAns.add(randAns);
       }
-      mcq.get(question).add(flashcard.getId());
+      mcq.get(question).put("id", flashcard.getId());
     }
 
     return new ResponseEntity<>(mcq, HttpStatus.OK);
