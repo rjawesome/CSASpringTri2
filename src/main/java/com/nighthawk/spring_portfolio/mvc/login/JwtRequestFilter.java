@@ -36,7 +36,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
-
+    
        final Cookie[] cookies = request.getCookies();
        String username = null;
        String jwtToken = null;
