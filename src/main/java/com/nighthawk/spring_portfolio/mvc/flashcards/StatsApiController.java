@@ -136,9 +136,9 @@ public class StatsApiController {
       newStats.setFlashcard(flash.get());
       newStats.setFlashcardSet(flash.get().getFlashcardSet());
       if ((boolean) map.get("correct"))
-        stats.get(0).setCorrect(1);
+        newStats.setCorrect(1);
       else
-        stats.get(0).setIncorrect(1);
+        newStats.setIncorrect(1);
       statsRepository.save(newStats);
       return new ResponseEntity<>(newStats, HttpStatus.OK);
     } else {
