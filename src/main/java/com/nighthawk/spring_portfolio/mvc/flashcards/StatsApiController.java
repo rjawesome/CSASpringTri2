@@ -60,6 +60,13 @@ public class StatsApiController {
 
     List<Stats> stats = statsRepository.findByUserAndFlashcardSet(optional.get(),
         flashcardSetRepository.findById((int) map.get("id")).get());
+    
+    for (var stat : stats) {
+      stat.setFlashcardSet(null);
+      stat.getFlashcard().setFlashcardSet(null);
+      stat.setUser(null);
+    }
+    
     return new ResponseEntity<>(stats, HttpStatus.OK);
   }
 
