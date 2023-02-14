@@ -140,16 +140,16 @@ public class StatsApiController {
       else
         newStats.setIncorrect(1);
       statsRepository.save(newStats);
-      return new ResponseEntity<>(newStats, HttpStatus.OK);
     } else {
       if ((boolean) map.get("correct"))
         stats.get(0).setCorrect(stats.get(0).getCorrect() + 1);
       else
         stats.get(0).setIncorrect(stats.get(0).getIncorrect() + 1);
       statsRepository.save(stats.get(0));
-      return new ResponseEntity<>(stats.get(0), HttpStatus.OK);
     }
-
+    Map<String, Object> resp = new HashMap<>();
+    resp.put("err", false);
+    return new ResponseEntity<>(resp, HttpStatus.OK);
   }
 
   @PostMapping("/createStatsBatch")
