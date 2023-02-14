@@ -244,7 +244,7 @@ public class FlashcardApiController {
       }
     }
 
-    Map<String, List<String>> mcq = new HashMap<>();
+    Map<String, List<Object>> mcq = new HashMap<>();
     List<Flashcard> flashcards = flashcardRepository.findByFlashcardSet(optionalFlashcardSet.get());
 
     if (flashcards.size() < 4) {
@@ -271,6 +271,7 @@ public class FlashcardApiController {
         mcq.get(question).add(flashcards.get(randAns).getBack());
         prevAns.add(randAns);
       }
+      mcq.get(question).add(flashcard.getId());
     }
 
     return new ResponseEntity<>(mcq, HttpStatus.OK);
