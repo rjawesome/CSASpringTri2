@@ -40,15 +40,16 @@ public class JwtApiController {
     private PersonDetailsService personDetailsService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody String email, @RequestBody String password) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody Map<String, String> map) throws Exception {
 
         // Creating password hash from password
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedHash = digest.digest(
-        password.getBytes(StandardCharsets.UTF_8));
+        map.get("password").getBytes(StandardCharsets.UTF_8));
         String computedPasswordHash = new String(encodedHash);
         
-        Person authenticationRequest = personJpaRepository.findByEmailAndPasswordHash(email, computedPasswordHash);
+        Person authenticationRequest = personJpaRepository.findByEmailAndPasswordHash((String) map.get("email"), computedPasswordHash);
+
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPasswordHash());
 		final UserDetails userDetails = personDetailsService // Don't worry I'll fix this later
 				.loadUserByUsername(authenticationRequest.getEmail());
@@ -60,6 +61,7 @@ public class JwtApiController {
 			.maxAge(3600)
 			// .domain("example.com") // Set to backend domain
 			.build();
+        System.out.println(tokenCookie);
 		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, tokenCookie.toString()).build();
     }
 
