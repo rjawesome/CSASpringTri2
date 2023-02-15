@@ -75,7 +75,7 @@ public class Quizlet {
     }
 
     public static Map<String, String> fetch(String id) throws InterruptedException {
-        CompletableFuture<List<FlashcardContainer>> future = new Quizlet(id.replace('"','')).fetchQuizlet();
+        CompletableFuture<List<FlashcardContainer>> future = new Quizlet(id.replaceAll("\"", "")).fetchQuizlet();
         List<FlashcardContainer> terms = future.join();
         Map<String, String> termsMap = new HashMap<>();
         for (FlashcardContainer term : terms) {
