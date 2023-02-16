@@ -3,6 +3,7 @@ package com.nighthawk.spring_portfolio.mvc.flashcards;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -94,6 +95,13 @@ public class PersonApiController {
     public ResponseEntity<Object> handleBadUserInput() {
         Map<String, Object> resp = new HashMap<>();
         resp.put("err", "Bad User Input");
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({ MissingRequestCookieException.class })
+    public ResponseEntity<Object> handleNoCookie() {
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("err", "Account doesn't exist");
         return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 }

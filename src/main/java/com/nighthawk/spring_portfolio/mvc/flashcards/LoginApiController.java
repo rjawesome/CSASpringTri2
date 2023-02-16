@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,5 +75,12 @@ public class LoginApiController {
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
     return new ResponseEntity<>(p, HttpStatus.OK);
+  }
+
+  @ExceptionHandler({ MissingRequestCookieException.class })
+  public ResponseEntity<Object> handleNoCookie() {
+      Map<String, Object> resp = new HashMap<>();
+      resp.put("err", "Account doesn't exist");
+      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
   }
 }
