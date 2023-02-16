@@ -6,9 +6,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +28,12 @@ public class LoginApiController {
   PersonJpaRepository personJpaRepository;
 
   @PostMapping("/authenticate")
-  public ResponseEntity<Object> authenticate(@RequestBody final Map<String, Object> map) throws NoSuchAlgorithmException {
-    Person p = personJpaRepository.findByEmail((String) map.get("email")).get();
-    if (p == null) {
+  public ResponseEntity<Object> authenticate(@RequestBody final Map<String, Object> map, HttpServletResponse response) throws NoSuchAlgorithmException {
+    var popt = personJpaRepository.findByEmail((String) map.get("email"));
+    if (!popt.isPresent()) {
       // error handling
     }
+    var p = popt.get();
 
     String password = (String) map.get("password");
 
@@ -37,10 +42,8 @@ public class LoginApiController {
         password.getBytes(StandardCharsets.UTF_8));
     String computedPasswordHash = new String(encodedHash);
 
-    System.out.println(password);
-    System.out.println(computedPasswordHash + " -------- " + p.getPasswordHash());
 
-    if (!computedPasswordHash.equals(p.getPasswordHash())) {
+    if (computedPasswordHash.equals(p.getPasswordHash())) {
       // redact password
       p.passwordHash = "REDACTED";
     } else {
@@ -51,11 +54,13 @@ public class LoginApiController {
 
     String jws = handler.createJwt(p);
 
+    response.addCookie(new Cookie("flashjwt", jws));
+
     return new ResponseEntity<>(jws, HttpStatus.OK);
   }
 
   @PostMapping("/getYourUser")
-  public ResponseEntity<Object> getYourUser(@RequestBody final Map<String, Object> map) {
-    return new ResponseEntity<>(handler.decodeJwt((String) map.get("jwt")), HttpStatus.OK);
+  public ResponseEntity<Object> getYourUser(@CookieValue("flashjwt") String jwt) {
+    return new ResponseEntity<>(handler.decodeJwt(jwt), HttpStatus.OK);
   }
 }
