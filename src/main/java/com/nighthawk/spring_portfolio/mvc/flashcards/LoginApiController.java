@@ -65,6 +65,18 @@ public class LoginApiController {
     return new ResponseEntity<>(jws, HttpStatus.OK);
   }
 
+  @PostMapping("/logout")
+  public ResponseEntity<Object> logout(@RequestBody final Map<String, Object> map, HttpServletResponse response) {
+    Cookie cookie = new Cookie("flashjwt", "");
+    cookie.setPath("/");
+    response.addCookie(cookie);
+
+    Map<String, Object> resp = new HashMap<>();
+    resp.put("err", false);
+
+    return new ResponseEntity<>(resp, HttpStatus.OK);
+  }
+
   @PostMapping("/getYourUser")
   public ResponseEntity<Object> getYourUser(@CookieValue("flashjwt") String jwt) {
     Person p = handler.decodeJwt(jwt);
