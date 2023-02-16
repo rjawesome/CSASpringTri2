@@ -32,6 +32,9 @@ public class LoginApiController {
     var popt = personJpaRepository.findByEmail((String) map.get("email"));
     if (!popt.isPresent()) {
       // error handling
+      Map<String, Object> resp = new HashMap<>();
+      resp.put("err", "No such user with email provided");
+      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
     var p = popt.get();
 
@@ -61,6 +64,13 @@ public class LoginApiController {
 
   @PostMapping("/getYourUser")
   public ResponseEntity<Object> getYourUser(@CookieValue("flashjwt") String jwt) {
-    return new ResponseEntity<>(handler.decodeJwt(jwt), HttpStatus.OK);
+    Person p = handler.decodeJwt(jwt);
+    if (p == null) {
+      // return err ting
+      Map<String, Object> resp = new HashMap<>();
+      resp.put("err", "Account doesn't exist");
+      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+    }
+    return new ResponseEntity<>(p, HttpStatus.OK);
   }
 }
