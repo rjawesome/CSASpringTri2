@@ -60,6 +60,7 @@ public class LoginApiController {
     String jws = handler.createJwt(p);
     Cookie cookie = new Cookie("flashjwt", jws);
     cookie.setPath("/");
+    cookie.setHttpOnly(true);
     response.addCookie(cookie);
 
     return new ResponseEntity<>(jws, HttpStatus.OK);
