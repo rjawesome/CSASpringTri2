@@ -28,35 +28,28 @@ public class FlashcardApiController {
   @Autowired
   private FlashcardJpaRepository flashcardRepository;
 
+  @Autowired
+  private LoginHandler handler;
+
   /*
    * GET individual Person using ID
    */
   @PostMapping("/createFlashcardSet")
-  public ResponseEntity<Object> createFlashcardSet(@RequestBody final Map<String, Object> map)
+  public ResponseEntity<Object> createFlashcardSet(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
 
     /*
      * Fix findByEmail somehow because it needs to return User for JWT
      * Not my problem though
      */
-    Optional<Person> optional = repository.findByEmail((String) map.get("email"));
-    if (optional.isPresent()) { // Good ID
-      Person person = optional.get(); // value from findByID
-      String password = (String) map.get("password");
+    Person person = handler.decodeJwt(jwt);
 
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      byte[] encodedHash = digest.digest(
-          password.getBytes(StandardCharsets.UTF_8));
-      String computedPasswordHash = new String(encodedHash);
-
-      if (computedPasswordHash.equals(person.getPasswordHash())) {
-        // redact password
-        person.passwordHash = "REDACTED";
-      } else {
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("err", "Incorrect Password");
-        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-      }
+    if (person == null) {
+      // return err ting
+      Map<String, Object> resp = new HashMap<>();
+      resp.put("err", "Account doesn't exist");
+      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+    }
 
       List<Map<String, Object>> flashcardData = (List<Map<String, Object>>) map.get("flashcards");
 
@@ -77,57 +70,38 @@ public class FlashcardApiController {
       Map<String, Object> resp = new HashMap<>();
       resp.put("id", flashcardSet.getId());
       return new ResponseEntity<>(resp, HttpStatus.OK);
+    
     }
-    // Bad ID
-    Map<String, Object> resp = new HashMap<>();
-    resp.put("err", "Account doesn't exist");
-    return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-  }
+  
 
   @PostMapping("/getYourFlashcardSets")
-  public ResponseEntity<Object> getYourFlashcardSets(@RequestBody final Map<String, Object> map)
+  public ResponseEntity<Object> getYourFlashcardSets(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
 
     /*
      * Fix findByEmail somehow because it needs to return User for JWT
      * Not my problem though
      */
-    Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+    Person person = handler.decodeJwt(jwt);
 
-    if (optional.isPresent()) { // Good ID
-      Person person = optional.get(); // value from findByID
-      String password = (String) map.get("password");
-
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      byte[] encodedHash = digest.digest(
-          password.getBytes(StandardCharsets.UTF_8));
-      String computedPasswordHash = new String(encodedHash);
-
-      if (computedPasswordHash.equals(person.getPasswordHash())) {
-        // auth passed
-      } else {
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("err", "Incorrect Password");
-        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-      }
-    } else {
+    if (person == null) {
+      // return err ting
       Map<String, Object> resp = new HashMap<>();
       resp.put("err", "Account doesn't exist");
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 
-    List<FlashcardSet> flashcardSets = flashcardSetRepository.findAllByOwnerEmail(optional.get().getEmail());
+    List<FlashcardSet> flashcardSets = flashcardSetRepository.findAllByOwnerEmail(person.getEmail());
 
     for (FlashcardSet i : flashcardSets) {
       i.getOwner().setPasswordHash("REDACTED");
-      ;
     }
 
     return new ResponseEntity<>(flashcardSets, HttpStatus.OK);
   }
 
   @PostMapping("/getFlashcardSet")
-  public ResponseEntity<Object> getFlashcardSet(@RequestBody final Map<String, Object> map)
+  public ResponseEntity<Object> getFlashcardSet(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
 
     /*
@@ -142,33 +116,23 @@ public class FlashcardApiController {
     }
     FlashcardSet flashcardSet = optionalFlashcardSet.get();
     if (!flashcardSet.isPublic()) {
-      Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+      Person person = handler.decodeJwt(jwt);
 
-      if (optional.isPresent()) { // Good ID
-        Person person = optional.get(); // value from findByID
-        String password = (String) map.get("password");
-
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedHash = digest.digest(
-            password.getBytes(StandardCharsets.UTF_8));
-        String computedPasswordHash = new String(encodedHash);
-
-        if (computedPasswordHash.equals(person.getPasswordHash())) {
-          // auth passed
-        } else {
-          Map<String, Object> resp = new HashMap<>();
-          resp.put("err", "Incorrect Password");
-          return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-        }
-      } else {
+      if (person == null) {
+        // return err ting
         Map<String, Object> resp = new HashMap<>();
-        resp.put("err", "Incorrect Password");
+        resp.put("err", "Account doesn't exist");
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+      }
+
+      if (person.getEmail() != flashcardSet.getOwner().getEmail()) {
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("err", "Flashcard set is private");
         return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
       }
     }
 
     flashcardSet.getOwner().setPasswordHash("REDACTED");
-    ;
 
     List<Flashcard> flashcards = flashcardRepository.findByFlashcardSet(flashcardSet);
     for (Flashcard i : flashcards) {
@@ -204,7 +168,7 @@ public class FlashcardApiController {
    */
 
   @PostMapping("/getFlashcardSetMC")
-  public ResponseEntity<Object> getFlashcardSetMC(@RequestBody final Map<String, Object> map)
+  public ResponseEntity<Object> getFlashcardSetMC(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
 
     /*
@@ -218,28 +182,18 @@ public class FlashcardApiController {
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
     if (!optionalFlashcardSet.get().isPublic()) {
-      Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+      Person person = handler.decodeJwt(jwt);
 
-      if (optional.isPresent()) { // Good ID
-        Person person = optional.get(); // value from findByID
-        String password = (String) map.get("password");
-
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedHash = digest.digest(
-            password.getBytes(StandardCharsets.UTF_8));
-        String computedPasswordHash = new String(encodedHash);
-
-        if (computedPasswordHash.equals(person.getPasswordHash())) {
-          // redact password
-          person.passwordHash = "REDACTED";
-        } else {
-          Map<String, Object> resp = new HashMap<>();
-          resp.put("err", "Incorrect Password");
-          return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-        }
-      } else {
+      if (person == null) {
+        // return err ting
         Map<String, Object> resp = new HashMap<>();
-        resp.put("err", "Incorrect Password");
+        resp.put("err", "Account doesn't exist");
+        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+      }
+
+      if (person.getEmail() != optionalFlashcardSet.get().getOwner().getEmail()) {
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("err", "Flashcard set is private");
         return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
       }
     }
