@@ -56,8 +56,9 @@ public class LoginApiController {
     }
 
     String jws = handler.createJwt(p);
-
-    response.addCookie(new Cookie("flashjwt", jws));
+    Cookie cookie = new Cookie("flashjwt", jws);
+    cookie.setPath("/");
+    response.addCookie(cookie);
 
     return new ResponseEntity<>(jws, HttpStatus.OK);
   }
