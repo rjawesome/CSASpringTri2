@@ -20,6 +20,9 @@ public class StatsApiController {
 
   // Autowired enables Control to connect POJO Object through JPA
   @Autowired
+  private LoginHandler handler;
+
+  @Autowired
   private PersonJpaRepository repository;
 
   @Autowired
@@ -32,33 +35,18 @@ public class StatsApiController {
   private StatsJpaRepository statsRepository;
 
   @PostMapping("/getStatsByFlashcardSet")
-  public ResponseEntity<Object> getStatsByFlashcardSet(@RequestBody final Map<String, Object> map)
+  public ResponseEntity<Object> getStatsByFlashcardSet(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
-    Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+    Person p = handler.decodeJwt(jwt);
 
-    if (optional.isPresent()) { // Good ID
-      Person person = optional.get(); // value from findByID
-      String password = (String) map.get("password");
-
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      byte[] encodedHash = digest.digest(
-          password.getBytes(StandardCharsets.UTF_8));
-      String computedPasswordHash = new String(encodedHash);
-
-      if (computedPasswordHash.equals(person.getPasswordHash())) {
-        // auth passed
-      } else {
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("err", "Incorrect Password");
-        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-      }
-    } else {
+    if (p == null) {
+      // return err ting
       Map<String, Object> resp = new HashMap<>();
-      resp.put("err", "Incorrect Password");
+      resp.put("err", "Account doesn't exist");
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 
-    List<Stats> stats = statsRepository.findByUserAndFlashcardSet(optional.get(),
+    List<Stats> stats = statsRepository.findByUserAndFlashcardSet(p,
         flashcardSetRepository.findById((int) map.get("id")).get());
     
     for (var stat : stats) {
@@ -71,63 +59,34 @@ public class StatsApiController {
   }
 
   @PostMapping("/getStatsByFlashcard")
-  public ResponseEntity<Object> getStatsByFlashcard(@RequestBody final Map<String, Object> map)
+  public ResponseEntity<Object> getStatsByFlashcard(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
-    Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+        Person p = handler.decodeJwt(jwt);
 
-    if (optional.isPresent()) { // Good ID
-      Person person = optional.get(); // value from findByID
-      String password = (String) map.get("password");
-
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      byte[] encodedHash = digest.digest(
-          password.getBytes(StandardCharsets.UTF_8));
-      String computedPasswordHash = new String(encodedHash);
-
-      if (computedPasswordHash.equals(person.getPasswordHash())) {
-        // auth passed
-      } else {
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("err", "Incorrect Password");
-        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-      }
-    } else {
+    if (p == null) {
+      // return err ting
       Map<String, Object> resp = new HashMap<>();
-      resp.put("err", "Incorrect Password");
+      resp.put("err", "Account doesn't exist");
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 
-    List<Stats> stats = statsRepository.findByUserAndFlashcard(optional.get(),
+    List<Stats> stats = statsRepository.findByUserAndFlashcard(p,
         flashcardRepository.findById((int) map.get("id")).get());
     return new ResponseEntity<>(stats, HttpStatus.OK);
   }
 
   @PostMapping("/createStats")
-  public ResponseEntity<Object> createStats(@RequestBody final Map<String, Object> map)
+  public ResponseEntity<Object> createStats(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
-    Optional<Person> optional = repository.findByEmail((String) map.get("email"));
+    
+        Person p = handler.decodeJwt(jwt);
 
-    if (optional.isPresent()) { // Good ID
-      Person person = optional.get(); // value from findByID
-      String password = (String) map.get("password");
-
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      byte[] encodedHash = digest.digest(
-          password.getBytes(StandardCharsets.UTF_8));
-      String computedPasswordHash = new String(encodedHash);
-
-      if (computedPasswordHash.equals(person.getPasswordHash())) {
-        // auth passed
-      } else {
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("err", "Incorrect Password");
-        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-      }
-    } else {
-      Map<String, Object> resp = new HashMap<>();
-      resp.put("err", "Incorrect Password");
-      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-    }
+        if (p == null) {
+          // return err ting
+          Map<String, Object> resp = new HashMap<>();
+          resp.put("err", "Account doesn't exist");
+          return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+        }
 
     Optional<Flashcard> flash = flashcardRepository.findById((int) map.get("id"));
     if (!flash.isPresent()) {
@@ -136,10 +95,10 @@ public class StatsApiController {
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 
-    List<Stats> stats = statsRepository.findByUserAndFlashcard(optional.get(), flash.get());
+    List<Stats> stats = statsRepository.findByUserAndFlashcard(p, flash.get());
     if (stats.isEmpty()) {
       Stats newStats = new Stats();
-      newStats.setUser(optional.get());
+      newStats.setUser(p);
       newStats.setFlashcard(flash.get());
       newStats.setFlashcardSet(flash.get().getFlashcardSet());
       if ((boolean) map.get("correct"))
