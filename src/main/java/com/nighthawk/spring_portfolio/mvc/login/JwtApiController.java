@@ -42,12 +42,14 @@ public class JwtApiController {
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Map<String, String> map) throws Exception {
 
+        System.out.println("LIST BEGIN");
+        System.out.println(personJpaRepository.findAll());
+        System.out.println("LIST END");
         // Creating password hash from password
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedHash = digest.digest(
         map.get("password").getBytes(StandardCharsets.UTF_8));
         String computedPasswordHash = new String(encodedHash);
-        
         Person authenticationRequest = personJpaRepository.findByEmailAndPasswordHash((String) map.get("email"), computedPasswordHash);
 
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPasswordHash());

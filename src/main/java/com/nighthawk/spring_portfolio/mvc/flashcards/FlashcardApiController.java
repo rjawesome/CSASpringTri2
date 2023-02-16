@@ -224,7 +224,8 @@ public class FlashcardApiController {
     POST Aa record by Requesting Parameters from URI
      */
     @PostMapping("/createPerson")
-    public ResponseEntity<Object> postPerson(@RequestBody final Map<String,Object> map) throws NoSuchAlgorithmException {
+    // Map should be Map<String, Object> but it's string string for sake of testing
+    public ResponseEntity<Object> postPerson(@RequestBody final Map<String,String> map) throws NoSuchAlgorithmException {
         //check for existing person
         if (repository.findByEmail((String) map.get("email")).isPresent()) {
             return new ResponseEntity<>("Account with email has been created", HttpStatus.CREATED);
