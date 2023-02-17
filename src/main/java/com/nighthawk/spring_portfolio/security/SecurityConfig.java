@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean  // Sets up password encoding style
     PasswordEncoder passwordEncoder(){
         //return new StandardPasswordEncoder();
-        return new BCryptPasswordEncoder();
+        return new ShaPasswordEncoder();
     }
 
 	@Autowired
