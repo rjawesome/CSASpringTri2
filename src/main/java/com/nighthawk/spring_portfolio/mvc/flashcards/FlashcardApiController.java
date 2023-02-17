@@ -233,7 +233,8 @@ public class FlashcardApiController {
 
     return new ResponseEntity<>(mcq, HttpStatus.OK);
   }
-
+  
+  @CrossOrigin("*")
   @PostMapping("/getQuizlet")
   public ResponseEntity<Object> getQuizlet(@RequestBody final Map<String, Object> map)
       throws NoSuchAlgorithmException, InterruptedException {
