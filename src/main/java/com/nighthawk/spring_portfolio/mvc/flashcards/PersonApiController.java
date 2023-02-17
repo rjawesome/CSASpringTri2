@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.*;
 
+import com.nighthawk.spring_portfolio.security.SecurityConfig;
+
 import java.util.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -35,10 +37,11 @@ public class PersonApiController {
         if (optional.isPresent()) { // Good ID
             Person person = optional.get(); // value from findByID
 
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] encodedHash = digest.digest(
-                    password.getBytes(StandardCharsets.UTF_8));
-            String computedPasswordHash = new String(encodedHash);
+            // MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            // byte[] encodedHash = digest.digest(
+            //         password.getBytes(StandardCharsets.UTF_8));
+            // String computedPasswordHash = new String(encodedHash);
+            String computedPasswordHash = SecurityConfig.bcryptencode(password);
 
             if (!computedPasswordHash.equals(person.passwordHash)) {
                 Map<String, Object> resp = new HashMap<>();
@@ -78,10 +81,11 @@ public class PersonApiController {
 
         // password hash
         String password = (String) map.get("password");
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedHash = digest.digest(
-                password.getBytes(StandardCharsets.UTF_8));
-        String computedPasswordHash = new String(encodedHash);
+        // MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        // byte[] encodedHash = digest.digest(
+        //         password.getBytes(StandardCharsets.UTF_8));
+        // String computedPasswordHash = new String(encodedHash);
+        String computedPasswordHash = SecurityConfig.bcryptencode(password);
         person.setPasswordHash(computedPasswordHash);
 
         repository.save(person);
