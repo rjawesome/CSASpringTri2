@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,8 @@ public class LoginHandler {
   PersonJpaRepository personJpaRepository;
 
   public String createJwt(Person user) {
-    return Jwts.builder().setSubject(user.getEmail()).signWith(key).compact();
+    var time = (new Date()).getTime() + 1000 * 60 * 60 * 24;
+    return Jwts.builder().setSubject(user.getEmail()).setExpiration(new Date(time)).signWith(key).compact();
   }
 
   public Person decodeJwt(String jws) {
