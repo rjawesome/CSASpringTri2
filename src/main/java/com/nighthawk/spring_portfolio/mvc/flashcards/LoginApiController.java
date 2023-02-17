@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nighthawk.spring_portfolio.security.SecurityConfig;
+
 @RestController
 @RequestMapping("/api/login")
 public class LoginApiController {
@@ -42,10 +44,12 @@ public class LoginApiController {
 
     String password = (String) map.get("password");
 
-    MessageDigest digest = MessageDigest.getInstance("SHA-256");
-    byte[] encodedHash = digest.digest(
-        password.getBytes(StandardCharsets.UTF_8));
-    String computedPasswordHash = new String(encodedHash);
+    // MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    // byte[] encodedHash = digest.digest(
+    //     password.getBytes(StandardCharsets.UTF_8));
+    // String computedPasswordHash = new String(encodedHash);
+
+    String computedPasswordHash = SecurityConfig.bcryptencode(password);
 
 
     if (computedPasswordHash.equals(p.getPasswordHash())) {

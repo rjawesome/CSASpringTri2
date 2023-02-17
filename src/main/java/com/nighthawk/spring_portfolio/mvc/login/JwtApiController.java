@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nighthawk.spring_portfolio.mvc.flashcards.Person;
 import com.nighthawk.spring_portfolio.mvc.flashcards.PersonDetailsService;
 import com.nighthawk.spring_portfolio.mvc.flashcards.PersonJpaRepository;
+import com.nighthawk.spring_portfolio.security.SecurityConfig;
 
 @RestController
 @RequestMapping("/api/jwt")
@@ -46,10 +47,11 @@ public class JwtApiController {
         System.out.println(personJpaRepository.findAll());
         System.out.println("LIST END");
         // Creating password hash from password
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedHash = digest.digest(
-        map.get("password").getBytes(StandardCharsets.UTF_8));
-        String computedPasswordHash = new String(encodedHash);
+        // MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        // byte[] encodedHash = digest.digest(
+        // map.get("password").getBytes(StandardCharsets.UTF_8));
+        // String computedPasswordHash = new String(encodedHash);
+        String computedPasswordHash = SecurityConfig.bcryptencode(map.get("password"));
         Person authenticationRequest = personJpaRepository.findByEmailAndPasswordHash((String) map.get("email"), computedPasswordHash);
 
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPasswordHash());
