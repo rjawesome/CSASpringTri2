@@ -16,8 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
-
 import com.nighthawk.spring_portfolio.mvc.flashcards.PersonDetailsService;
 import com.nighthawk.spring_portfolio.mvc.login.JwtAuthenticationEntryPoint;
 import com.nighthawk.spring_portfolio.mvc.login.JwtRequestFilter;
@@ -88,7 +86,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean  // Sets up password encoding style
     PasswordEncoder passwordEncoder(){
-        return new StandardPasswordEncoder();
+        //return new StandardPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
 	@Autowired
