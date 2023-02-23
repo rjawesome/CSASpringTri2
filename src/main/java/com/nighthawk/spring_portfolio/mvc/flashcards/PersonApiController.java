@@ -70,6 +70,13 @@ public class PersonApiController {
             resp.put("err", "Email already in use");
             return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
         }
+        
+        // check for password complexity requirements
+        if (password.length() < 8 || !password.matches(".*[0-9]+.*") || !password.matches(".*[^A-Za-z0-9\\s].*")) {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", "Password does not meet complexity requirements (length >= 8, contains number, contains special character)");
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+        }
 
         // A person object WITHOUT ID will create a new record with default roles as
         // student
