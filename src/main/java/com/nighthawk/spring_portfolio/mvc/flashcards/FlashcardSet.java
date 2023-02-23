@@ -20,4 +20,11 @@ public class FlashcardSet {
 
   @ManyToOne
   private Person owner;
+  
+  public static void main (String[] args) {
+    FlashcardSet fs = new FlashcardSet();
+    fs.setName("Cool set");
+    fs.setPublic(true);
+    System.out.println(fs.toString());
+  }
 }
