@@ -18,4 +18,12 @@ public class Flashcard {
 
   @ManyToOne
   private FlashcardSet flashcardSet;
+  
+  public static void main(String[] args) {
+        Flashcard f = new Flashcard();
+        f.setFront("term");
+        f.setBack("definition");
+
+        System.out.println(f.toString());
+  }
 }
