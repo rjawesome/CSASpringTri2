@@ -24,4 +24,11 @@ public class Stats {
 
     @ManyToOne
     private Person user;
+    
+    public static void main (String[] args) {
+      Stats s = new Stats();
+      s.setCorrect(10);
+      s.setIncorrect(11);
+      System.out.println(s.toString());
+    }
   }
