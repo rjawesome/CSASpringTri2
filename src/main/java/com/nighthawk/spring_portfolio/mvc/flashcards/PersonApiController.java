@@ -72,6 +72,7 @@ public class PersonApiController {
         }
         
         // check for password complexity requirements
+        String password = (String) map.get("password");
         if (password.length() < 8 || !password.matches(".*[0-9]+.*") || !password.matches(".*[^A-Za-z0-9\\s].*")) {
             Map<String, Object> resp = new HashMap<>();
             resp.put("err", "Password does not meet complexity requirements (length >= 8, contains number, contains special character)");
@@ -84,7 +85,6 @@ public class PersonApiController {
         person.setEmail((String) map.get("email"));
 
         // password hash
-        String password = (String) map.get("password");
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedHash = digest.digest(
                 password.getBytes(StandardCharsets.UTF_8));
