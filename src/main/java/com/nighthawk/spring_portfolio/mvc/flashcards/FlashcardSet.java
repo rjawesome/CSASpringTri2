@@ -20,7 +20,7 @@ public class FlashcardSet {
 
   @ManyToOne
   private Person owner;
-  
+  // main method for giving example name to flashcard sets for testing
   public static void main (String[] args) {
     FlashcardSet fs = new FlashcardSet();
     fs.setName("Cool set");
