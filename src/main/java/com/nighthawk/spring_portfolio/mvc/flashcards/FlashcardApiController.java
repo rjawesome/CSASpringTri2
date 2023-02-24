@@ -44,7 +44,7 @@ public class FlashcardApiController {
      * Not my problem though
      */
     Person person = handler.decodeJwt(jwt);
-
+    // if person doesn't exist, return an error that they don't have an account
     if (person == null) {
       // return err ting
       Map<String, Object> resp = new HashMap<>();
@@ -53,13 +53,13 @@ public class FlashcardApiController {
     }
 
       List<Map<String, Object>> flashcardData = (List<Map<String, Object>>) map.get("flashcards");
-
+      // flashcard set is created with attributes of name, owner, whether or not it is is public, set is saved
       FlashcardSet flashcardSet = new FlashcardSet();
       flashcardSet.setName((String) map.get("name"));
       flashcardSet.setOwner(person);
       flashcardSet.setPublic((boolean) map.get("isPublic"));
       flashcardSetRepository.save(flashcardSet);
-
+      // for each term/definition in the flashcard set, add it to the front and back of a flashcard
       for (Map<String, Object> flashcard : flashcardData) {
         Flashcard flashcardObject = new Flashcard();
         flashcardObject.setFront((String) flashcard.get("front"));
@@ -74,7 +74,7 @@ public class FlashcardApiController {
     
     }
   
-
+  // get flashcard set
   @PostMapping("/getYourFlashcardSets")
   public ResponseEntity<Object> getYourFlashcardSets(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
@@ -93,14 +93,14 @@ public class FlashcardApiController {
     }
 
     List<FlashcardSet> flashcardSets = flashcardSetRepository.findAllByOwnerEmail(person.getEmail());
-
+    // check password hash to see if the person can access the flashcard set
     for (FlashcardSet i : flashcardSets) {
       i.getOwner().setPasswordHash("REDACTED");
     }
 
     return new ResponseEntity<>(flashcardSets, HttpStatus.OK);
   }
-
+  // gets flashcard set using jwt
   @PostMapping("/getFlashcardSet")
   public ResponseEntity<Object> getFlashcardSet(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
@@ -116,9 +116,10 @@ public class FlashcardApiController {
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
     FlashcardSet flashcardSet = optionalFlashcardSet.get();
+    // checks if the flashcard set is public
     if (!flashcardSet.isPublic()) {
       Person person = handler.decodeJwt(jwt);
-
+      // if person doesn't exist, returns error
       if (person == null) {
         // return err ting
         Map<String, Object> resp = new HashMap<>();
@@ -145,7 +146,7 @@ public class FlashcardApiController {
 
     return new ResponseEntity<>(resp, HttpStatus.OK);
   }
-
+  // gets flashcard by name for the search bar
   @PostMapping("/getFlashcardSetsByName")
   public ResponseEntity<Object> getFlashcardSetsByName(@RequestBody final Map<String, Object> map)
       throws NoSuchAlgorithmException {
@@ -167,7 +168,7 @@ public class FlashcardApiController {
   /*
    * GET MC quiz for flashcard set
    */
-
+  // gets flashcard set mc to be used for search
   @PostMapping("/getFlashcardSetMC")
   public ResponseEntity<Object> getFlashcardSetMC(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
@@ -184,14 +185,14 @@ public class FlashcardApiController {
     }
     if (!optionalFlashcardSet.get().isPublic()) {
       Person person = handler.decodeJwt(jwt);
-
+      // if person doesn't exist return error
       if (person == null) {
         // return err ting
         Map<String, Object> resp = new HashMap<>();
         resp.put("err", "Account doesn't exist");
         return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
       }
-
+      // if person exists but the public option is not checked, display error that the set is private
       if (person.getEmail() != optionalFlashcardSet.get().getOwner().getEmail()) {
         Map<String, Object> resp = new HashMap<>();
         resp.put("err", "Flashcard set is private");
@@ -201,13 +202,13 @@ public class FlashcardApiController {
 
     Map<String, Map<String, Object>> mcq = new HashMap<>();
     List<Flashcard> flashcards = flashcardRepository.findByFlashcardSet(optionalFlashcardSet.get());
-
+    // sets minimum size of flashcard set
     if (flashcards.size() < 4) {
       Map<String, Object> resp = new HashMap<>();
       resp.put("err", "Flashcard set too small");
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
-
+    // creates question and answers from the flashcard set for the mcq
     for (int i = 0; i < flashcards.size(); i++) {
       Flashcard flashcard = flashcards.get(i);
       String question = flashcard.getFront();
@@ -233,7 +234,7 @@ public class FlashcardApiController {
 
     return new ResponseEntity<>(mcq, HttpStatus.OK);
   }
-  
+  // imports quizlet using fetch method from quizlet.java file
   @CrossOrigin("*")
   @PostMapping("/getQuizlet")
   public ResponseEntity<Object> getQuizlet(@RequestBody final Map<String, Object> map)
