@@ -12,7 +12,7 @@ public class Stats {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+    // sets variables for amount of mc questions or flashcard attempts incorrect and correct
     private int correct;
     private int incorrect;
 
@@ -24,7 +24,7 @@ public class Stats {
 
     @ManyToOne
     private Person user;
-    
+    // main method for testing stats
     public static void main (String[] args) {
       Stats s = new Stats();
       s.setCorrect(10);
