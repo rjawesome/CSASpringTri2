@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import com.google.gson.Gson;
-
+// quizlet class which gets a string from the frontend
 public class Quizlet {
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -19,7 +19,7 @@ public class Quizlet {
     public Quizlet (String id) {
         this.id = id;
     }
-
+    // uses quizlet's api for fetch
     public CompletableFuture<List<FlashcardContainer>> fetchQuizlet() {
         return httpClient.sendAsync(
                 HttpRequest.newBuilder()
@@ -42,7 +42,7 @@ public class Quizlet {
                     }
                 });
     }
-
+    // gets terms from the quizlet and stores them in the database
     private List<FlashcardContainer> extractTerms(String response) throws IOException, InterruptedException {
         Gson gson = new Gson();
         ResponseData res = gson.fromJson(response, ResponseData.class);
@@ -64,6 +64,7 @@ public class Quizlet {
                                             + token))
                             .build(),
                     HttpResponse.BodyHandlers.ofString());
+            // gets a response to store in the database
             String newResponse = httpResponse.body();
             ResponseData newRes = gson.fromJson(newResponse, ResponseData.class);
             terms.addAll(newRes.responses.get(0).models.studiableItem);
@@ -73,7 +74,7 @@ public class Quizlet {
     
         return terms;
     }
-
+    // formats quizlet set to be displayed on frontend, main method to display terms on the flashcards
     public static Map<String, String> fetch(String id) throws InterruptedException {
         CompletableFuture<List<FlashcardContainer>> future = new Quizlet(id.replaceAll("\"", "")).fetchQuizlet();
         List<FlashcardContainer> terms = future.join();
