@@ -19,6 +19,7 @@ public class Flashcard {
   @ManyToOne
   private FlashcardSet flashcardSet;
   
+  // main class defining front and back for a flashcard with the given term and definition from the flashcard set
   public static void main(String[] args) {
         Flashcard f = new Flashcard();
         f.setFront("term");
