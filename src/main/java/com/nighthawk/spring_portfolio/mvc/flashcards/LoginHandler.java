@@ -16,12 +16,12 @@ public class LoginHandler {
 
   @Autowired
   PersonJpaRepository personJpaRepository;
-
+  // creates a person's account
   public String createJwt(Person user) {
     var time = (new Date()).getTime() + 1000 * 60 * 60 * 24;
     return Jwts.builder().setSubject(user.getEmail()).setExpiration(new Date(time)).signWith(key).compact();
   }
-
+  // try/catch set up for searching for an account based on a person's email
   public Person decodeJwt(String jws) {
     try {
       String email = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws).getBody().getSubject();
@@ -31,7 +31,7 @@ public class LoginHandler {
       return null;
     }
   }
-
+  // main method to test with example email
   public static void main(String[] args) {
     LoginHandler handler = new LoginHandler();
     String email = "rohanj2006@gmail.com";
