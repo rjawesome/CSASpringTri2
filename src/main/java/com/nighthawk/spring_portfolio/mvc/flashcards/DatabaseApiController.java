@@ -1,5 +1,5 @@
 package com.nighthawk.spring_portfolio.mvc.flashcards;
-
+// Gets necessary imports
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,6 +29,7 @@ public class DatabaseApiController {
     // Set the content type of the file
     String contentType = "application/octet-stream";
 
+    // Returns the response back from the database
     return ResponseEntity.ok()
             .contentType(MediaType.parseMediaType(contentType))
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + coolDbResource.getFilename() + "\"")
