@@ -57,7 +57,7 @@ public class StatsApiController {
     
     return new ResponseEntity<>(stats, HttpStatus.OK);
   }
-
+  // gets stats for each flashcard based on the id
   @PostMapping("/getStatsByFlashcard")
   public ResponseEntity<Object> getStatsByFlashcard(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
@@ -74,7 +74,7 @@ public class StatsApiController {
         flashcardRepository.findById((int) map.get("id")).get());
     return new ResponseEntity<>(stats, HttpStatus.OK);
   }
-
+  // stats calculations
   @PostMapping("/createStats")
   public ResponseEntity<Object> createStats(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
@@ -94,7 +94,7 @@ public class StatsApiController {
       resp.put("err", "Flashcard doesn't exist");
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
-
+    // checks if states exist, uses boolean if someone gets an answer right or wrong
     List<Stats> stats = statsRepository.findByUserAndFlashcard(p, flash.get());
     if (stats.isEmpty()) {
       Stats newStats = new Stats();
@@ -117,7 +117,7 @@ public class StatsApiController {
     resp.put("err", false);
     return new ResponseEntity<>(resp, HttpStatus.OK);
   }
-
+  // checks if a person's account exists with jwt
   @PostMapping("/createStatsBatch")
   public ResponseEntity<Object> createStatsBatch(@RequestBody final Map<String, Object> map,  @CookieValue("flashjwt") String jwt)
       throws NoSuchAlgorithmException {
