@@ -12,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+// sets attributes for each person - id, roles, email, password which is stored with a hash
 public class Person {
     // id
     @Id
@@ -29,7 +30,7 @@ public class Person {
     String email;
 
     String passwordHash;
-
+    // main method for testing create person
     public static void main(String[] args) {
         Person p = new Person();
         p.setEmail("yippee@y8ipee.com");
