@@ -1,6 +1,8 @@
 version: '3'
 services:
   web_t8_tri2:
+    env_file:
+      - .env
     image: java_springv1_t8_tri2
     build: .
     ports:
