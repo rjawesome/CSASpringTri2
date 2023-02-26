@@ -34,3 +34,6 @@ build/
 
 ### Database ###
 volumes/sqlite.db
+
+### Environment Variables ###
+.env
