@@ -52,6 +52,10 @@ public class JwtApiController {
         // map.get("password").getBytes(StandardCharsets.UTF_8));
         // String computedPasswordHash = new String(encodedHash);
         String computedPasswordHash = SecurityConfig.bcryptencode(map.get("password"));
+        System.out.println(map.get("password"));
+        System.out.println(SecurityConfig.bcryptencode("password"));
+        System.out.println(SecurityConfig.bcryptencode("password"));
+        System.out.println(computedPasswordHash);
         Person authenticationRequest = personJpaRepository.findByEmailAndPasswordHash((String) map.get("email"), computedPasswordHash);
 
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPasswordHash());

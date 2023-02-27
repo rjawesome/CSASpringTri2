@@ -1,6 +1,11 @@
 package com.nighthawk.spring_portfolio.security;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVersion;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
@@ -37,6 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private PersonDetailsService personDetailsService;
+
+    @Value("${jwt.random-secret}")
+    static String salt;
 
     // Provide a default configuration using configure(HttpSecurity http)
     @Override
@@ -91,7 +100,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     public static String bcryptencode(String password) {
-        return new BCryptPasswordEncoder().encode(password);
+        Charset charset = StandardCharsets.US_ASCII;
+        byte[] byteSalt = charset.encode("salt").array();
+
+         SecureRandom random = new SecureRandom(byteSalt);
+
+        return new BCryptPasswordEncoder(BCryptVersion.$2Y, random).encode(password);
     }
 
 	@Autowired
