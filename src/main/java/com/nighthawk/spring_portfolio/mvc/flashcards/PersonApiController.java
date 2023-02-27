@@ -90,6 +90,7 @@ public class PersonApiController {
                 password.getBytes(StandardCharsets.UTF_8));
         String computedPasswordHash = new String(encodedHash);
         person.setPasswordHash(computedPasswordHash);
+        person.setAdmin(false);
 
         repository.save(person);
         Map<String, Object> resp = new HashMap<>();
