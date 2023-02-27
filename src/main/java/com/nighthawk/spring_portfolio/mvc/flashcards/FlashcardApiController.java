@@ -80,7 +80,7 @@ public class FlashcardApiController {
   @DeleteMapping("/deleteFlashcardSet")
   public ResponseEntity<Object> deleteFlashcardSet(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt) {
     Person p = handler.decodeJwt(jwt);
-    if (p.isAdmin()) {
+    if (p.isAdmin() && p != null) {
 
       long id = (long) map.get("id");
       Optional<FlashcardSet> optional = flashcardSetRepository.findById(id);
@@ -102,7 +102,7 @@ public class FlashcardApiController {
     } else {
       Map<String, Object> resp = new HashMap<>();
       resp.put("err", "Unauthorized");
-      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(resp, HttpStatus.UNAUTHORIZED);
     }
 
   }

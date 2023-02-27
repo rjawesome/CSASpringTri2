@@ -28,7 +28,7 @@ public class DatabaseApiController {
   @GetMapping("/sqlite.db")
   public ResponseEntity<Object> getDB (@CookieValue("flashjwt") String jwt) throws IOException {
     Person p = handler.decodeJwt(jwt);
-    if (p.isAdmin()) {
+    if (p.isAdmin() && p != null) {
       Resource coolDbResource = new FileSystemResource("volumes/sqlite.db");
 
       // Check if the file exists
