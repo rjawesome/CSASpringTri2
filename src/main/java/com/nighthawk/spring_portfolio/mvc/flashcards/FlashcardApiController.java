@@ -81,24 +81,28 @@ public class FlashcardApiController {
   public ResponseEntity<Object> deleteFlashcardSet(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt) {
     Person p = handler.decodeJwt(jwt);
     if (p.isAdmin()) {
+
       long id = (long) map.get("id");
       Optional<FlashcardSet> optional = flashcardSetRepository.findById(id);
+
       if (optional.isPresent()) {
         FlashcardSet flashcardSet = optional.get();
         flashcardSetRepository.deleteById(flashcardSet.getId());
-      // Success
+        // Success
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("err", false);
+        return new ResponseEntity<>(resp, HttpStatus.OK);
+      }
+
+      // Bad ID
       Map<String, Object> resp = new HashMap<>();
-      resp.put("err", false);
-      return new ResponseEntity<>(resp, HttpStatus.OK);
-    }
-    // Bad ID
-    Map<String, Object> resp = new HashMap<>();
-    resp.put("err", "No flashcard set found");
-    return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+      resp.put("err", "No flashcard set found");
+      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+
     } else {
       Map<String, Object> resp = new HashMap<>();
-    resp.put("err", "Unauthorized");
-    return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+      resp.put("err", "Unauthorized");
+      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 
   }
