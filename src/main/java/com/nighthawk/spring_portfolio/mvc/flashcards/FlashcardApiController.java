@@ -78,13 +78,14 @@ public class FlashcardApiController {
    * @param {Map<String, Object>} map - should reference "name" and "isPublic" of flashcard set; probably should use id but who cares
    */
   @DeleteMapping("/deleteFlashcardSet")
-  public ResponseEntity<Object> deleteFlashcardSet(@RequestBody final Map<String, Object> map) {
-    long id = (long) map.get("id");
-    Optional<FlashcardSet> optional = flashcardSetRepository.findById(id);
-    if (optional.isPresent()) {
-      FlashcardSet flashcardSet = optional.get();
-      flashcardSetRepository.deleteById(flashcardSet.getId());
-
+  public ResponseEntity<Object> deleteFlashcardSet(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt) {
+    Person p = handler.decodeJwt(jwt);
+    if (p.isAdmin()) {
+      long id = (long) map.get("id");
+      Optional<FlashcardSet> optional = flashcardSetRepository.findById(id);
+      if (optional.isPresent()) {
+        FlashcardSet flashcardSet = optional.get();
+        flashcardSetRepository.deleteById(flashcardSet.getId());
       // Success
       Map<String, Object> resp = new HashMap<>();
       resp.put("err", false);
@@ -94,6 +95,11 @@ public class FlashcardApiController {
     Map<String, Object> resp = new HashMap<>();
     resp.put("err", "No flashcard set found");
     return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+    } else {
+      Map<String, Object> resp = new HashMap<>();
+    resp.put("err", "Unauthorized");
+    return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+    }
 
   }
   // get flashcard set

@@ -102,7 +102,7 @@ public class PersonApiController {
     public ResponseEntity<Object> handleBadUserInput() {
         Map<String, Object> resp = new HashMap<>();
         resp.put("err", "Bad User Input");
-        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(resp, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({ MissingRequestCookieException.class })
