@@ -12,20 +12,27 @@ Features:
 - Secure signup and login system 🔑 using Json Web Tokens, preventing any malicious attackers from stealing user information
 
 Previews:
-![Login](../../../../var/folders/zp/q3vfrqhx2gs73b12mqt0ckmm0000gn/T/TemporaryItems/NSIRD_screencaptureui_CqHtpl/Screenshot%202023-02-26%20at%207.28.11%20PM.png)
+
+![Login](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.28.11%20PM.png)
+
 Secure Login System
 
-![Database](../../../../var/folders/zp/q3vfrqhx2gs73b12mqt0ckmm0000gn/T/TemporaryItems/NSIRD_screencaptureui_PJh7zb/Screenshot%202023-02-26%20at%207.29.12%20PM.png)
+![Search](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.29.12%20PM.png)
+
 Huge Flashcard Database
 
-![Flashcards 1](../../../../var/folders/zp/q3vfrqhx2gs73b12mqt0ckmm0000gn/T/TemporaryItems/NSIRD_screencaptureui_bboWj7/Screenshot%202023-02-26%20at%207.30.42%20PM.png)
-![Flashcards 2](../../../../var/folders/zp/q3vfrqhx2gs73b12mqt0ckmm0000gn/T/TemporaryItems/NSIRD_screencaptureui_tBv1GU/Screenshot%202023-02-26%20at%207.30.05%20PM.png)
+![Flashcards 1](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.30.42%20PM.png)
+
+![Flashcards 2](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.30.05%20PM.png)
+
 Flashcards
 
-![Quizzes](../../../../var/folders/zp/q3vfrqhx2gs73b12mqt0ckmm0000gn/T/TemporaryItems/NSIRD_screencaptureui_mOXptw/Screenshot%202023-02-26%20at%207.32.57%20PM.png)
+![Quizzes](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.32.57%20PM.png)
+
 Practice Quizzes
 
-![Importing](../../../../var/folders/zp/q3vfrqhx2gs73b12mqt0ckmm0000gn/T/TemporaryItems/NSIRD_screencaptureui_dMeGsj/Screenshot%202023-02-26%20at%207.31.45%20PM.png)
+![Importing](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.31.45%20PM.png)
+
 Importing from Quizlet
 
 
