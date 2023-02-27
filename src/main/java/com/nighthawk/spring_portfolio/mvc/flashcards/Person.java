@@ -30,6 +30,9 @@ public class Person {
     String email;
 
     String passwordHash;
+
+    // True if user is admin, false otherwise
+    boolean admin;
     // main method for testing create person
     public static void main(String[] args) {
         Person p = new Person();

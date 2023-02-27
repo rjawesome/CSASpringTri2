@@ -74,6 +74,28 @@ public class FlashcardApiController {
     
     }
   
+  /*
+   * @param {Map<String, Object>} map - should reference "name" and "isPublic" of flashcard set; probably should use id but who cares
+   */
+  @DeleteMapping("/deleteFlashcardSet")
+  public ResponseEntity<Object> deleteFlashcardSet(@RequestBody final Map<String, Object> map) {
+    long id = (long) map.get("id");
+    Optional<FlashcardSet> optional = flashcardSetRepository.findById(id);
+    if (optional.isPresent()) {
+      FlashcardSet flashcardSet = optional.get();
+      flashcardSetRepository.deleteById(flashcardSet.getId());
+
+      // Success
+      Map<String, Object> resp = new HashMap<>();
+      resp.put("err", false);
+      return new ResponseEntity<>(resp, HttpStatus.OK);
+    }
+    // Bad ID
+    Map<String, Object> resp = new HashMap<>();
+    resp.put("err", "No flashcard set found");
+    return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+
+  }
   // get flashcard set
   @PostMapping("/getYourFlashcardSets")
   public ResponseEntity<Object> getYourFlashcardSets(@RequestBody final Map<String, Object> map, @CookieValue("flashjwt") String jwt)
