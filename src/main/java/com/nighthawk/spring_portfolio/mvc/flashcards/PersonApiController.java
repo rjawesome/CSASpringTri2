@@ -105,7 +105,7 @@ public class PersonApiController {
     public ResponseEntity<Object> createAdmin(@RequestBody final Map<String, Object> map)
             throws NoSuchAlgorithmException {
         // check if admin key
-        String key = map.get("key");
+        String key = (String) map.get("key");
         if (key != System.getenv("ADMIN_KEY")) {
             Map<String, Object> resp = new HashMap<>();
             resp.put("err", "Incorrect Admin key");
