@@ -19,7 +19,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         // TODO Auto-generated method stub 
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
 
-        
+
     }
-    
+
 }

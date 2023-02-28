@@ -10,14 +10,14 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 public class FlashcardSet {
-    // id
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    
-    private String name;
-    private boolean isPublic;
+  // id
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    @ManyToOne
-    private Person owner;
-  }
+  private String name;
+  private boolean isPublic;
+
+  @ManyToOne
+  private Person owner;
+}

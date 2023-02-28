@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.nighthawk.spring_portfolio.security.SecurityConfig;
+
 import java.util.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -35,10 +37,11 @@ public class StepsApiController {
             Person1 person = optional.get();  // value from findByID
             String password = (String) map.get("password");
 
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] encodedHash = digest.digest(
-            password.getBytes(StandardCharsets.UTF_8));
-            String computedPasswordHash = new String(encodedHash);
+            // MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            // byte[] encodedHash = digest.digest(
+            // password.getBytes(StandardCharsets.UTF_8));
+            // String computedPasswordHash = new String(encodedHash);
+            String computedPasswordHash = SecurityConfig.bcryptencode(password);
 
             if (computedPasswordHash.equals(person.getPasswordHash())) {
                 // redact password
@@ -63,10 +66,11 @@ public class StepsApiController {
             Person1 person = optional.get();  // value from findByID
             String password = (String) map.get("password");
 
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] encodedHash = digest.digest(
-            password.getBytes(StandardCharsets.UTF_8));
-            String computedPasswordHash = new String(encodedHash);
+            // MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            // byte[] encodedHash = digest.digest(
+            // password.getBytes(StandardCharsets.UTF_8));
+            // String computedPasswordHash = new String(encodedHash);
+            String computedPasswordHash = SecurityConfig.bcryptencode(password);
 
             if (!computedPasswordHash.equals(person.getPasswordHash())) {
               return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);
@@ -94,10 +98,11 @@ public class StepsApiController {
         if (optional.isPresent()) {  // Good ID
             Person1 person = optional.get();  // value from findByID
             
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] encodedHash = digest.digest(
-            password.getBytes(StandardCharsets.UTF_8));
-            String computedPasswordHash = new String(encodedHash);
+            // MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            // byte[] encodedHash = digest.digest(
+            // password.getBytes(StandardCharsets.UTF_8));
+            // String computedPasswordHash = new String(encodedHash);
+            String computedPasswordHash = SecurityConfig.bcryptencode(password);
 
             if (!computedPasswordHash.equals(person.passwordHash)) {
                 return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST); 
@@ -136,10 +141,11 @@ public class StepsApiController {
 
         // password hash
         String password = (String) map.get("password");
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedHash = digest.digest(
-        password.getBytes(StandardCharsets.UTF_8));
-        String computedPasswordHash = new String(encodedHash);
+        // MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        // byte[] encodedHash = digest.digest(
+        // password.getBytes(StandardCharsets.UTF_8));
+        // String computedPasswordHash = new String(encodedHash);
+        String computedPasswordHash = SecurityConfig.bcryptencode(password);
         person.setPasswordHash(computedPasswordHash);
         
         repository.save(person);
@@ -156,10 +162,11 @@ public class StepsApiController {
             Person1 person = optional.get();  // value from findByEmail
             String password = (String) map.get("password");
 
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] encodedHash = digest.digest(
-            password.getBytes(StandardCharsets.UTF_8));
-            String computedPasswordHash = new String(encodedHash);
+            // MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            // byte[] encodedHash = digest.digest(
+            // password.getBytes(StandardCharsets.UTF_8));
+            // String computedPasswordHash = new String(encodedHash);
+            String computedPasswordHash = SecurityConfig.bcryptencode(password);
             if (!computedPasswordHash.equals(person.getPasswordHash())) {
                 return new ResponseEntity<>("Incorrect Password", HttpStatus.BAD_REQUEST);        
             }

@@ -12,6 +12,8 @@ Extends the JpaRepository interface from Spring Data JPA.
 public interface StatsJpaRepository extends JpaRepository<Stats, Long> {
   Optional<Stats> findById(long id);
   List<Stats> findByFlashcardSetId(long flashcardSetId);
+  List<Stats> findByUserAndFlashcardSet(Person user, FlashcardSet set);
+  List<Stats> findByUserAndFlashcard(Person user, Flashcard flashcard);
 }
 
 /*
