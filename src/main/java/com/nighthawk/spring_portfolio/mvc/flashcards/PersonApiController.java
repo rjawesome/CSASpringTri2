@@ -97,6 +97,53 @@ public class PersonApiController {
         resp.put("err", false);
         return new ResponseEntity<>(resp, HttpStatus.CREATED);
     }
+    
+    /*
+     * POST Aa record by Requesting Parameters from URI
+     */
+    @PostMapping("/createAdmin")
+    public ResponseEntity<Object> createAdmin(@RequestBody final Map<String, Object> map)
+            throws NoSuchAlgorithmException {
+        // check if admin key
+        String key = map.get("key");
+        if (key != System.getenv("ADMIN_KEY")) {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", "Incorrect Admin key");
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+        }
+        // check for existing person
+        if (repository.findByEmail((String) map.get("email")).isPresent()) {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", "Email already in use");
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+        }
+        
+        // check for password complexity requirements
+        String password = (String) map.get("password");
+        if (password.length() < 8 || !password.matches(".*[0-9]+.*") || !password.matches(".*[^A-Za-z0-9\\s].*")) {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", "Password does not meet complexity requirements (length >= 8, contains number, contains special character)");
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+        }
+
+        // A person object WITHOUT ID will create a new record with default roles as
+        // student
+        Person person = new Person();
+        person.setEmail((String) map.get("email"));
+
+        // password hash
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] encodedHash = digest.digest(
+                password.getBytes(StandardCharsets.UTF_8));
+        String computedPasswordHash = new String(encodedHash);
+        person.setPasswordHash(computedPasswordHash);
+        person.setAdmin(true);
+
+        repository.save(person);
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("err", false);
+        return new ResponseEntity<>(resp, HttpStatus.CREATED);
+    }
 
     // handles exceptions
     @ExceptionHandler({ ClassCastException.class, NullPointerException.class })
