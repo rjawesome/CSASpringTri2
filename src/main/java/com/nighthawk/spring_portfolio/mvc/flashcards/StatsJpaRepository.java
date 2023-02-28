@@ -13,3 +13,10 @@ public interface StatsJpaRepository extends JpaRepository<Stats, Long> {
   Optional<Stats> findById(long id);
   List<Stats> findByFlashcardSetId(long flashcardSetId);
 }
+
+/*
+Extends the JpaRepository interface from Spring Data JPA.
+-- Java Persistent API (JPA) - Hibernate: map, store, update and retrieve database
+-- JpaRepository defines standard CRUD methods
+-- Via JPA the developer can retrieve database from relational databases to Java objects and vice versa.
+ */
