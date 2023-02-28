@@ -82,7 +82,7 @@ public class FlashcardApiController {
     Person p = handler.decodeJwt(jwt);
     if (p.isAdmin() && p != null) {
 
-      long id = (long) map.get("id");
+      long id = (int) map.get("id");
       Optional<FlashcardSet> optional = flashcardSetRepository.findById(id);
 
       if (optional.isPresent()) {
