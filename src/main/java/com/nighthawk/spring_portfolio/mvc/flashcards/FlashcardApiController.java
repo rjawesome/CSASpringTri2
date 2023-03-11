@@ -267,7 +267,6 @@ public class FlashcardApiController {
     return new ResponseEntity<>(mcq, HttpStatus.OK);
   }
   // imports quizlet using fetch method from quizlet.java file
-  @CrossOrigin("*")
   @PostMapping("/getQuizlet")
   public ResponseEntity<Object> getQuizlet(@RequestBody final Map<String, Object> map)
       throws NoSuchAlgorithmException, InterruptedException {
