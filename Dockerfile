@@ -1,8 +1,11 @@
 # syntax=docker/dockerfile:1
-FROM openjdk:17-alpine3.13
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
-RUN apk update && apk upgrade && \
-    apk add --no-cache git
+RUN apt update && \
+    apt install -y git
+RUN apt install -y libfreetype6-dev
+RUN apt install -y ttf-dejavu
+RUN apt install -y fontconfig
 COPY ["pom.xml", "mvnw", "./"]
 COPY .mvn .mvn
 RUN ./mvnw install -Dspring-boot.repackage.skip=true
