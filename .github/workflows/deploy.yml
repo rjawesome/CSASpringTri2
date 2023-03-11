@@ -13,6 +13,8 @@ jobs:
         java-version: 17
     - run: ./mvnw package
   AWS-Deploy:
+    # disable job
+    if: 1 == 0
     needs: Build
     runs-on: ubuntu-latest
     steps:
