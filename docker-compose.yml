@@ -16,4 +16,4 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /home/ubuntu/tri2/t8_csaspring/volumes
+      device: /home/pi/apps/quizme/volumes
