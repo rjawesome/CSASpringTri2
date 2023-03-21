@@ -6,7 +6,7 @@ import lombok.*;
 
 @Data
 @Entity
-public class Person extends DataObject {
+public class Person extends DataObject implements DataObject.InterfaceToJson {
 	// Class data
 
 	// Instance data
@@ -34,8 +34,17 @@ public class Person extends DataObject {
 	public String toString()
 	{
 		return "Name: " + name + ", Email: " + email + ", Password: " + passwordHash;
+	}
+
+	/* 'Generics' requires toJson override
+	 * toJson provides data based off of Static Key setting
+	 */
+	@Override
+	public String toJson()
+	{
 		
-		
+		// return all data in json format
+		return "{ \"Name\": \"" + name + "\", \"Email\": \"" + email + "\", \"Password\": \"" + passwordHash + "\" }";
 	}
 
 	// Test data initializer
@@ -59,6 +68,13 @@ public class Person extends DataObject {
 		// print with title
 		System.out.println("Person Class Test");
 		System.out.println(john.toString());
+		System.out.println(john.toJson());
+
+		// test with parent class
+		DataObject mary = new Person("Mary", "mary@email.com", "password2");
+		System.out.println(mary.toString());
+		//System.out.println(mary.toJson());
+		// throws error because toJson is not defined in DataObject
 	}
 
 }
